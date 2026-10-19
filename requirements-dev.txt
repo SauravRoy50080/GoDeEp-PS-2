@@ -1,0 +1,4 @@
+# Complete current development environment, including all runtime dependencies.
+# Install from repository root: python -m pip install -r requirements-dev.txt
+# Adds pytest, HTTPX and Ruff via the backend's dev extra.
+-e ./backend[dev]

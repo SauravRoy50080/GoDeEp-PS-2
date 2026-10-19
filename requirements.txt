@@ -1,0 +1,5 @@
+# Install from the repository root: python -m pip install -r requirements.txt
+# Installs the backend and all runtime dependencies declared in backend/pyproject.toml:
+# FastAPI, Uvicorn, pydantic-settings, SQLAlchemy, Alembic,
+# psycopg[binary], argon2-cffi, and their required transitive dependencies.
+-e ./backend

@@ -139,7 +139,7 @@ the hosts used to execute untrusted Android applications.
 git clone https://github.com/SauravRoy50080/GoDeEp-PS-2.git
 cd GoDeEp-PS-2
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e "./backend[dev]"
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 Copy-Item backend/.env.example backend/.env
 .\.venv\Scripts\python.exe -m uvicorn godeep.main:app --app-dir backend/src --reload --host 127.0.0.1
 ```
@@ -154,13 +154,25 @@ directly, so PowerShell activation is unnecessary.
 git clone https://github.com/SauravRoy50080/GoDeEp-PS-2.git
 cd GoDeEp-PS-2
 python3 -m venv .venv
-.venv/bin/python -m pip install -e './backend[dev]'
+.venv/bin/python -m pip install -r requirements-dev.txt
 cp backend/.env.example backend/.env
 .venv/bin/python -m uvicorn godeep.main:app --app-dir backend/src --reload --host 127.0.0.1
 ```
 
 The API binds to localhost for development. Production deployment configuration
 is not included.
+
+### Dependency files
+
+- `requirements.txt`: backend runtime and its dependencies.
+- `requirements-dev.txt`: runtime plus pytest, HTTPX and Ruff for development.
+- `backend/pyproject.toml`: authoritative package names and supported version ranges.
+
+Run installation commands from the repository root. The requirements files install
+this local package and let pip resolve its declared dependencies; they are not
+fully pinned lockfiles. Analyzer, sandbox and machine-learning dependencies will
+be added as those modules are implemented. PostgreSQL server, Android emulators,
+Java and other external tools are not installed by pip.
 
 ## Available API
 
