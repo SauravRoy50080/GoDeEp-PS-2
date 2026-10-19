@@ -156,4 +156,5 @@ The dex_static adapter adds bounded identifier-table triage; see
 [DEX analysis](dex-static-analysis.md). The dex_calls adapter adds [instruction evidence](dex-call-analysis.md).
 The static_review adapter adds [unified findings](unified-static-review.md).
 The signature_verify adapter adds [official signature verification](signature-verification.md).
-All six adapters use the same worker; verification requires configured external tools.
+The resource_inventory adapter adds [resource/library metadata](resource-inventory.md).
+All seven adapters use the same worker; signature verification requires configured external tools.

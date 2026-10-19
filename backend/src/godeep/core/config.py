@@ -54,3 +54,9 @@ class Settings(BaseSettings):
     signer_jar_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     signer_timeout_seconds: int = Field(default=20, ge=1, le=120)
     max_signer_output_bytes: int = Field(default=65536, ge=1024, le=262144)
+
+    max_resource_files: int = Field(default=128, ge=1, le=1000)
+    max_resource_bytes: int = Field(default=1048576, ge=64, le=8388608)
+    max_resource_total_bytes: int = Field(default=16777216, ge=64, le=67108864)
+    max_resource_nodes: int = Field(default=2000, ge=1, le=20000)
+    max_resource_findings: int = Field(default=500, ge=1, le=2000)

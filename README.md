@@ -40,10 +40,12 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 8 — signature verification:** an optional Windows adapter now runs
-> official apksigner with bounded diagnostics and tool provenance. Unified static
-> review remains available. Valid signatures do not establish app safety; dynamic
-> analysis, intelligence, scoring, reporting, AI and deployment hardening remain planned.
+> **Milestone 9 — resource and declared-library inventory:** analysis now adds
+> resource URL candidates, network-policy declarations, embedded-file magic, ELF
+> headers and declared Maven/version metadata. The earlier steps have been reviewed;
+> signature verification and unified static review remain available. Dynamic
+> analysis, threat intelligence, vulnerability matching, scoring, reporting and AI
+> remain planned. No malware-detection accuracy benchmark has been established.
 
 | Area | Current state |
 |---|---|
@@ -267,6 +269,7 @@ GoDeEp-PS-2/
 - [x] Add bounded DEX method-reference rules and network-string candidates.
 - [x] Add bounded instruction decoding and sensitive API invoke-site evidence.
 - [x] Add optional official APK signature verification with real signed/tampered tests.
+- [x] Add bounded resource, embedded-file and declared-library inventory.
 - [ ] Add control-flow/call-graph/evasion analysis and benchmark detection quality.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
 - [x] Group static findings and add permission context with evidence references.
@@ -324,6 +327,8 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Resource and library metadata inventory](docs/resource-inventory.md)
+- [Backend review and fixes](docs/backend-review.md)
 - [Official signature verification](docs/signature-verification.md)
 - [Unified static review](docs/unified-static-review.md)
 - [Instruction call-site evidence](docs/dex-call-analysis.md)

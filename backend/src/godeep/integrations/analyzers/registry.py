@@ -9,6 +9,7 @@ ADAPTER_VERSIONS = {
     "dex_calls": "1.0.1",
     "static_review": "1.0.1",
     "signature_verify": "1.0.0",
+    "resource_inventory": "1.0.0",
 }
 
 

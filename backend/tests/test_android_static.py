@@ -261,6 +261,7 @@ def test_analyzer_catalog_declares_real_capabilities(intake):
         "dex_calls",
         "static_review",
         "signature_verify",
+        "resource_inventory",
     }
     assert "binary_manifest" in catalog["android_static"]["capabilities"]
     assert not catalog["android_static"]["cryptographic_signature_verification"]

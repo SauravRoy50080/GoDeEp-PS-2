@@ -171,3 +171,19 @@ and real case/job/result processing with operator paths excluded from public job
 config. Tools: Android Build Tools 35.0.0, apksigner 0.9, OpenJDK 21.0.2. The test
 APKs and keys are generated synthetic fixtures; these tests do not certify Android
 installability, production containment or malware-detection accuracy.
+
+## Milestone 9 and previous-step review - 20 October 2026
+
+Live PostgreSQL 17.11: **129 passed in 85.45 seconds**. SQLite: **123 passed,
+six PostgreSQL-only checks skipped in 40.64 seconds**. Real Java/apksigner tests
+were enabled in both runs. Both reported the existing Starlette TestClient
+warning; the temporary PostgreSQL server stopped after verification. Ruff lint,
+format, dependency consistency, UTF-8 source/document validation and diff checks passed.
+
+This includes the empty concrete DEX-body regression and ten new resource inventory
+tests: declared library properties, path conflicts, unsupported syntax, binary/text
+XML URL evidence, network-policy selectors, DTD rejection, parsing/output limits,
+embedded DEX/ZIP magic, ELF headers and case-scoped worker results. After the full
+runs, a small ABI-label correction for lib/demo.so paths also passed all ten resource
+tests: paths without an ABI directory report null rather than treating a filename
+as an ABI. These remain functional tests, not malware accuracy benchmarks.

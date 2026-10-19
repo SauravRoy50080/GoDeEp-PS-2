@@ -49,3 +49,6 @@ findings with related permission context; see [unified review](unified-static-re
 The signature_verify adapter adds optional official apksigner verification with
 Windows process ownership and bounded diagnostics. Certificate extraction retains
 its separate unverified status. See [verification integration](signature-verification.md).
+
+Resource and declared-library observations are available through resource_inventory.
+It does not resolve Android resources or infer dependency vulnerabilities.

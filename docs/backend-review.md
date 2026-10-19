@@ -26,3 +26,8 @@ private local configuration remain outside Git.
 
 Also found earlier Markdown files stored with Windows-1252 punctuation. Converted
 all affected tracked documentation to UTF-8 for GitHub and cross-platform rendering.
+
+Final verification with the next resource adapter included: PostgreSQL 129 passed;
+SQLite 123 passed, six skipped. Real signature-tool tests were enabled. The final
+ABI-label adjustment passed the ten resource tests separately. No other failures
+were found within this review and test scope.

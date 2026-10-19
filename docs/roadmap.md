@@ -7,7 +7,8 @@
 3. Static analysis: manifest/permission/component and certificate extraction implemented;
    DEX identifier references and network-string candidates also implemented;
    decoded invoke sites and optional official signature verification are implemented; next add control-flow/call-graph/evasion
-   analysis and evaluate controlled test APKs.
+   analysis and evaluate controlled test APKs. Resource/policy declarations, embedded-file
+   classification and declared-library metadata inventory are also implemented.
 4. Dynamic analysis: isolated Android environments, repeatable actions,
    filesystem/process/network observations and coverage reporting.
 5. Intelligence and correlation (static grouping and permission context implemented):

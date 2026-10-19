@@ -11,6 +11,11 @@ router = APIRouter(tags=["analysis adapters"])
 @router.get("/analyzers")
 def analyzers(user: CurrentUser):
     capabilities = {
+        "resource_inventory": [
+            "resource_inventory",
+            "declared_library_metadata",
+            "resource_url_candidates",
+        ],
         "signature_verify": ["official_apksigner_verification", "bounded_tool_diagnostics"],
         "static_review": [
             "unified_static_findings",
