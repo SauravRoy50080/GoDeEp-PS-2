@@ -50,7 +50,7 @@ could not observe.
 | FastAPI application, configuration and liveness | Implemented |
 | Cases and paginated sample metadata | Implemented |
 | Bounded raw APK intake and local original-byte storage | Implemented |
-| SQLAlchemy models and Alembic migrations | Implemented; SQLite-tested, live PostgreSQL pending |
+| SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Analyzer, worker, reporting and AI packages | Structure only |
 | Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
@@ -114,7 +114,7 @@ the hosts used to execute untrusted Android applications.
 | Backend API | Python 3.12+, FastAPI, Uvicorn | Included |
 | Configuration and contracts | Pydantic / pydantic-settings | Included |
 | Verification | pytest, HTTPX, Ruff | Included |
-| Metadata | SQLAlchemy + Alembic; PostgreSQL target | Implemented; SQLite-tested |
+| Metadata | SQLAlchemy + Alembic; PostgreSQL target | Implemented; SQLite and PostgreSQL 17.11 tested |
 | Artifact storage | Local original-byte store; object storage later | Local store implemented |
 | Background execution | Queued, isolated analysis workers | Planned; queue choice pending |
 | Analysis engines | Versioned external adapters | Candidates under evaluation |
@@ -266,8 +266,8 @@ On Linux/macOS, use `.venv/bin/python` in place of
 The suite checks liveness, case/sample persistence, original-byte/hash integrity,
 case scoping, role permissions, session lifecycle, bounds, failure cleanup, and
 migration consistency. It
-does not evaluate malware detection, sandbox containment or live PostgreSQL. See
-[validation limits](docs/intake-development.md).
+does not evaluate malware detection or sandbox containment. Live PostgreSQL
+verification passed all 40 tests; see [results and repeatable setup](docs/postgresql-verification.md).
 
 ## Research foundations
 
@@ -298,6 +298,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Live PostgreSQL verification and test setup](docs/postgresql-verification.md)
 - [Authentication and case permissions](docs/authentication.md)
 - [Local intake setup and API walkthrough](docs/intake-development.md)
 - [Architecture and design constraints](docs/architecture.md)

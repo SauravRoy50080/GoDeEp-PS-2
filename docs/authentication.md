@@ -96,15 +96,15 @@ disposable test databases; they remove authentication and permission records.
 
 ## Validation and deployment limits
 
-Tests use migrated, file-backed SQLite with real Argon2 hashing. PostgreSQL row
-locks are used for per-account login accounting and operator legacy assignment,
-but PostgreSQL runtime/concurrency is not yet tested here. SQLite does not provide
-the same row-lock semantics and remains a local testing option.
+Tests use real Argon2 hashing and migrated databases. The full suite passed on
+live PostgreSQL 17.11, including eight concurrent failed logins and competing
+legacy-case assignments. See [verification results](postgresql-verification.md).
+SQLite does not provide the same row-lock semantics and remains a local testing option.
 
 Account lockouts do not replace ingress/global rate limits. Unknown-account attempts
 still perform a dummy hash verification; before network deployment add distributed
 rate limits, request-size limits on auth JSON, HTTPS, trusted-proxy configuration,
-security-event monitoring, MFA/SSO/recovery design and PostgreSQL integration tests.
+security-event monitoring, MFA/SSO/recovery design and deployment-specific tests.
 Argon2 runs in worker threads; set bounded server concurrency for actual hosting.
 No production security certification is claimed by this milestone.
 

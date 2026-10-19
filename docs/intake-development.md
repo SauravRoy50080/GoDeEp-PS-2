@@ -82,5 +82,6 @@ records even when hashes match. Storage paths are not exposed by public schemas.
 Tests use synthetic ZIPs and file-backed SQLite migrated through Alembic. They
 cover persistence, case scoping, pagination, upload bounds, malformed structures,
 hash/original integrity, failure cleanup and migration/schema consistency.
-Live PostgreSQL must be verified in a PostgreSQL-equipped environment before
-calling this production-ready.
+The complete suite has also passed against live PostgreSQL 17.11. See
+[verification results](postgresql-verification.md). This does not establish
+production readiness or malware detection accuracy.
