@@ -89,6 +89,7 @@ def run_once(factory, settings):
             result = json.loads(raw)
             if process.returncode != 0:
                 allowed = {
+                    "dex_limits_exceeded",
                     "manifest_parse_failed",
                     "manifest_ambiguous",
                     "manifest_dtd_rejected",

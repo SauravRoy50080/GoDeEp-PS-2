@@ -115,3 +115,15 @@ permissions, review leads, malformed-input bounds, certificate metadata, partial
 signing coverage, authenticated adapter discovery and case-scoped results.
 Synthetic fixtures do not establish real-world malware detection accuracy or
 Android installability. No runtime application database was modified.
+
+## Milestone 5 — DEX identifier triage, 20 October 2026
+
+Live PostgreSQL 17.11: **82 passed in 74.97 seconds**. SQLite: **76 passed,
+six PostgreSQL-only tests skipped in 33.15 seconds**. Both retained the existing
+Starlette TestClient deprecation warning. Ten new tests cover DEX identifier
+references, string candidates, malformed table/header bounds, unsupported formats,
+modified UTF-8, output caps and mixed valid/invalid multidex worker processing.
+The temporary PostgreSQL server was stopped. These are functional tests using
+synthetic table fixtures, not malware-detection or Android-installability benchmarks.
+The final worker error-code allowlist adjustment also passed the ten targeted
+SQLite DEX tests; Ruff and dependency consistency checks passed.

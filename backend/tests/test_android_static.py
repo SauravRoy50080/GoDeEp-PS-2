@@ -254,7 +254,7 @@ def test_analyzer_catalog_declares_real_capabilities(intake):
     response = client.get("/api/v1/analyzers")
     assert response.status_code == 200
     catalog = {item["name"]: item for item in response.json()}
-    assert set(catalog) == {"archive_inventory", "android_static"}
+    assert set(catalog) == {"archive_inventory", "android_static", "dex_static"}
     assert "binary_manifest" in catalog["android_static"]["capabilities"]
     assert not catalog["android_static"]["cryptographic_signature_verification"]
     client.headers.pop("Authorization")

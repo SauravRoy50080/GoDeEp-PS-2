@@ -35,3 +35,10 @@ class Settings(BaseSettings):
     max_signature_bytes: int = Field(default=8388608, ge=1024, le=16777216)
     max_certificate_member_bytes: int = Field(default=1048576, ge=1024, le=4194304)
     max_certificates: int = Field(default=64, ge=1, le=256)
+
+    max_dex_bytes: int = Field(default=16777216, ge=112, le=67108864)
+    max_dex_total_bytes: int = Field(default=67108864, ge=112, le=268435456)
+    max_dex_files: int = Field(default=32, ge=1, le=128)
+    max_dex_identifiers: int = Field(default=100000, ge=1, le=1000000)
+    max_dex_string_bytes: int = Field(default=8192, ge=16, le=65536)
+    max_dex_findings: int = Field(default=500, ge=1, le=2000)

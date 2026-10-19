@@ -11,6 +11,7 @@ router = APIRouter(tags=["analysis adapters"])
 @router.get("/analyzers")
 def analyzers(user: CurrentUser):
     capabilities = {
+        "dex_static": ["dex_method_identifier_review", "dex_string_network_candidates"],
         "archive_inventory": ["archive_metadata", "dex_and_native_path_inventory"],
         "android_static": [
             "binary_manifest",

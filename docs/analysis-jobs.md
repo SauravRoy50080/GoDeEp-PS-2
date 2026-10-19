@@ -151,3 +151,6 @@ explicit retries/limits, cancellation, expired leases, output limits and worker 
 Timeout handling is tested with an injected non-terminating process double.
 Live PostgreSQL adds simultaneous worker claims and a cancel/terminal-transition race.
 Run the suite using [PostgreSQL test setup](postgresql-verification.md).
+
+The dex_static adapter adds bounded identifier-table triage; see
+[DEX analysis](dex-static-analysis.md). All three adapters use the same worker.

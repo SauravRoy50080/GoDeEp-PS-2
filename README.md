@@ -40,10 +40,10 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 4 — Android static evidence:** intake and durable jobs now support
-> binary manifests, permissions, exported-component review and certificate metadata.
-> DEX behaviour, dynamic sandboxing, scoring, AI and the dashboard remain planned.
-> Certificate extraction does not verify APK signatures or establish malware.
+> **Milestone 5 — DEX identifier triage:** jobs now include bounded multidex
+> method-reference review and network-string candidates, alongside manifest and
+> certificate metadata. References do not establish runtime actions. Instruction
+> tracing, dynamic sandboxing, scoring, AI and the dashboard remain planned.
 
 | Area | Current state |
 |---|---|
@@ -52,7 +52,7 @@ could not observe.
 | Bounded raw APK intake and local original-byte storage | Implemented |
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
-| Durable job queue and separate worker | Implemented for archive inventory and Android static evidence |
+| Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
 | Malware analyzers, reporting and AI | Planned; no malware classification yet |
 | Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
 | Object storage and frontend dashboard | Planned |
@@ -264,7 +264,8 @@ GoDeEp-PS-2/
 - [x] Add bounded APK intake, hashing, metadata persistence, and local evidence storage.
 - [x] Implement durable jobs, provenance, explicit retries, timeouts and cancellation for archive inventory.
 - [x] Integrate bounded manifest, component, permission and certificate extraction.
-- [ ] Add DEX/API/evasion analysis and benchmark detection quality.
+- [x] Add bounded DEX method-reference rules and network-string candidates.
+- [ ] Add instruction/call-graph/evasion analysis and benchmark detection quality.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
 - [ ] Implement IoC enrichment, correlation, and explainable scoring.
 - [ ] Add evidence-linked reports and AI investigation assistance.
@@ -320,6 +321,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [DEX identifier and network-candidate analysis](docs/dex-static-analysis.md)
 - [Android static analysis](docs/android-static-analysis.md)
 - [Analysis worker setup and job API](docs/analysis-jobs.md)
 - [Live PostgreSQL verification and test setup](docs/postgresql-verification.md)
