@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.coverage
+htmlcov/
+# Local configuration and evidence
+.env
+.env.*
+!.env.example
+data/
+*.apk
+*.aab
+*.dex
+*.pcap
+*.pcapng
+# Local duplicate checkouts; not project source
+/GoDeEp-PS-2/
+/GoDeEp-PS-2-1/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,1 @@
+"""Planned external tool adapters."""
