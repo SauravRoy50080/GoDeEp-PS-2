@@ -21,3 +21,7 @@ class Settings(BaseSettings):
     max_archive_entries: int = Field(default=10000, ge=1, le=65534)
     max_uncompressed_bytes: int = Field(default=1024 * 1024 * 1024, ge=1)
     max_central_directory_bytes: int = Field(default=8 * 1024 * 1024, ge=1)
+
+    session_ttl_seconds: int = Field(default=28800, ge=60, le=86400)
+    login_max_attempts: int = Field(default=5, ge=1, le=20)
+    login_lock_seconds: int = Field(default=900, ge=60, le=86400)

@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 
 from godeep.core.config import Settings
 from godeep.main import create_app
+from godeep.services.auth import create_user
 
 
 @pytest.fixture
@@ -24,5 +25,10 @@ def intake(tmp_path, monkeypatch):
         evidence_root=tmp_path / "evidence",
     )
     app = create_app(settings)
+    create_user(app.state.sessions, "owner", "owner-test-password-123")
     with TestClient(app) as client:
+        token = client.post(
+            "/api/v1/auth/login", json={"username": "owner", "password": "owner-test-password-123"}
+        ).json()["access_token"]
+        client.headers["Authorization"] = f"Bearer {token}"
         yield client, app, config

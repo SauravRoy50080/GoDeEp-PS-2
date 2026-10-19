@@ -26,6 +26,7 @@ class Record(BaseModel):
 
 
 class CaseRead(Record):
+    owner_id: UUID
     name: str
     description: str
 

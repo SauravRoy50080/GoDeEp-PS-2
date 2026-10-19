@@ -1,9 +1,10 @@
 # Milestone 1: local evidence intake
 
 Implemented: cases, raw APK upload, SHA-256, original-byte storage, sample metadata,
-paginated queries and transactional intake events. Authentication, analysis jobs,
-Android parsing and malware verdicts remain future work. Run only on localhost
-with synthetic fixtures until authentication and worker isolation are added.
+paginated queries and transactional intake events. Authentication and case permissions
+were added in milestone 2; analysis jobs, Android parsing and malware verdicts remain
+future work. Run on localhost with synthetic fixtures pending deployment hardening.
+See [authentication setup](authentication.md) before using these endpoints.
 
 ## Install and migrate (repository root, PowerShell)
 
@@ -35,13 +36,16 @@ variables override `.env`. Liveness remains independent of database readiness.
 
 ## API walkthrough
 
+First log in as described in the authentication guide. Set `$headers` to
+`@{Authorization="Bearer $token"}` using the returned session token.
+
 ```powershell
 $case = Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/v1/cases `
-  -ContentType application/json -Body '{"name":"Synthetic test","description":"Local evaluation"}'
+  -Headers $headers -ContentType application/json -Body '{"name":"Synthetic test","description":"Local evaluation"}'
 Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8000/api/v1/cases/$($case.id)/samples" `
-  -ContentType application/octet-stream -Headers @{"X-Filename"="fixture.apk"} -InFile ./fixture.apk
-Invoke-RestMethod "http://127.0.0.1:8000/api/v1/cases/$($case.id)/samples?limit=25&offset=0"
-Invoke-RestMethod "http://127.0.0.1:8000/api/v1/cases/$($case.id)/audit"
+  -ContentType application/octet-stream -Headers (@{Authorization="Bearer $token";"X-Filename"="fixture.apk"}) -InFile ./fixture.apk
+Invoke-RestMethod -Headers $headers "http://127.0.0.1:8000/api/v1/cases/$($case.id)/samples?limit=25&offset=0"
+Invoke-RestMethod -Headers $headers "http://127.0.0.1:8000/api/v1/cases/$($case.id)/audit"
 ```
 
 Upload uses the **raw file as the request body**, not multipart. Extension and
@@ -68,8 +72,9 @@ records even when hashes match. Storage paths are not exposed by public schemas.
   transaction: process crashes can leave orphan files. Startup reconciliation and
   crash recovery are future work; never auto-delete unexplained evidence.
 - Audit rows are committed with their mutation. They are application events, not
-  an authenticated, append-only, tamper-evident chain of custody. Actor is explicitly
-  `local-development` until authenticated identities exist. Rejected intake logging
+  an append-only, tamper-evident chain of custody. Actor is
+  the authenticated user UUID for new mutations; old `local-development` events
+  remain unchanged. Rejected intake logging
   and download events are not implemented.
 
 ## Verification

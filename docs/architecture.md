@@ -1,8 +1,8 @@
 # Backend architecture
 
 Status: local intake implemented (cases, samples, bounded ZIP triage, SHA-256,
-local originals and transactional intake events). Analysis, auth and worker
-isolation remain planned. See [milestone guide](intake-development.md).
+local originals and transactional case events). Authentication, revocable sessions
+and case permissions are implemented. Analysis and worker isolation remain planned. See [milestone guide](intake-development.md).
 
 ## Boundaries
 

@@ -17,12 +17,13 @@ def register_sample(
     staged: Path,
     sha256: str,
     size_bytes: int,
+    user_id: str,
 ) -> Sample:
     validate_archive(staged, settings)
     destination = None
     try:
         with factory.begin() as session:
-            require_case(session, case_id)
+            require_case(session, case_id, user_id, write=True)
             key, destination = store.publish(staged, sample_id)
             sample = Sample(
                 id=sample_id,
@@ -37,6 +38,7 @@ def register_sample(
                 AuditEvent(
                     case_id=case_id,
                     action="sample.registered",
+                    actor=user_id,
                     subject_id=sample_id,
                     details={"sha256": sha256, "size_bytes": size_bytes},
                 )

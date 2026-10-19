@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
 ![Track](https://img.shields.io/badge/PS--02-Malware%20Analysis-7C3AED)
-![Status](https://img.shields.io/badge/Status-Evidence%20Intake-F59E0B)
+![Status](https://img.shields.io/badge/Status-Authenticated%20Intake-F59E0B)
 ![Focus](https://img.shields.io/badge/Focus-Evidence--Driven%20Investigation-0F766E)
 
 **From suspicious APKs to traceable evidence and explainable findings.**
@@ -40,10 +40,10 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 1 — local evidence intake:** the backend now registers cases and APK
-> samples, preserves original bytes with SHA-256 hashes, and records intake events.
-> Android analysis, authentication, sandboxing, scoring, AI and the dashboard are
-> not implemented. This stage is for localhost development with synthetic fixtures.
+> **Milestone 2 — authenticated intake:** operator-created accounts, revocable
+> login sessions, case ownership and analyst/viewer access now protect evidence
+> intake. Android analysis, sandboxing, scoring, AI and the dashboard remain
+> planned. This stage is for localhost development; deployment hardening is pending.
 
 | Area | Current state |
 |---|---|
@@ -51,9 +51,9 @@ could not observe.
 | Cases and paginated sample metadata | Implemented |
 | Bounded raw APK intake and local original-byte storage | Implemented |
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite-tested, live PostgreSQL pending |
-| Transactional intake event records | Implemented; authenticated/tamper-evident audit pending |
+| Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Analyzer, worker, reporting and AI packages | Structure only |
-| Authentication and case access permissions | Next milestone |
+| Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
 | Object storage and frontend dashboard | Planned |
 
 ## Planned capabilities
@@ -129,7 +129,8 @@ the hosts used to execute untrusted Android applications.
 - These instructions start the API scaffold. Android SDKs, emulators, and analysis
   engines are not required at this stage.
 - For intake endpoints, configure a database and apply migrations using the
-  [milestone setup guide](docs/intake-development.md). The commands below start the API;
+  [intake setup guide](docs/intake-development.md) and
+  [account setup](docs/authentication.md). The commands below start the API;
   they do not provision PostgreSQL or create tables.
 
 ### Windows PowerShell
@@ -169,6 +170,11 @@ is not included.
 | `GET` | `/docs` | Interactive Swagger API documentation |
 | `GET` | `/redoc` | Alternative API documentation |
 | `GET` | `/openapi.json` | Generated OpenAPI specification |
+| `POST` | `/api/v1/auth/login` | Exchange credentials for an expiring bearer token |
+| `GET` | `/api/v1/auth/me` | Retrieve authenticated identity |
+| `POST` | `/api/v1/auth/logout` | Revoke current session |
+| `GET` / `PUT` | `/api/v1/cases/{case_id}/members` | Owner lists or grants membership |
+| `DELETE` | `/api/v1/cases/{case_id}/members/{user_id}` | Owner removes membership |
 | `POST` / `GET` | `/api/v1/cases` | Create/list investigation cases |
 | `GET` | `/api/v1/cases/{case_id}` | Retrieve a case |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
@@ -189,7 +195,8 @@ Response:
 
 Liveness does not indicate database, worker, or sandbox readiness. Intake requires
 migrated database tables. Upload accepts raw bytes with an `X-Filename` header,
-not multipart. See [intake setup and examples](docs/intake-development.md).
+not multipart. All case/sample/audit/member endpoints now require a bearer token.
+See [authentication](docs/authentication.md) before using the intake examples.
 
 ## Repository structure
 
@@ -233,7 +240,8 @@ GoDeEp-PS-2/
 - [x] Create backend package structure and configuration.
 - [x] Add versioned routing, liveness endpoint, and initial verification.
 - [x] Document architecture and research patterns.
-- [ ] Implement authentication, authorization, cases, and audit records.
+- [x] Implement local accounts, sessions, case permissions and authenticated case events.
+- [ ] Add deployment hardening, MFA/SSO/recovery and durable security-event monitoring.
 - [x] Add bounded APK intake, hashing, metadata persistence, and local evidence storage.
 - [ ] Implement queued jobs, run provenance, retries, timeouts, and cancellation.
 - [ ] Benchmark and integrate selected static analyzers.
@@ -256,7 +264,8 @@ On Linux/macOS, use `.venv/bin/python` in place of
 `.\.venv\Scripts\python.exe`.
 
 The suite checks liveness, case/sample persistence, original-byte/hash integrity,
-case scoping, bounds, rejection and cleanup paths, and migration consistency. It
+case scoping, role permissions, session lifecycle, bounds, failure cleanup, and
+migration consistency. It
 does not evaluate malware detection, sandbox containment or live PostgreSQL. See
 [validation limits](docs/intake-development.md).
 
@@ -289,6 +298,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Authentication and case permissions](docs/authentication.md)
 - [Local intake setup and API walkthrough](docs/intake-development.md)
 - [Architecture and design constraints](docs/architecture.md)
 - [Implementation roadmap](docs/roadmap.md)

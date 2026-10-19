@@ -1,4 +1,4 @@
-"""Local-development intake API. Authorization is a later milestone."""
+"""Authenticated intake API with case-scoped access checks."""
 
 import hashlib
 import os
@@ -9,6 +9,7 @@ from fastapi import APIRouter, Header, HTTPException, Query, Request
 from starlette.concurrency import run_in_threadpool
 
 from godeep.analysis.static.archive import InvalidAPK
+from godeep.api.dependencies import CurrentUser
 from godeep.persistence.models import AuditEvent, Case, Sample
 from godeep.schemas.intake import AuditRead, CaseCreate, CaseRead, Page, SampleRead
 from godeep.services import cases
@@ -18,45 +19,54 @@ router = APIRouter(tags=["evidence intake"])
 
 
 @router.post("/cases", response_model=CaseRead, status_code=201)
-def create_case(payload: CaseCreate, request: Request):
-    return cases.create_case(request.app.state.sessions, payload)
+def create_case(payload: CaseCreate, request: Request, user: CurrentUser):
+    return cases.create_case(request.app.state.sessions, payload, user.user_id)
 
 
 @router.get("/cases", response_model=Page[CaseRead])
 def list_cases(
-    request: Request, limit: int = Query(25, ge=1, le=100), offset: int = Query(0, ge=0)
+    request: Request,
+    user: CurrentUser,
+    limit: int = Query(25, ge=1, le=100),
+    offset: int = Query(0, ge=0),
 ):
-    return cases.list_records(request.app.state.sessions, Case, limit, offset)
+    return cases.list_records(request.app.state.sessions, Case, limit, offset, user.user_id)
 
 
 @router.get("/cases/{case_id}", response_model=CaseRead)
-def get_case(case_id: UUID, request: Request):
-    return cases.get_case(request.app.state.sessions, str(case_id))
+def get_case(case_id: UUID, request: Request, user: CurrentUser):
+    return cases.get_case(request.app.state.sessions, str(case_id), user.user_id)
 
 
 @router.get("/cases/{case_id}/samples", response_model=Page[SampleRead])
 def list_samples(
     case_id: UUID,
     request: Request,
+    user: CurrentUser,
     limit: int = Query(25, ge=1, le=100),
     offset: int = Query(0, ge=0),
 ):
-    return cases.list_records(request.app.state.sessions, Sample, limit, offset, str(case_id))
+    return cases.list_records(
+        request.app.state.sessions, Sample, limit, offset, user.user_id, str(case_id)
+    )
 
 
 @router.get("/cases/{case_id}/samples/{sample_id}", response_model=SampleRead)
-def get_sample(case_id: UUID, sample_id: UUID, request: Request):
-    return cases.get_sample(request.app.state.sessions, str(case_id), str(sample_id))
+def get_sample(case_id: UUID, sample_id: UUID, request: Request, user: CurrentUser):
+    return cases.get_sample(request.app.state.sessions, str(case_id), str(sample_id), user.user_id)
 
 
 @router.get("/cases/{case_id}/audit", response_model=Page[AuditRead])
 def list_audit(
     case_id: UUID,
     request: Request,
+    user: CurrentUser,
     limit: int = Query(25, ge=1, le=100),
     offset: int = Query(0, ge=0),
 ):
-    return cases.list_records(request.app.state.sessions, AuditEvent, limit, offset, str(case_id))
+    return cases.list_records(
+        request.app.state.sessions, AuditEvent, limit, offset, user.user_id, str(case_id)
+    )
 
 
 @router.post(
@@ -73,7 +83,9 @@ def list_audit(
         }
     },
 )
-async def upload_sample(case_id: UUID, request: Request, x_filename: str = Header(...)):
+async def upload_sample(
+    case_id: UUID, request: Request, user: CurrentUser, x_filename: str = Header(...)
+):
     settings = request.app.state.settings
     factory = request.app.state.sessions
     store = request.app.state.evidence_store
@@ -89,7 +101,7 @@ async def upload_sample(case_id: UUID, request: Request, x_filename: str = Heade
         raise HTTPException(
             422, "X-Filename must be a plain .apk filename (maximum 255 characters)"
         )
-    await run_in_threadpool(cases.get_case, factory, str(case_id))
+    await run_in_threadpool(cases.get_case, factory, str(case_id), user.user_id, write=True)
     declared = request.headers.get("content-length")
     if declared is not None:
         if not declared.isascii() or not declared.isdecimal():
@@ -129,6 +141,7 @@ async def upload_sample(case_id: UUID, request: Request, x_filename: str = Heade
             staged,
             digest.hexdigest(),
             size,
+            user.user_id,
         )
     except InvalidAPK as exc:
         raise HTTPException(422, str(exc)) from exc
