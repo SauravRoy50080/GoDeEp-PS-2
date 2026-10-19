@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
 ![Track](https://img.shields.io/badge/PS--02-Malware%20Analysis-7C3AED)
-![Status](https://img.shields.io/badge/Status-Authenticated%20Intake-F59E0B)
+![Status](https://img.shields.io/badge/Status-Analysis%20Jobs-F59E0B)
 ![Focus](https://img.shields.io/badge/Focus-Evidence--Driven%20Investigation-0F766E)
 
 **From suspicious APKs to traceable evidence and explainable findings.**
@@ -40,10 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 2 — authenticated intake:** operator-created accounts, revocable
-> login sessions, case ownership and analyst/viewer access now protect evidence
-> intake. Android analysis, sandboxing, scoring, AI and the dashboard remain
-> planned. This stage is for localhost development; deployment hardening is pending.
+> **Milestone 3 — analysis jobs:** authenticated case/sample intake now connects
+> to a durable job queue and separate archive-inventory worker. Jobs support
+> status tracking, timeouts, cancellation, explicit retries and hash-linked JSON
+> results. Full Android/malware analysis, dynamic sandboxing, scoring, AI and the
+> dashboard remain planned. This is a localhost development milestone.
 
 | Area | Current state |
 |---|---|
@@ -52,7 +53,8 @@ could not observe.
 | Bounded raw APK intake and local original-byte storage | Implemented |
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
-| Analyzer, worker, reporting and AI packages | Structure only |
+| Durable job queue and separate worker | Implemented for archive inventory |
+| Malware analyzers, reporting and AI | Planned; no malware classification yet |
 | Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
 | Object storage and frontend dashboard | Planned |
 
@@ -85,14 +87,14 @@ has been established for GoDeEp yet.**
 
 ## Proposed architecture
 
-The diagram describes the target system. Local intake now exists; worker orchestration
-and analysis stages remain planned. See the milestone guide for exact scope.
+The diagram describes the target system. Local intake, durable jobs and the archive
+inventory worker now exist; deeper static and dynamic analysis remain planned.
 
 ```mermaid
 flowchart TD
     A["APK intake and case registration — implemented"] --> B["SHA-256 and local originals — implemented"]
-    B --> C["Analysis job orchestration — planned"]
-    C --> D["Static analysis workers — planned"]
+    B --> C["Durable analysis jobs — implemented"]
+    C --> D["Archive inventory worker — implemented"]
     C --> E["Isolated Android runtime hosts — planned"]
     D --> F["Normalized observations and raw artifacts — planned"]
     E --> F
@@ -101,7 +103,7 @@ flowchart TD
     G --> I["Risk, confidence and coverage — planned"]
     I --> J["Investigator review and reports — planned"]
     J --> K["Evidence-grounded AI assistance — planned"]
-    L["FastAPI intake API — implemented"] -. "Future orchestration interface" .-> C
+    L["FastAPI intake API — implemented"] -. "Job submission" .-> C
 ```
 
 The intended deployment separates the API, metadata, and evidence storage from
@@ -191,7 +193,12 @@ Java and other external tools are not installed by pip.
 | `GET` | `/api/v1/cases/{case_id}` | Retrieve a case |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}` | Retrieve sample metadata |
-| `GET` | `/api/v1/cases/{case_id}/audit` | List case intake events |
+| `GET` | `/api/v1/cases/{case_id}/audit` | List case events |
+| `POST` / `GET` | `/api/v1/cases/{case_id}/analyses` | Queue/list sample analysis jobs |
+| `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}` | Read job status/provenance |
+| `POST` | `/api/v1/cases/{case_id}/analyses/{job_id}/cancel` | Cancel a job |
+| `POST` | `/api/v1/cases/{case_id}/analyses/{job_id}/retry` | Create an explicit retry |
+| `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}/result` | Read hash-verified inventory results |
 
 Open **http://127.0.0.1:8000/docs** after starting the server.
 
@@ -255,7 +262,7 @@ GoDeEp-PS-2/
 - [x] Implement local accounts, sessions, case permissions and authenticated case events.
 - [ ] Add deployment hardening, MFA/SSO/recovery and durable security-event monitoring.
 - [x] Add bounded APK intake, hashing, metadata persistence, and local evidence storage.
-- [ ] Implement queued jobs, run provenance, retries, timeouts, and cancellation.
+- [x] Implement durable jobs, provenance, explicit retries, timeouts and cancellation for archive inventory.
 - [ ] Benchmark and integrate selected static analyzers.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
 - [ ] Implement IoC enrichment, correlation, and explainable scoring.
@@ -279,7 +286,8 @@ The suite checks liveness, case/sample persistence, original-byte/hash integrity
 case scoping, role permissions, session lifecycle, bounds, failure cleanup, and
 migration consistency. It
 does not evaluate malware detection or sandbox containment. Live PostgreSQL
-verification passed all 40 tests; see [results and repeatable setup](docs/postgresql-verification.md).
+verification results and repeatable setup are recorded in
+[the test guide](docs/postgresql-verification.md).
 
 ## Research foundations
 
@@ -310,6 +318,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Analysis worker setup and job API](docs/analysis-jobs.md)
 - [Live PostgreSQL verification and test setup](docs/postgresql-verification.md)
 - [Authentication and case permissions](docs/authentication.md)
 - [Local intake setup and API walkthrough](docs/intake-development.md)

@@ -25,3 +25,7 @@ class Settings(BaseSettings):
     session_ttl_seconds: int = Field(default=28800, ge=60, le=86400)
     login_max_attempts: int = Field(default=5, ge=1, le=20)
     login_lock_seconds: int = Field(default=900, ge=60, le=86400)
+
+    job_timeout_seconds: int = Field(default=60, ge=1, le=300)
+    worker_poll_seconds: float = Field(default=2.0, ge=0.1, le=60)
+    max_result_bytes: int = Field(default=1048576, ge=1024, le=10485760)

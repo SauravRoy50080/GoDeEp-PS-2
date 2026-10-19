@@ -89,3 +89,33 @@ class CaseMember(Base):
     case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), primary_key=True)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
     role: Mapped[str] = mapped_column(String(20))
+
+
+class AnalysisJob(Base):
+    __tablename__ = "analysis_jobs"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('queued','running','completed','failed','cancelled')",
+            name="ck_analysis_status",
+        ),
+        CheckConstraint("attempt >= 1 AND attempt <= 3", name="ck_analysis_attempt"),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
+    sample_id: Mapped[str] = mapped_column(ForeignKey("samples.id"))
+    requested_by: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    parent_id: Mapped[str | None] = mapped_column(ForeignKey("analysis_jobs.id"), unique=True)
+    adapter: Mapped[str] = mapped_column(String(80))
+    adapter_version: Mapped[str] = mapped_column(String(40))
+    config: Mapped[dict] = mapped_column(JSON)
+    input_sha256: Mapped[str] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(String(20), default="queued", index=True)
+    attempt: Mapped[int] = mapped_column(Integer, default=1)
+    claim_token: Mapped[str | None] = mapped_column(String(36))
+    lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    error_code: Mapped[str | None] = mapped_column(String(80))
+    result_key: Mapped[str | None] = mapped_column(String(160))
+    result_sha256: Mapped[str | None] = mapped_column(String(64))

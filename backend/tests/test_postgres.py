@@ -137,3 +137,66 @@ def test_auth_migration_preserves_original_sample_and_historical_audit(intake, t
         assert saved.sha256 == digest and saved.size_bytes == len(original)
         assert (app.state.settings.evidence_root / saved.storage_key).read_bytes() == original
         assert session.get(AuditEvent, event_id).actor == "local-development"
+
+
+def test_concurrent_workers_claim_different_jobs(intake):
+    from test_jobs import fixture_sample, queue
+
+    from godeep.services.jobs import claim_job
+
+    client, app, _ = intake
+    case_id, sample = fixture_sample(client)
+    queued = {queue(client, case_id, sample)["id"] for _ in range(2)}
+    barrier = Barrier(2)
+
+    def claim(_):
+        barrier.wait(timeout=10)
+        return claim_job(app.state.sessions)
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        claimed = list(pool.map(claim, range(2)))
+    assert {job.id for job in claimed} == queued
+    assert all(job.status == "running" for job in claimed)
+    assert claimed[0].claim_token != claimed[1].claim_token
+    assert claim_job(app.state.sessions) is None
+
+
+def test_cancel_and_worker_failure_race_has_one_terminal_event(intake):
+    from test_jobs import fixture_sample, path, queue
+
+    from godeep.services.jobs import cancel_job, claim_job, finish_job
+
+    client, app, _ = intake
+    case_id, sample = fixture_sample(client)
+    job = queue(client, case_id, sample)
+    claimed = claim_job(app.state.sessions)
+    owner_id = client.get("/api/v1/auth/me").json()["id"]
+    barrier = Barrier(2)
+
+    def cancel():
+        barrier.wait(timeout=10)
+        try:
+            cancel_job(app.state.sessions, case_id, job["id"], owner_id)
+            return True
+        except HTTPException as error:
+            assert error.status_code == 409
+            return False
+
+    def complete():
+        barrier.wait(timeout=10)
+        return finish_job(
+            app.state.sessions, claimed.id, claimed.claim_token, error_code="simulated_failure"
+        )
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        cancel_future, complete_future = pool.submit(cancel), pool.submit(complete)
+        assert cancel_future.result() != complete_future.result()
+    assert client.get(path(case_id, job["id"])).json()["status"] in {"failed", "cancelled"}
+    with app.state.sessions() as session:
+        events = session.scalars(
+            select(AuditEvent).where(
+                AuditEvent.subject_id == job["id"],
+                AuditEvent.action.in_(["analysis.failed", "analysis.cancelled"]),
+            )
+        ).all()
+        assert len(events) == 1

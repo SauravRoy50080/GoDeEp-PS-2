@@ -20,13 +20,29 @@ The portable runtime came from the EDB archive linked by the
 Binaries, cluster files and session-only startup helpers remain outside the Git
 repository. Running the backend does not require those temporary helpers.
 
+## Milestone 3 extension — analysis jobs
+
+The expanded suite passed on the same live PostgreSQL 17.11 runtime:
+**53 passed in 52.82 seconds**. SQLite regression: **47 passed, six PostgreSQL-only
+checks skipped**. The temporary server was stopped afterward. No application
+runtime database was modified.
+
+This adds real subprocess archive inventory, job permissions, cancellation,
+explicit retries, stale-claim/lease handling, source/result hash checks and worker
+CLI coverage. Timeout behaviour uses a process double. Two additional PostgreSQL
+checks verify that simultaneous workers claim distinct jobs and that a racing
+cancel/failure produces exactly one terminal audit transition.
+
+The original 40-test result below remains the historical milestone 2 baseline.
+Current instructions run the entire expanded suite.
+
 ## What the tests establish
 
 The normal suite runs actual case creation, APK intake, hash/original verification,
 transaction rollback, pagination, authentication, session revocation/expiry,
 case access checks, role grants/removals and migration/schema consistency.
 
-`backend/tests/test_postgres.py` adds four live-database checks:
+`backend/tests/test_postgres.py` originally added four live-database checks:
 
 1. Eight simultaneous incorrect logins preserve the failure counter and trigger
    the configured account lock, without lost updates.
@@ -87,4 +103,4 @@ portable binaries rather than this Docker configuration. Docker startup itself
 has not been exercised in this environment.
 
 Without `GODEEP_TEST_POSTGRES_ADMIN_URL`, tests use SQLite and explicitly skip the
-four live PostgreSQL checks. Do not interpret that run as PostgreSQL verification.
+six live PostgreSQL checks. Do not interpret that run as PostgreSQL verification.

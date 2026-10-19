@@ -2,7 +2,9 @@
 
 Status: local intake implemented (cases, samples, bounded ZIP triage, SHA-256,
 local originals and transactional case events). Authentication, revocable sessions
-and case permissions are implemented. Analysis and worker isolation remain planned. See [milestone guide](intake-development.md).
+and case permissions are implemented. Durable jobs and a bounded archive-inventory subprocess worker are implemented.
+Full malware analyzers and OS-level worker isolation remain planned. See
+[worker architecture](analysis-jobs.md). See [milestone guide](intake-development.md).
 
 ## Boundaries
 

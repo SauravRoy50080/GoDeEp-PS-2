@@ -2,7 +2,7 @@
 
 1. Evidence foundation (local intake implemented; accounts/sessions and case permissions implemented; deployment hardening pending): cases, samples, upload validation, hashes, audit records,
    authentication, authorization, database migrations and storage.
-2. Jobs and adapters: bounded workers, retries, cancellation, run provenance,
+2. Jobs and adapters (queue and archive inventory implemented; malware engines pending): bounded workers, retries, cancellation, run provenance,
    raw output retention and normalized observations.
 3. Static analysis: evaluate pinned engines using controlled test APKs.
 4. Dynamic analysis: isolated Android environments, repeatable actions,
