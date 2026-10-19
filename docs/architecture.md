@@ -42,3 +42,6 @@ analysis workers. The database queue and adapter registry are implemented; Andro
 DEX identifier tables and network-string candidates are now supported through
 [dex_static](dex-static-analysis.md). Bounded invoke-site decoding is now supported by dex_calls.
 Control-flow, dispatch resolution and call-graph analysis remain planned.
+
+The static_review adapter runs static phases on one verified snapshot and groups
+findings with related permission context; see [unified review](unified-static-review.md).

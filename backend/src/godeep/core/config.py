@@ -45,3 +45,6 @@ class Settings(BaseSettings):
 
     max_dex_encoded_methods: int = Field(default=10000, ge=1, le=100000)
     max_dex_code_units: int = Field(default=1000000, ge=1, le=10000000)
+
+    max_review_findings: int = Field(default=500, ge=1, le=2000)
+    max_review_evidence: int = Field(default=50, ge=1, le=200)

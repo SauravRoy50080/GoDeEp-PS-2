@@ -141,3 +141,16 @@ registers and targets, code bounds, missing bodies, native flags, output limits,
 unresolved indirect invokes, unreachable instruction labelling and real worker
 persistence. Original synthetic fixtures establish parser behaviour, not Android
 installability, reachability or real-world malware detection accuracy.
+
+## Milestone 7 — unified static review, 20 October 2026
+
+Live PostgreSQL 17.11: **106 passed in 80.50 seconds**. SQLite: **100 passed,
+six PostgreSQL-only tests skipped in 34.03 seconds**. Both retained the existing
+Starlette TestClient deprecation warning. The temporary PostgreSQL server stopped
+following verification. Ruff lint/format and dependency consistency checks passed.
+
+Eight new tests cover qualified permission context, missing versus unavailable
+manifest state, reference-only findings, duplicate suppression and stable IDs,
+output caps, grouped network candidates and real case-scoped worker processing
+with valid input, broken manifests and malformed DEX members. These are functional
+synthetic-fixture tests, not malware detection benchmarks or production certification.

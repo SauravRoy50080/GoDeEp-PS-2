@@ -40,10 +40,10 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 6 — instruction call-site evidence:** analysis can now link sensitive
-> API leads to encoded callers and decoded invoke offsets. Manifest, certificate
-> and identifier/string evidence remain available. Runtime execution, reachability,
-> scoring, AI and the dashboard remain planned.
+> **Milestone 7 — unified static review:** one analysis combines manifest,
+> certificate and DEX invoke evidence with grouped findings, related permission
+> context and network-string candidates. Coverage gaps remain explicit. Dynamic
+> analysis, threat enrichment, risk scoring, reports, AI and the dashboard are planned.
 
 | Area | Current state |
 |---|---|
@@ -268,7 +268,8 @@ GoDeEp-PS-2/
 - [x] Add bounded instruction decoding and sensitive API invoke-site evidence.
 - [ ] Add control-flow/call-graph/evasion analysis and benchmark detection quality.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
-- [ ] Implement IoC enrichment, correlation, and explainable scoring.
+- [x] Group static findings and add permission context with evidence references.
+- [ ] Implement IoC enrichment, cross-source correlation and explainable scoring.
 - [ ] Add evidence-linked reports and AI investigation assistance.
 - [ ] Build the investigation dashboard on a separate frontend branch.
 - [ ] Evaluate detection quality and operational limitations on held-out datasets.
@@ -322,6 +323,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Unified static review](docs/unified-static-review.md)
 - [Instruction call-site evidence](docs/dex-call-analysis.md)
 - [DEX identifier and network-candidate analysis](docs/dex-static-analysis.md)
 - [Android static analysis](docs/android-static-analysis.md)

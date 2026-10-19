@@ -7,6 +7,7 @@ ADAPTER_VERSIONS = {
     "android_static": "1.0.0",
     "dex_static": "1.0.0",
     "dex_calls": "1.0.0",
+    "static_review": "1.0.0",
 }
 
 

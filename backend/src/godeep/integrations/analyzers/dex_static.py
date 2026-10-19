@@ -28,6 +28,31 @@ def analyze_members(
     limitations=None,
 ):
     settings, size = prepare_snapshot(original, snapshot, expected_hash, config)
+    return analyze_snapshot(
+        snapshot,
+        settings,
+        size,
+        expected_hash,
+        parser=parser,
+        name=name,
+        version=version,
+        complete=complete,
+        limitations=limitations,
+    )
+
+
+def analyze_snapshot(
+    snapshot,
+    settings,
+    size,
+    expected_hash,
+    *,
+    parser=parse_dex,
+    name=NAME,
+    version=VERSION,
+    complete="identifier_tables_parsed",
+    limitations=None,
+):
     results, total = [], 0
     with ZipFile(snapshot) as archive:
         members = [

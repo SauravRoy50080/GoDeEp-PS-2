@@ -10,7 +10,8 @@
    analysis and evaluate controlled test APKs.
 4. Dynamic analysis: isolated Android environments, repeatable actions,
    filesystem/process/network observations and coverage reporting.
-5. Intelligence and correlation: source-aware IoC enrichment, deduplication,
+5. Intelligence and correlation (static grouping and permission context implemented):
+   source-aware IoC enrichment, cross-source correlation,
    explainable scoring and analyst review.
 6. Reporting and AI: evidence-linked explanations, exports and investigation assistance.
 
