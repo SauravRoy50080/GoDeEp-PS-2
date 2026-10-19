@@ -4,7 +4,7 @@ from godeep.analysis.static.calls import parse_calls
 from godeep.integrations.analyzers.dex_static import analyze_members
 
 NAME = "dex_calls"
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 
 def analyze(original, snapshot, expected_hash, config):

@@ -176,3 +176,11 @@ def test_code_bounds_fail_before_decoding():
     result = parse_calls(bytes(raw), Settings(_env_file=None))
     assert result["call_sites"] == []
     assert result["instruction_analysis"]["issues"][0]["code"] == "dex_code_bounds_invalid"
+
+
+def test_empty_concrete_code_body_is_partial_not_success():
+    raw, _ = code_fixture(b"")
+    result = parse_calls(raw, Settings(_env_file=None))
+    assert result["coverage"] == "partial"
+    assert result["instruction_analysis"]["counts"]["bodies_decoded"] == 0
+    assert result["instruction_analysis"]["issues"][0]["code"] == "dex_code_header_invalid"

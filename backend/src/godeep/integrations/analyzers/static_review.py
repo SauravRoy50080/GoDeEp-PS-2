@@ -8,10 +8,11 @@ from godeep.analysis.static.calls import parse_calls
 from godeep.analysis.static.manifest import RULE_VERSION, parse_manifest
 from godeep.analysis.static.signing import inspect_signing
 from godeep.integrations.analyzers.common import AdapterFailure, prepare_snapshot, read_member
+from godeep.integrations.analyzers.dex_calls import VERSION as CALLS_VERSION
 from godeep.integrations.analyzers.dex_static import analyze_snapshot
 
 NAME = "static_review"
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 
 def analyze(original, snapshot, expected_hash, config):
@@ -39,6 +40,7 @@ def analyze(original, snapshot, expected_hash, config):
             expected_hash,
             parser=parse_calls,
             name="dex_calls",
+            version=CALLS_VERSION,
             complete="call_sites_decoded",
             limitations=[
                 "Decoded calls do not establish reachability or runtime execution",
@@ -57,7 +59,7 @@ def analyze(original, snapshot, expected_hash, config):
         "tool_versions": {name: version(name) for name in ("androguard", "cryptography", "lxml")},
         "component_versions": {
             "manifest_rules": RULE_VERSION,
-            "dex_calls": "1.0.0",
+            "dex_calls": CALLS_VERSION,
             "correlation_rules": review["rule_version"],
         },
         "manifest": manifest,

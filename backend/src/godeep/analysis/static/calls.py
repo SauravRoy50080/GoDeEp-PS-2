@@ -96,7 +96,7 @@ def parse_calls(raw, settings):
             raise InvalidCode("dex_code_header_invalid")
         data_check(code_offset, 16)
         registers, ins, outs, tries, debug, units = struct.unpack_from("<4H2I", raw, code_offset)
-        if ins > registers:
+        if units == 0 or ins > registers:
             raise InvalidCode("dex_code_header_invalid")
         start, length = code_offset + 16, units * 2
         data_check(start, length)

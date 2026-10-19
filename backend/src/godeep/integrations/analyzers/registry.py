@@ -6,8 +6,8 @@ ADAPTER_VERSIONS = {
     "archive_inventory": "1.0.0",
     "android_static": "1.0.0",
     "dex_static": "1.0.0",
-    "dex_calls": "1.0.0",
-    "static_review": "1.0.0",
+    "dex_calls": "1.0.1",
+    "static_review": "1.0.1",
     "signature_verify": "1.0.0",
 }
 
