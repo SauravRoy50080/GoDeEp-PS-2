@@ -1,63 +1,297 @@
-# GoDeEp — PS-02
+<div align="center">
 
-AI-assisted Android application security and forensic analysis platform.
+# 🛡️ GoDeEp
 
-The backend is being built around evidence preservation, static and dynamic
-analysis, threat intelligence, and explainable findings for investigators.
+### AI-Assisted Android Application Security & Forensic Analysis Platform
 
-## Current status
+![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
+![Track](https://img.shields.io/badge/PS--02-Malware%20Analysis-7C3AED)
+![Status](https://img.shields.io/badge/Status-Backend%20Scaffold-F59E0B)
+![Focus](https://img.shields.io/badge/Focus-Evidence--Driven%20Investigation-0F766E)
 
-Backend scaffold only. The API exposes a liveness endpoint. APK ingestion,
-analysis engines, database persistence, authentication, sandbox execution,
-risk scoring, and AI assistance are planned and are not implemented yet.
-No frontend is included.
+**From suspicious APKs to traceable evidence and explainable findings.**
 
-## Development
+A platform in development for correlating Android application code, runtime
+behaviour, forensic artifacts, and threat intelligence in one investigation workflow.
 
-Requires Python 3.12 or newer. From the repository root:
+[Overview](#overview) · [Capabilities](#planned-capabilities) ·
+[Architecture](#proposed-architecture) · [Quickstart](#quickstart) ·
+[API](#available-api) · [Roadmap](#development-roadmap)
+
+</div>
+
+---
+
+## Overview
+
+Malicious Android applications can conceal functionality through obfuscation,
+encrypted payloads, dynamic code loading, and anti-analysis checks. Investigators
+must connect findings spread across code inspection, sandbox observations,
+network captures, and intelligence sources.
+
+**GoDeEp aims to bring those findings together with their supporting evidence.**
+The project targets malware analysts, digital forensic investigators, security
+researchers, and law-enforcement workflows under **PS-02 — Malware Analysis**.
+
+The intended outcome is an investigation record that explains what was found,
+where it came from, how confidently it can be interpreted, and what the analysis
+could not observe.
+
+## Implementation status
+
+> **Early development:** this repository currently contains the backend structure,
+> configuration, a runnable FastAPI application, and a liveness test. APK analysis,
+> sandbox execution, intelligence integrations, scoring, AI assistance, and the
+> investigation dashboard are not implemented yet.
+
+| Area | Current state |
+|---|---|
+| FastAPI application and versioned routing | Implemented |
+| Environment-based configuration | Implemented |
+| Process liveness endpoint | Implemented |
+| API smoke test and lint configuration | Included |
+| Analysis, evidence, worker, integration, reporting, and AI packages | Structure only |
+| Database and object storage | Planned |
+| Authentication, case management, and audit trail | Planned |
+| Frontend dashboard | Planned for a separate branch |
+
+## Planned capabilities
+
+| Investigation area | Intended capability | Evidence to preserve |
+|---|---|---|
+| **Static, manifest & resources** | Inspect permissions, exported components, configurations, resources, and suspicious code | Manifest entries, file paths, class/method references |
+| **Dynamic behaviour** | Observe apps in isolated Android environments | Runtime events, file changes, process activity, network captures |
+| **Permissions, APIs & evasion** | Investigate sensitive API use, reflection, dynamic loading, obfuscation, and anti-analysis indicators | Rule matches, code locations, instrumentation observations |
+| **Network & signing** | Extract destinations and inspect APK signing metadata | URLs, domains, IPs, certificates, signer fingerprints |
+| **Library analysis** | Identify embedded libraries and assess vulnerability leads | Component identity, version evidence, advisory references |
+| **Threat intelligence** | Enrich indicators with attributable, time-stamped intelligence | Provider, retrieval time, match context, confidence |
+| **Risk & correlation** | Connect static indicators with runtime observations | Evidence relationships, scoring factors, analyst review states |
+| **Forensic reporting** | Produce structured case reports and compare APKs | Sample hashes, run metadata, artifact references, limitations |
+| **AI assistance** | Explain findings and suggest investigation steps | Evidence-linked statements and explicitly labelled hypotheses |
+
+## Evidence and accuracy principles
+
+- **Traceable findings:** preserve original artifacts and link conclusions to supporting evidence.
+- **Reproducible runs:** record analyzer versions, rule versions, configuration, and execution environment.
+- **Separate risk, confidence, and coverage:** an incomplete run must not become a clean verdict.
+- **Avoid duplicate evidence:** several tools reporting the same fact do not establish independent confirmation.
+- **Distinguish observation from inference:** an API reference is different from an executed API call; a network connection alone does not prove exfiltration.
+- **Validate before claiming accuracy:** use ground-truth apps and labelled evaluation sets; report false positives and category-level precision and recall.
+- **Ground AI in evidence:** summaries must cite artifacts, and unsupported explanations remain review hypotheses.
+
+**No detection accuracy, malware-family coverage, or production-readiness benchmark
+has been established for GoDeEp yet.**
+
+## Proposed architecture
+
+The diagram describes the target system. Only the API scaffold is currently available.
+
+```mermaid
+flowchart TD
+    A["APK intake and case registration — planned"] --> B["Hashing and evidence preservation — planned"]
+    B --> C["Analysis job orchestration — planned"]
+    C --> D["Static analysis workers — planned"]
+    C --> E["Isolated Android runtime hosts — planned"]
+    D --> F["Normalized observations and raw artifacts — planned"]
+    E --> F
+    F --> G["Evidence correlation and deduplication — planned"]
+    H["Threat intelligence enrichment — planned"] --> G
+    G --> I["Risk, confidence and coverage — planned"]
+    I --> J["Investigator review and reports — planned"]
+    J --> K["Evidence-grounded AI assistance — planned"]
+    L["FastAPI application — implemented scaffold"] -. "Future orchestration interface" .-> C
+```
+
+The intended deployment separates the API, metadata, and evidence storage from
+the hosts used to execute untrusted Android applications.
+
+## Technology direction
+
+| Layer | Technology or approach | Status |
+|---|---|---|
+| Backend API | Python 3.12+, FastAPI, Uvicorn | Included |
+| Configuration and contracts | Pydantic / pydantic-settings | Included |
+| Verification | pytest, HTTPX, Ruff | Included |
+| Metadata | PostgreSQL | Planned |
+| Artifact storage | Object storage | Planned |
+| Background execution | Queued, isolated analysis workers | Planned; queue choice pending |
+| Analysis engines | Versioned external adapters | Candidates under evaluation |
+| AI | Evidence-grounded assistance | Planned; model/provider undecided |
+
+## Quickstart
+
+### Prerequisites
+
+- Python **3.12 or newer** and Git.
+- Internet access for the initial dependency installation.
+- These instructions start the API scaffold. Android SDKs, emulators, and analysis
+  engines are not required at this stage.
+
+### Windows PowerShell
 
 ```powershell
+git clone https://github.com/SauravRoy50080/GoDeEp-PS-2.git
+cd GoDeEp-PS-2
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -e "./backend[dev]"
+.\.venv\Scripts\python.exe -m pip install -e "./backend[dev]"
 Copy-Item backend/.env.example backend/.env
-python -m uvicorn godeep.main:app --app-dir backend/src --reload --host 127.0.0.1
+.\.venv\Scripts\python.exe -m uvicorn godeep.main:app --app-dir backend/src --reload --host 127.0.0.1
 ```
 
-API documentation: http://127.0.0.1:8000/docs
-Liveness: http://127.0.0.1:8000/api/v1/health/live
+If the repository is already on your computer, open its root folder and start
+at the virtual-environment step. The commands use the environment's Python
+directly, so PowerShell activation is unnecessary.
 
-The liveness response confirms only that the API process responds; it does
-not report database, worker, or sandbox readiness.
+### Linux / macOS
+
+```bash
+git clone https://github.com/SauravRoy50080/GoDeEp-PS-2.git
+cd GoDeEp-PS-2
+python3 -m venv .venv
+.venv/bin/python -m pip install -e './backend[dev]'
+cp backend/.env.example backend/.env
+.venv/bin/python -m uvicorn godeep.main:app --app-dir backend/src --reload --host 127.0.0.1
+```
+
+The API binds to localhost for development. Production deployment configuration
+is not included.
+
+## Available API
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/api/v1/health/live` | Confirm the API process responds |
+| `GET` | `/docs` | Interactive Swagger API documentation |
+| `GET` | `/redoc` | Alternative API documentation |
+| `GET` | `/openapi.json` | Generated OpenAPI specification |
+
+Open **http://127.0.0.1:8000/docs** after starting the server.
 
 ```powershell
-python -m pytest backend/tests
-python -m ruff check backend
+Invoke-RestMethod http://127.0.0.1:8000/api/v1/health/live
 ```
 
-## Layout
+Response:
+
+```json
+{"status": "ok"}
+```
+
+Liveness does not indicate database, worker, or sandbox readiness. APK upload
+and analysis endpoints will be introduced in later milestones.
+
+## Repository structure
 
 ```text
-backend/
-  src/godeep/
-    api/v1/          # Versioned routes
-    core/            # Configuration and application concerns
-    schemas/         # API contracts
-    domain/          # Cases, samples, evidence, findings (planned)
-    services/        # Use-case orchestration (planned)
-    persistence/     # Database repositories (planned)
-    storage/         # Evidence storage (planned)
-    analysis/        # Static, dynamic and correlation pipelines (planned)
-    integrations/    # External analyzer adapters (planned)
-    workers/         # Background jobs (planned)
-    reporting/       # Evidence-linked reports (planned)
-    ai/              # Grounded assistance (planned)
-  tests/
-  migrations/
-docs/
-infra/
+GoDeEp-PS-2/
+├── backend/
+│   ├── src/godeep/
+│   │   ├── main.py                 # FastAPI application factory
+│   │   ├── api/v1/                 # Versioned routes and liveness endpoint
+│   │   ├── core/                   # Application configuration
+│   │   ├── schemas/                # API request/response contracts
+│   │   ├── domain/                 # Planned cases, samples, evidence, findings
+│   │   ├── services/               # Planned use-case orchestration
+│   │   ├── persistence/            # Planned metadata repositories
+│   │   ├── storage/                # Planned artifact storage
+│   │   ├── analysis/
+│   │   │   ├── static/             # Planned static pipeline
+│   │   │   ├── dynamic/            # Planned runtime pipeline
+│   │   │   └── correlation/        # Planned correlation and scoring
+│   │   ├── integrations/
+│   │   │   ├── analyzers/          # Planned external tool adapters
+│   │   │   └── intelligence/       # Planned intelligence providers
+│   │   ├── workers/                # Planned background jobs
+│   │   ├── reporting/              # Planned forensic exports
+│   │   └── ai/                     # Planned grounded assistance
+│   ├── tests/test_health.py
+│   ├── migrations/                 # Migration placeholder
+│   ├── .env.example
+│   └── pyproject.toml
+├── docs/
+│   ├── architecture.md
+│   ├── repository-patterns.md
+│   └── roadmap.md
+├── infra/                          # Infrastructure planning notes
+├── .gitignore
+└── README.md
 ```
 
-See [architecture](docs/architecture.md), [development roadmap](docs/roadmap.md),
-and [research patterns](docs/repository-patterns.md).
-Never commit APK samples, forensic evidence, credentials, or private case data.
+## Development roadmap
+
+- [x] Create backend package structure and configuration.
+- [x] Add versioned routing, liveness endpoint, and initial verification.
+- [x] Document architecture and research patterns.
+- [ ] Implement authentication, authorization, cases, and audit records.
+- [ ] Add validated APK intake, hashing, metadata persistence, and evidence storage.
+- [ ] Implement queued jobs, run provenance, retries, timeouts, and cancellation.
+- [ ] Benchmark and integrate selected static analyzers.
+- [ ] Add isolated Android runtime analysis and coverage reporting.
+- [ ] Implement IoC enrichment, correlation, and explainable scoring.
+- [ ] Add evidence-linked reports and AI investigation assistance.
+- [ ] Build the investigation dashboard on a separate frontend branch.
+- [ ] Evaluate detection quality and operational limitations on held-out datasets.
+
+## Verification
+
+From the repository root on Windows:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest backend/tests
+.\.venv\Scripts\python.exe -m ruff check backend
+```
+
+On Linux/macOS, use `.venv/bin/python` in place of
+`.\.venv\Scripts\python.exe`.
+
+The current test checks the liveness response. It does not evaluate malware
+detection, sandbox containment, or forensic integrity.
+
+## Research foundations
+
+The following projects inform the design and are potential integration candidates.
+They are **not installed or integrated by this scaffold**.
+
+| Project | Design relevance |
+|---|---|
+| [MobSF](https://github.com/MobSF/Mobile-Security-Framework-MobSF) | Unified mobile assessment workflow |
+| [Sandroid](https://github.com/fkie-cad/Sandroid_core) | Runtime forensics and ground-truth calibration |
+| [Dexray Insight](https://github.com/fkie-cad/Sandroid_Dexray-Insight) | Modular static analysis and review leads |
+| [Androguard](https://github.com/androguard/androguard) | Programmatic APK/DEX inspection |
+| [Quark Engine](https://github.com/ev-flow/quark-engine) | Rule-driven behaviour analysis |
+| [APKiD](https://github.com/rednaga/APKiD) | Compiler, packer, and protection fingerprinting |
+| [DroidLysis](https://github.com/cryptax/droidlysis) | Triage artifacts and configurable patterns |
+| [AndroPyTool](https://github.com/alexMyG/AndroPyTool) | Batch feature-extraction workflows |
+| [MISP](https://github.com/MISP/MISP) | Structured threat intelligence and correlation |
+
+See [repository research](docs/repository-patterns.md) for the review scope,
+integration order, and compatibility checks.
+
+## Investigation data handling
+
+APKs, extracted payloads, packet captures, secrets, and private case data belong
+outside Git. Relevant exclusions are included in `.gitignore`; review files
+before staging them. Future sandboxing and sharing controls are design work,
+not protections supplied by this scaffold.
+
+## Documentation and contribution
+
+- [Architecture and design constraints](docs/architecture.md)
+- [Implementation roadmap](docs/roadmap.md)
+- [Repository research and reusable patterns](docs/repository-patterns.md)
+
+Keep changes focused, document implemented behaviour, and run the available
+checks before proposing a change. Keep example data synthetic and non-sensitive.
+
+## License
+
+A project license has not been selected yet. Third-party integration candidates
+retain their own licenses; dependency and distribution requirements must be
+reviewed before adoption.
+
+---
+
+<div align="center">
+<b>GoDeEp · Android Security · Digital Forensics · Evidence-Driven Analysis</b>
+</div>
