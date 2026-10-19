@@ -153,4 +153,5 @@ Live PostgreSQL adds simultaneous worker claims and a cancel/terminal-transition
 Run the suite using [PostgreSQL test setup](postgresql-verification.md).
 
 The dex_static adapter adds bounded identifier-table triage; see
-[DEX analysis](dex-static-analysis.md). All three adapters use the same worker.
+[DEX analysis](dex-static-analysis.md). The dex_calls adapter adds [instruction evidence](dex-call-analysis.md).
+All four adapters use the same worker.

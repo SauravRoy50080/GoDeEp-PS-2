@@ -47,7 +47,7 @@ def network_candidates(value):
     return sorted(found)
 
 
-def parse_dex(raw, settings):
+def parse_dex(raw, settings, *, include_tables=False):
     def fail():
         raise AdapterFailure("dex_parse_failed")
 
@@ -136,12 +136,14 @@ def parse_dex(raw, settings):
         if index >= sc:
             fail()
         types.append(strings[index])
-    references = []
+    references, method_ids = [], []
     for i in range(mc):
         offset = mo + i * 8
         cls, proto, name = struct.unpack_from("<HHI", raw, offset)
         if cls >= tc or proto >= pc or name >= sc:
             fail()
+        if include_tables:
+            method_ids.append((cls, proto, name))
         category = RULES.get((types[cls], strings[name]))
         if category:
             if len(references) < settings.max_dex_findings:
@@ -159,7 +161,7 @@ def parse_dex(raw, settings):
                 )
             else:
                 truncated = True
-    return {
+    result = {
         "sha256": hashlib.sha256(raw).hexdigest(),
         "version": version.decode(),
         "counts": {"strings": sc, "types": tc, "methods": mc},
@@ -168,3 +170,7 @@ def parse_dex(raw, settings):
         "coverage": "partial_output_limit" if truncated else "identifier_tables_parsed",
         "full_dex_validation": "not_performed",
     }
+
+    if include_tables:
+        result["_tables"] = (strings, types, method_ids)
+    return result

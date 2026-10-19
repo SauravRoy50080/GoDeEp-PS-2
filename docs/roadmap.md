@@ -6,7 +6,8 @@
    raw output retention and normalized observations.
 3. Static analysis: manifest/permission/component and certificate extraction implemented;
    DEX identifier references and network-string candidates also implemented;
-   next add instruction/call-graph/evasion analysis and evaluate controlled test APKs.
+   decoded invoke sites are now implemented; next add control-flow/call-graph/evasion
+   analysis and evaluate controlled test APKs.
 4. Dynamic analysis: isolated Android environments, repeatable actions,
    filesystem/process/network observations and coverage reporting.
 5. Intelligence and correlation: source-aware IoC enrichment, deduplication,

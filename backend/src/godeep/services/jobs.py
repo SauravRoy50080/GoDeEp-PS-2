@@ -49,6 +49,8 @@ def create_job(factory, settings, case_id, user_id, payload: JobCreate):
                 "max_dex_bytes",
                 "max_dex_total_bytes",
                 "max_dex_files",
+                "max_dex_encoded_methods",
+                "max_dex_code_units",
                 "max_dex_identifiers",
                 "max_dex_string_bytes",
                 "max_dex_findings",

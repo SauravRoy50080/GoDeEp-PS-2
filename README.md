@@ -40,10 +40,10 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 5 — DEX identifier triage:** jobs now include bounded multidex
-> method-reference review and network-string candidates, alongside manifest and
-> certificate metadata. References do not establish runtime actions. Instruction
-> tracing, dynamic sandboxing, scoring, AI and the dashboard remain planned.
+> **Milestone 6 — instruction call-site evidence:** analysis can now link sensitive
+> API leads to encoded callers and decoded invoke offsets. Manifest, certificate
+> and identifier/string evidence remain available. Runtime execution, reachability,
+> scoring, AI and the dashboard remain planned.
 
 | Area | Current state |
 |---|---|
@@ -265,7 +265,8 @@ GoDeEp-PS-2/
 - [x] Implement durable jobs, provenance, explicit retries, timeouts and cancellation for archive inventory.
 - [x] Integrate bounded manifest, component, permission and certificate extraction.
 - [x] Add bounded DEX method-reference rules and network-string candidates.
-- [ ] Add instruction/call-graph/evasion analysis and benchmark detection quality.
+- [x] Add bounded instruction decoding and sensitive API invoke-site evidence.
+- [ ] Add control-flow/call-graph/evasion analysis and benchmark detection quality.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
 - [ ] Implement IoC enrichment, correlation, and explainable scoring.
 - [ ] Add evidence-linked reports and AI investigation assistance.
@@ -321,6 +322,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Instruction call-site evidence](docs/dex-call-analysis.md)
 - [DEX identifier and network-candidate analysis](docs/dex-static-analysis.md)
 - [Android static analysis](docs/android-static-analysis.md)
 - [Analysis worker setup and job API](docs/analysis-jobs.md)

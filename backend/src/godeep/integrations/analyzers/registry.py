@@ -2,7 +2,12 @@
 
 from importlib import import_module
 
-ADAPTER_VERSIONS = {"archive_inventory": "1.0.0", "android_static": "1.0.0", "dex_static": "1.0.0"}
+ADAPTER_VERSIONS = {
+    "archive_inventory": "1.0.0",
+    "android_static": "1.0.0",
+    "dex_static": "1.0.0",
+    "dex_calls": "1.0.0",
+}
 
 
 def adapter_function(name: str):

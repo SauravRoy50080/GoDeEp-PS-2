@@ -12,6 +12,21 @@ VERSION = "1.0.0"
 
 
 def analyze(original, snapshot, expected_hash, config):
+    return analyze_members(original, snapshot, expected_hash, config)
+
+
+def analyze_members(
+    original,
+    snapshot,
+    expected_hash,
+    config,
+    *,
+    parser=parse_dex,
+    name=NAME,
+    version=VERSION,
+    complete="identifier_tables_parsed",
+    limitations=None,
+):
     settings, size = prepare_snapshot(original, snapshot, expected_hash, config)
     results, total = [], 0
     with ZipFile(snapshot) as archive:
@@ -28,7 +43,7 @@ def analyze(original, snapshot, expected_hash, config):
                 raise AdapterFailure("dex_limits_exceeded")
             raw = read_member(archive, member, settings.max_dex_bytes)
             try:
-                data = parse_dex(raw, settings)
+                data = parser(raw, settings)
             except AdapterFailure as exc:
                 data = {
                     "sha256": hashlib.sha256(raw).hexdigest(),
@@ -36,21 +51,18 @@ def analyze(original, snapshot, expected_hash, config):
                     "error_code": str(exc),
                 }
             results.append({"member": member.filename, **data})
-    partial = any(d["coverage"] != "identifier_tables_parsed" for d in results)
+    partial = any(d["coverage"] != complete for d in results)
     return {
         "schema_version": 1,
-        "adapter": NAME,
-        "adapter_version": VERSION,
+        "adapter": name,
+        "adapter_version": version,
         "rule_version": "1.0.0",
         "input_sha256": expected_hash,
         "input_size_bytes": size,
         "dex_files": results,
-        "coverage": "no_dex_found"
-        if not results
-        else "partial"
-        if partial
-        else "identifier_tables_parsed",
-        "limitations": [
+        "coverage": "no_dex_found" if not results else "partial" if partial else complete,
+        "limitations": limitations
+        or [
             "Identifier references do not prove invocation, reachability or maliciousness",
             "Network candidates are strings, not observed destinations; no external requests made",
             "Instructions, call graphs, obfuscation and anti-emulation are not analyzed",

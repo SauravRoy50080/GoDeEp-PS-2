@@ -40,4 +40,5 @@ Python/FastAPI API, PostgreSQL metadata, object storage for artifacts, and queue
 analysis workers. The database queue and adapter registry are implemented; Androguard 4.1.4 is pinned. Infrastructure is not provisioned by this scaffold.
 
 DEX identifier tables and network-string candidates are now supported through
-[dex_static](dex-static-analysis.md). Instruction/call-graph analysis remains planned.
+[dex_static](dex-static-analysis.md). Bounded invoke-site decoding is now supported by dex_calls.
+Control-flow, dispatch resolution and call-graph analysis remain planned.

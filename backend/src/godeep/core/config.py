@@ -42,3 +42,6 @@ class Settings(BaseSettings):
     max_dex_identifiers: int = Field(default=100000, ge=1, le=1000000)
     max_dex_string_bytes: int = Field(default=8192, ge=16, le=65536)
     max_dex_findings: int = Field(default=500, ge=1, le=2000)
+
+    max_dex_encoded_methods: int = Field(default=10000, ge=1, le=100000)
+    max_dex_code_units: int = Field(default=1000000, ge=1, le=10000000)

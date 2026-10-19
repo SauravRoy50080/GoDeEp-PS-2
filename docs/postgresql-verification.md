@@ -127,3 +127,17 @@ The temporary PostgreSQL server was stopped. These are functional tests using
 synthetic table fixtures, not malware-detection or Android-installability benchmarks.
 The final worker error-code allowlist adjustment also passed the ten targeted
 SQLite DEX tests; Ruff and dependency consistency checks passed.
+
+## Milestone 6 — instruction call-site evidence, 20 October 2026
+
+Live PostgreSQL 17.11: **98 passed in 73.18 seconds**. SQLite: **92 passed,
+six PostgreSQL-only tests skipped in 31.14 seconds**. Both reported the existing
+Starlette TestClient deprecation warning. The temporary PostgreSQL server stopped
+after verification. Ruff and dependency consistency checks passed.
+
+Sixteen new tests cover caller/target identities, ordinary and range invokes,
+unused references, payload boundaries, malformed/truncated instructions, invalid
+registers and targets, code bounds, missing bodies, native flags, output limits,
+unresolved indirect invokes, unreachable instruction labelling and real worker
+persistence. Original synthetic fixtures establish parser behaviour, not Android
+installability, reachability or real-world malware detection accuracy.
