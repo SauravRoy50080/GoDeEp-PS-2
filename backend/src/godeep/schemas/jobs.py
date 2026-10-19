@@ -13,7 +13,12 @@ class JobCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
     sample_id: UUID
     adapter: Literal[
-        "archive_inventory", "android_static", "dex_static", "dex_calls", "static_review"
+        "archive_inventory",
+        "android_static",
+        "dex_static",
+        "dex_calls",
+        "static_review",
+        "signature_verify",
     ] = "archive_inventory"
 
 

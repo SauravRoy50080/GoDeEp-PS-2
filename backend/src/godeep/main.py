@@ -21,7 +21,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         yield
         application.state.engine.dispose()
 
-    application = FastAPI(title=settings.app_name, version="0.8.0", lifespan=lifespan)
+    application = FastAPI(title=settings.app_name, version="0.9.0", lifespan=lifespan)
     engine = build_engine(settings.database_url.get_secret_value())
     application.state.settings = settings
     application.state.engine = engine

@@ -48,3 +48,9 @@ class Settings(BaseSettings):
 
     max_review_findings: int = Field(default=500, ge=1, le=2000)
     max_review_evidence: int = Field(default=50, ge=1, le=200)
+
+    signer_java_path: Path | None = None
+    signer_jar_path: Path | None = None
+    signer_jar_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    signer_timeout_seconds: int = Field(default=20, ge=1, le=120)
+    max_signer_output_bytes: int = Field(default=65536, ge=1024, le=262144)

@@ -49,6 +49,17 @@ def run_once(factory, settings):
                 "expected_hash": job.input_sha256,
                 "config": job.config,
                 "output": str(output),
+                "runtime": {
+                    "signer_java_path": str(settings.signer_java_path)
+                    if settings.signer_java_path
+                    else None,
+                    "signer_jar_path": str(settings.signer_jar_path)
+                    if settings.signer_jar_path
+                    else None,
+                    "signer_jar_sha256": settings.signer_jar_sha256,
+                }
+                if job.adapter == "signature_verify"
+                else {},
             }
             environment = {
                 k: v

@@ -13,11 +13,16 @@ def main():
     payload = json.loads(sys.stdin.read(16384))
     try:
         analyze = adapter_function(payload.get("adapter", "archive_inventory"))
+        config = dict(payload["config"])
+        for key in ("signer_java_path", "signer_jar_path", "signer_jar_sha256"):
+            config.pop(key, None)
+            if payload.get("adapter") == "signature_verify":
+                config[key] = payload.get("runtime", {}).get(key)
         result = analyze(
             Path(payload["original"]),
             Path(payload["snapshot"]),
             payload["expected_hash"],
-            payload["config"],
+            config,
         )
         Path(payload["output"]).write_text(json.dumps(result, sort_keys=True), encoding="utf-8")
         return 0

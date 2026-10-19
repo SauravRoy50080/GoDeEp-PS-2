@@ -45,3 +45,7 @@ Control-flow, dispatch resolution and call-graph analysis remain planned.
 
 The static_review adapter runs static phases on one verified snapshot and groups
 findings with related permission context; see [unified review](unified-static-review.md).
+
+The signature_verify adapter adds optional official apksigner verification with
+Windows process ownership and bounded diagnostics. Certificate extraction retains
+its separate unverified status. See [verification integration](signature-verification.md).

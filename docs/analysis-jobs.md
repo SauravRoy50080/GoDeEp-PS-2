@@ -129,7 +129,7 @@ is provided. Local files remain mutable outside the application.
 
 A subprocess is **not a malware sandbox**. This worker has the host user's privileges
 and does not supply OS-level network/memory/CPU isolation. It runs only the trusted
-built-in archive inventory and Android static adapters, uses no shell command assembled from input,
+built-in static adapters and optional trusted apksigner integration, uses no shell command assembled from input,
 and does not execute APK code. External tools and dynamic APK execution must not
 be added here without the dedicated isolation layer planned for later milestones.
 
@@ -155,4 +155,5 @@ Run the suite using [PostgreSQL test setup](postgresql-verification.md).
 The dex_static adapter adds bounded identifier-table triage; see
 [DEX analysis](dex-static-analysis.md). The dex_calls adapter adds [instruction evidence](dex-call-analysis.md).
 The static_review adapter adds [unified findings](unified-static-review.md).
-All five adapters use the same worker.
+The signature_verify adapter adds [official signature verification](signature-verification.md).
+All six adapters use the same worker; verification requires configured external tools.

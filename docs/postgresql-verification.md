@@ -154,3 +154,20 @@ manifest state, reference-only findings, duplicate suppression and stable IDs,
 output caps, grouped network candidates and real case-scoped worker processing
 with valid input, broken manifests and malformed DEX members. These are functional
 synthetic-fixture tests, not malware detection benchmarks or production certification.
+
+## Milestone 8 — official signature verification, 20 October 2026
+
+Live PostgreSQL 17.11: **118 passed in 83.90 seconds**. SQLite: **112 passed,
+six PostgreSQL-only checks skipped in 39.29 seconds**. The explicit official-tool
+test variables were set in both runs, so none of the three Java/apksigner checks
+were skipped. Both runs retained the existing Starlette TestClient deprecation
+warning. The temporary PostgreSQL server stopped afterward. Ruff lint/format,
+dependency consistency and diff checks passed.
+
+Twelve new tests cover status/output interpretation, certificate-text boundaries,
+unavailable configuration, real process timeout/output bounds, parent-death tool
+cleanup, pinned JAR mismatch, freshly signed/unsigned/tampered APK verification
+and real case/job/result processing with operator paths excluded from public job
+config. Tools: Android Build Tools 35.0.0, apksigner 0.9, OpenJDK 21.0.2. The test
+APKs and keys are generated synthetic fixtures; these tests do not certify Android
+installability, production containment or malware-detection accuracy.
