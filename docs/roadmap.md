@@ -1,6 +1,6 @@
 # Backend implementation roadmap
 
-1. Evidence foundation: cases, samples, upload validation, hashes, audit records,
+1. Evidence foundation (local intake implemented; authentication/authorization pending): cases, samples, upload validation, hashes, audit records,
    authentication, authorization, database migrations and storage.
 2. Jobs and adapters: bounded workers, retries, cancellation, run provenance,
    raw output retention and normalized observations.

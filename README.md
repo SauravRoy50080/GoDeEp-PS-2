@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
 ![Track](https://img.shields.io/badge/PS--02-Malware%20Analysis-7C3AED)
-![Status](https://img.shields.io/badge/Status-Backend%20Scaffold-F59E0B)
+![Status](https://img.shields.io/badge/Status-Evidence%20Intake-F59E0B)
 ![Focus](https://img.shields.io/badge/Focus-Evidence--Driven%20Investigation-0F766E)
 
 **From suspicious APKs to traceable evidence and explainable findings.**
@@ -40,21 +40,21 @@ could not observe.
 
 ## Implementation status
 
-> **Early development:** this repository currently contains the backend structure,
-> configuration, a runnable FastAPI application, and a liveness test. APK analysis,
-> sandbox execution, intelligence integrations, scoring, AI assistance, and the
-> investigation dashboard are not implemented yet.
+> **Milestone 1 — local evidence intake:** the backend now registers cases and APK
+> samples, preserves original bytes with SHA-256 hashes, and records intake events.
+> Android analysis, authentication, sandboxing, scoring, AI and the dashboard are
+> not implemented. This stage is for localhost development with synthetic fixtures.
 
 | Area | Current state |
 |---|---|
-| FastAPI application and versioned routing | Implemented |
-| Environment-based configuration | Implemented |
-| Process liveness endpoint | Implemented |
-| API smoke test and lint configuration | Included |
-| Analysis, evidence, worker, integration, reporting, and AI packages | Structure only |
-| Database and object storage | Planned |
-| Authentication, case management, and audit trail | Planned |
-| Frontend dashboard | Planned for a separate branch |
+| FastAPI application, configuration and liveness | Implemented |
+| Cases and paginated sample metadata | Implemented |
+| Bounded raw APK intake and local original-byte storage | Implemented |
+| SQLAlchemy models and Alembic migrations | Implemented; SQLite-tested, live PostgreSQL pending |
+| Transactional intake event records | Implemented; authenticated/tamper-evident audit pending |
+| Analyzer, worker, reporting and AI packages | Structure only |
+| Authentication and case access permissions | Next milestone |
+| Object storage and frontend dashboard | Planned |
 
 ## Planned capabilities
 
@@ -85,11 +85,12 @@ has been established for GoDeEp yet.**
 
 ## Proposed architecture
 
-The diagram describes the target system. Only the API scaffold is currently available.
+The diagram describes the target system. Local intake now exists; worker orchestration
+and analysis stages remain planned. See the milestone guide for exact scope.
 
 ```mermaid
 flowchart TD
-    A["APK intake and case registration — planned"] --> B["Hashing and evidence preservation — planned"]
+    A["APK intake and case registration — implemented"] --> B["SHA-256 and local originals — implemented"]
     B --> C["Analysis job orchestration — planned"]
     C --> D["Static analysis workers — planned"]
     C --> E["Isolated Android runtime hosts — planned"]
@@ -100,7 +101,7 @@ flowchart TD
     G --> I["Risk, confidence and coverage — planned"]
     I --> J["Investigator review and reports — planned"]
     J --> K["Evidence-grounded AI assistance — planned"]
-    L["FastAPI application — implemented scaffold"] -. "Future orchestration interface" .-> C
+    L["FastAPI intake API — implemented"] -. "Future orchestration interface" .-> C
 ```
 
 The intended deployment separates the API, metadata, and evidence storage from
@@ -113,8 +114,8 @@ the hosts used to execute untrusted Android applications.
 | Backend API | Python 3.12+, FastAPI, Uvicorn | Included |
 | Configuration and contracts | Pydantic / pydantic-settings | Included |
 | Verification | pytest, HTTPX, Ruff | Included |
-| Metadata | PostgreSQL | Planned |
-| Artifact storage | Object storage | Planned |
+| Metadata | SQLAlchemy + Alembic; PostgreSQL target | Implemented; SQLite-tested |
+| Artifact storage | Local original-byte store; object storage later | Local store implemented |
 | Background execution | Queued, isolated analysis workers | Planned; queue choice pending |
 | Analysis engines | Versioned external adapters | Candidates under evaluation |
 | AI | Evidence-grounded assistance | Planned; model/provider undecided |
@@ -127,6 +128,9 @@ the hosts used to execute untrusted Android applications.
 - Internet access for the initial dependency installation.
 - These instructions start the API scaffold. Android SDKs, emulators, and analysis
   engines are not required at this stage.
+- For intake endpoints, configure a database and apply migrations using the
+  [milestone setup guide](docs/intake-development.md). The commands below start the API;
+  they do not provision PostgreSQL or create tables.
 
 ### Windows PowerShell
 
@@ -165,6 +169,11 @@ is not included.
 | `GET` | `/docs` | Interactive Swagger API documentation |
 | `GET` | `/redoc` | Alternative API documentation |
 | `GET` | `/openapi.json` | Generated OpenAPI specification |
+| `POST` / `GET` | `/api/v1/cases` | Create/list investigation cases |
+| `GET` | `/api/v1/cases/{case_id}` | Retrieve a case |
+| `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}` | Retrieve sample metadata |
+| `GET` | `/api/v1/cases/{case_id}/audit` | List case intake events |
 
 Open **http://127.0.0.1:8000/docs** after starting the server.
 
@@ -178,8 +187,9 @@ Response:
 {"status": "ok"}
 ```
 
-Liveness does not indicate database, worker, or sandbox readiness. APK upload
-and analysis endpoints will be introduced in later milestones.
+Liveness does not indicate database, worker, or sandbox readiness. Intake requires
+migrated database tables. Upload accepts raw bytes with an `X-Filename` header,
+not multipart. See [intake setup and examples](docs/intake-development.md).
 
 ## Repository structure
 
@@ -193,8 +203,8 @@ GoDeEp-PS-2/
 │   │   ├── schemas/                # API request/response contracts
 │   │   ├── domain/                 # Planned cases, samples, evidence, findings
 │   │   ├── services/               # Planned use-case orchestration
-│   │   ├── persistence/            # Planned metadata repositories
-│   │   ├── storage/                # Planned artifact storage
+│   │   ├── persistence/            # SQLAlchemy models and session factories
+│   │   ├── storage/                # Local evidence store
 │   │   ├── analysis/
 │   │   │   ├── static/             # Planned static pipeline
 │   │   │   ├── dynamic/            # Planned runtime pipeline
@@ -206,7 +216,7 @@ GoDeEp-PS-2/
 │   │   ├── reporting/              # Planned forensic exports
 │   │   └── ai/                     # Planned grounded assistance
 │   ├── tests/test_health.py
-│   ├── migrations/                 # Migration placeholder
+│   ├── migrations/                 # Alembic environment and intake migration
 │   ├── .env.example
 │   └── pyproject.toml
 ├── docs/
@@ -224,7 +234,7 @@ GoDeEp-PS-2/
 - [x] Add versioned routing, liveness endpoint, and initial verification.
 - [x] Document architecture and research patterns.
 - [ ] Implement authentication, authorization, cases, and audit records.
-- [ ] Add validated APK intake, hashing, metadata persistence, and evidence storage.
+- [x] Add bounded APK intake, hashing, metadata persistence, and local evidence storage.
 - [ ] Implement queued jobs, run provenance, retries, timeouts, and cancellation.
 - [ ] Benchmark and integrate selected static analyzers.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
@@ -245,8 +255,10 @@ From the repository root on Windows:
 On Linux/macOS, use `.venv/bin/python` in place of
 `.\.venv\Scripts\python.exe`.
 
-The current test checks the liveness response. It does not evaluate malware
-detection, sandbox containment, or forensic integrity.
+The suite checks liveness, case/sample persistence, original-byte/hash integrity,
+case scoping, bounds, rejection and cleanup paths, and migration consistency. It
+does not evaluate malware detection, sandbox containment or live PostgreSQL. See
+[validation limits](docs/intake-development.md).
 
 ## Research foundations
 
@@ -277,6 +289,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Local intake setup and API walkthrough](docs/intake-development.md)
 - [Architecture and design constraints](docs/architecture.md)
 - [Implementation roadmap](docs/roadmap.md)
 - [Repository research and reusable patterns](docs/repository-patterns.md)

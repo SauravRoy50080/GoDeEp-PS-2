@@ -1,6 +1,8 @@
 # Backend architecture
 
-Status: proposed design; only configuration, routing and liveness are implemented.
+Status: local intake implemented (cases, samples, bounded ZIP triage, SHA-256,
+local originals and transactional intake events). Analysis, auth and worker
+isolation remain planned. See [milestone guide](intake-development.md).
 
 ## Boundaries
 
