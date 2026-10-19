@@ -1,4 +1,4 @@
-# Instruction call-site evidence — milestone 6
+# Instruction call-site evidence â€” milestone 6
 
 Submit an authenticated analysis job using:
 

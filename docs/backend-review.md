@@ -1,4 +1,4 @@
-# Backend review — 20 October 2026
+# Backend review â€” 20 October 2026
 
 Reviewed intake/storage boundaries, authentication and sessions, case authorization,
 job claims/cancellation/retries, artifact integrity, manifest/DEX parsing, grouped
@@ -23,3 +23,6 @@ input is correct. Earlier functional scope remains intact; full DEX/resource
 validation, production isolation, tamper-evident audit, deployment hardening and
 malware-detection benchmarks still require further work. Tool/runtime files and
 private local configuration remain outside Git.
+
+Also found earlier Markdown files stored with Windows-1252 punctuation. Converted
+all affected tracked documentation to UTF-8 for GitHub and cross-platform rendering.

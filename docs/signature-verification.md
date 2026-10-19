@@ -1,4 +1,4 @@
-# Official APK signature verification — milestone 8
+# Official APK signature verification â€” milestone 8
 
 ## Run
 

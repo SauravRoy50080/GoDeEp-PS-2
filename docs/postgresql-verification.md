@@ -105,7 +105,7 @@ has not been exercised in this environment.
 Without `GODEEP_TEST_POSTGRES_ADMIN_URL`, tests use SQLite and explicitly skip the
 six live PostgreSQL checks. Do not interpret that run as PostgreSQL verification.
 
-## Milestone 4 — Android static evidence, 20 October 2026
+## Milestone 4 â€” Android static evidence, 20 October 2026
 
 Live PostgreSQL 17.11: **72 passed in 71.07 seconds**. SQLite: **66 passed,
 six PostgreSQL-only tests skipped**. Both reported the existing Starlette TestClient
@@ -116,7 +116,7 @@ signing coverage, authenticated adapter discovery and case-scoped results.
 Synthetic fixtures do not establish real-world malware detection accuracy or
 Android installability. No runtime application database was modified.
 
-## Milestone 5 — DEX identifier triage, 20 October 2026
+## Milestone 5 â€” DEX identifier triage, 20 October 2026
 
 Live PostgreSQL 17.11: **82 passed in 74.97 seconds**. SQLite: **76 passed,
 six PostgreSQL-only tests skipped in 33.15 seconds**. Both retained the existing
@@ -128,7 +128,7 @@ synthetic table fixtures, not malware-detection or Android-installability benchm
 The final worker error-code allowlist adjustment also passed the ten targeted
 SQLite DEX tests; Ruff and dependency consistency checks passed.
 
-## Milestone 6 — instruction call-site evidence, 20 October 2026
+## Milestone 6 â€” instruction call-site evidence, 20 October 2026
 
 Live PostgreSQL 17.11: **98 passed in 73.18 seconds**. SQLite: **92 passed,
 six PostgreSQL-only tests skipped in 31.14 seconds**. Both reported the existing
@@ -142,7 +142,7 @@ unresolved indirect invokes, unreachable instruction labelling and real worker
 persistence. Original synthetic fixtures establish parser behaviour, not Android
 installability, reachability or real-world malware detection accuracy.
 
-## Milestone 7 — unified static review, 20 October 2026
+## Milestone 7 â€” unified static review, 20 October 2026
 
 Live PostgreSQL 17.11: **106 passed in 80.50 seconds**. SQLite: **100 passed,
 six PostgreSQL-only tests skipped in 34.03 seconds**. Both retained the existing
@@ -155,7 +155,7 @@ output caps, grouped network candidates and real case-scoped worker processing
 with valid input, broken manifests and malformed DEX members. These are functional
 synthetic-fixture tests, not malware detection benchmarks or production certification.
 
-## Milestone 8 — official signature verification, 20 October 2026
+## Milestone 8 â€” official signature verification, 20 October 2026
 
 Live PostgreSQL 17.11: **118 passed in 83.90 seconds**. SQLite: **112 passed,
 six PostgreSQL-only checks skipped in 39.29 seconds**. The explicit official-tool
