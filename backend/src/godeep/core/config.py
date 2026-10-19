@@ -29,3 +29,9 @@ class Settings(BaseSettings):
     job_timeout_seconds: int = Field(default=60, ge=1, le=300)
     worker_poll_seconds: float = Field(default=2.0, ge=0.1, le=60)
     max_result_bytes: int = Field(default=1048576, ge=1024, le=10485760)
+
+    max_manifest_bytes: int = Field(default=2097152, ge=1024, le=8388608)
+    max_manifest_nodes: int = Field(default=20000, ge=10, le=100000)
+    max_signature_bytes: int = Field(default=8388608, ge=1024, le=16777216)
+    max_certificate_member_bytes: int = Field(default=1048576, ge=1024, le=4194304)
+    max_certificates: int = Field(default=64, ge=1, le=256)

@@ -7,11 +7,11 @@ from sqlalchemy import func, select, update
 from sqlalchemy.exc import IntegrityError
 
 from godeep.core.security import aware
+from godeep.integrations.analyzers.registry import ADAPTER_VERSIONS
 from godeep.persistence.models import AnalysisJob, AuditEvent, Sample, new_id, utc_now
 from godeep.schemas.jobs import JobCreate
 from godeep.services.cases import require_case
 
-ADAPTER_VERSION = "1.0.0"
 TERMINAL = {"completed", "failed", "cancelled"}
 
 
@@ -46,6 +46,11 @@ def create_job(factory, settings, case_id, user_id, payload: JobCreate):
                 "max_uncompressed_bytes",
                 "max_central_directory_bytes",
                 "job_timeout_seconds",
+                "max_manifest_bytes",
+                "max_manifest_nodes",
+                "max_signature_bytes",
+                "max_certificate_member_bytes",
+                "max_certificates",
             )
         }
         job = AnalysisJob(
@@ -53,7 +58,7 @@ def create_job(factory, settings, case_id, user_id, payload: JobCreate):
             sample_id=sample.id,
             requested_by=user_id,
             adapter=payload.adapter,
-            adapter_version=ADAPTER_VERSION,
+            adapter_version=ADAPTER_VERSIONS[payload.adapter],
             input_sha256=sample.sha256,
             config=config,
         )

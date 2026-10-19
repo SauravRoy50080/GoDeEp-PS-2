@@ -2,6 +2,7 @@
 
 from fastapi import APIRouter
 
+from godeep.api.v1.analyzers import router as analyzers_router
 from godeep.api.v1.auth import router as auth_router
 from godeep.api.v1.health import router as health_router
 from godeep.api.v1.intake import router as intake_router
@@ -17,3 +18,5 @@ router.include_router(auth_router)
 router.include_router(members_router)
 
 router.include_router(jobs_router)
+
+router.include_router(analyzers_router)

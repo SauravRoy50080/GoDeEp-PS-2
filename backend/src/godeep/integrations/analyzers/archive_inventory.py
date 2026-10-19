@@ -1,37 +1,17 @@
 """Bounded archive inventory adapter. No Android code is executed or extracted."""
 
-import hashlib
 from collections import Counter
 from pathlib import Path
 from zipfile import ZipFile
 
-from godeep.analysis.static.archive import validate_archive
-from godeep.core.config import Settings
+from godeep.integrations.analyzers.common import prepare_snapshot
 
 NAME = "archive_inventory"
 VERSION = "1.0.0"
 
 
-class AdapterFailure(Exception):
-    pass
-
-
 def analyze(original: Path, snapshot: Path, expected_hash: str, config: dict):
-    settings = Settings(
-        _env_file=None, **{k: v for k, v in config.items() if k in Settings.model_fields}
-    )
-    digest = hashlib.sha256()
-    size = 0
-    with original.open("rb") as source, snapshot.open("xb") as destination:
-        while chunk := source.read(1024 * 1024):
-            size += len(chunk)
-            if size > settings.max_upload_bytes:
-                raise AdapterFailure("input_size_exceeded")
-            digest.update(chunk)
-            destination.write(chunk)
-    if digest.hexdigest() != expected_hash:
-        raise AdapterFailure("input_integrity_mismatch")
-    validate_archive(snapshot, settings)
+    settings, size = prepare_snapshot(original, snapshot, expected_hash, config)
     with ZipFile(snapshot) as archive:
         members = archive.infolist()
         files = [m for m in members if not m.is_dir()]

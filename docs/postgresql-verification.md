@@ -104,3 +104,14 @@ has not been exercised in this environment.
 
 Without `GODEEP_TEST_POSTGRES_ADMIN_URL`, tests use SQLite and explicitly skip the
 six live PostgreSQL checks. Do not interpret that run as PostgreSQL verification.
+
+## Milestone 4 — Android static evidence, 20 October 2026
+
+Live PostgreSQL 17.11: **72 passed in 71.07 seconds**. SQLite: **66 passed,
+six PostgreSQL-only tests skipped**. Both reported the existing Starlette TestClient
+deprecation warning. The temporary PostgreSQL server was stopped after the run.
+New coverage includes binary manifest decoding, SDK defaults, inherited component
+permissions, review leads, malformed-input bounds, certificate metadata, partial
+signing coverage, authenticated adapter discovery and case-scoped results.
+Synthetic fixtures do not establish real-world malware detection accuracy or
+Android installability. No runtime application database was modified.

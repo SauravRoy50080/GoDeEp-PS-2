@@ -5,12 +5,14 @@ import sys
 from pathlib import Path
 
 from godeep.analysis.static.archive import InvalidAPK
-from godeep.integrations.analyzers.archive_inventory import AdapterFailure, analyze
+from godeep.integrations.analyzers.common import AdapterFailure
+from godeep.integrations.analyzers.registry import adapter_function
 
 
 def main():
     payload = json.loads(sys.stdin.read(16384))
     try:
+        analyze = adapter_function(payload.get("adapter", "archive_inventory"))
         result = analyze(
             Path(payload["original"]),
             Path(payload["snapshot"]),

@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
 ![Track](https://img.shields.io/badge/PS--02-Malware%20Analysis-7C3AED)
-![Status](https://img.shields.io/badge/Status-Analysis%20Jobs-F59E0B)
+![Status](https://img.shields.io/badge/Status-Android%20Static-F59E0B)
 ![Focus](https://img.shields.io/badge/Focus-Evidence--Driven%20Investigation-0F766E)
 
 **From suspicious APKs to traceable evidence and explainable findings.**
@@ -40,11 +40,10 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 3 — analysis jobs:** authenticated case/sample intake now connects
-> to a durable job queue and separate archive-inventory worker. Jobs support
-> status tracking, timeouts, cancellation, explicit retries and hash-linked JSON
-> results. Full Android/malware analysis, dynamic sandboxing, scoring, AI and the
-> dashboard remain planned. This is a localhost development milestone.
+> **Milestone 4 — Android static evidence:** intake and durable jobs now support
+> binary manifests, permissions, exported-component review and certificate metadata.
+> DEX behaviour, dynamic sandboxing, scoring, AI and the dashboard remain planned.
+> Certificate extraction does not verify APK signatures or establish malware.
 
 | Area | Current state |
 |---|---|
@@ -53,7 +52,7 @@ could not observe.
 | Bounded raw APK intake and local original-byte storage | Implemented |
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
-| Durable job queue and separate worker | Implemented for archive inventory |
+| Durable job queue and separate worker | Implemented for archive inventory and Android static evidence |
 | Malware analyzers, reporting and AI | Planned; no malware classification yet |
 | Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
 | Object storage and frontend dashboard | Planned |
@@ -87,14 +86,14 @@ has been established for GoDeEp yet.**
 
 ## Proposed architecture
 
-The diagram describes the target system. Local intake, durable jobs and the archive
-inventory worker now exist; deeper static and dynamic analysis remain planned.
+The diagram describes the target system. Local intake, durable jobs, archive inventory and manifest/certificate extraction
+now exist; DEX behaviour and dynamic analysis remain planned.
 
 ```mermaid
 flowchart TD
     A["APK intake and case registration — implemented"] --> B["SHA-256 and local originals — implemented"]
     B --> C["Durable analysis jobs — implemented"]
-    C --> D["Archive inventory worker — implemented"]
+    C --> D["Archive and Android static worker — implemented"]
     C --> E["Isolated Android runtime hosts — planned"]
     D --> F["Normalized observations and raw artifacts — planned"]
     E --> F
@@ -118,8 +117,8 @@ the hosts used to execute untrusted Android applications.
 | Verification | pytest, HTTPX, Ruff | Included |
 | Metadata | SQLAlchemy + Alembic; PostgreSQL target | Implemented; SQLite and PostgreSQL 17.11 tested |
 | Artifact storage | Local original-byte store; object storage later | Local store implemented |
-| Background execution | Queued, isolated analysis workers | Planned; queue choice pending |
-| Analysis engines | Versioned external adapters | Candidates under evaluation |
+| Background execution | Database queue and bounded subprocess | Implemented; OS isolation pending |
+| Analysis engines | Versioned adapters; Androguard 4.1.4 | Manifest/certificate extraction included |
 | AI | Evidence-grounded assistance | Planned; model/provider undecided |
 
 ## Quickstart
@@ -194,11 +193,12 @@ Java and other external tools are not installed by pip.
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}` | Retrieve sample metadata |
 | `GET` | `/api/v1/cases/{case_id}/audit` | List case events |
+| `GET` | `/api/v1/analyzers` | List implemented adapter capabilities |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/analyses` | Queue/list sample analysis jobs |
 | `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}` | Read job status/provenance |
 | `POST` | `/api/v1/cases/{case_id}/analyses/{job_id}/cancel` | Cancel a job |
 | `POST` | `/api/v1/cases/{case_id}/analyses/{job_id}/retry` | Create an explicit retry |
-| `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}/result` | Read hash-verified inventory results |
+| `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}/result` | Read hash-verified adapter results |
 
 Open **http://127.0.0.1:8000/docs** after starting the server.
 
@@ -232,13 +232,13 @@ GoDeEp-PS-2/
 │   │   ├── persistence/            # SQLAlchemy models and session factories
 │   │   ├── storage/                # Local evidence store
 │   │   ├── analysis/
-│   │   │   ├── static/             # Planned static pipeline
+│   │   │   ├── static/             # Manifest and certificate analysis
 │   │   │   ├── dynamic/            # Planned runtime pipeline
 │   │   │   └── correlation/        # Planned correlation and scoring
 │   │   ├── integrations/
-│   │   │   ├── analyzers/          # Planned external tool adapters
+│   │   │   ├── analyzers/          # Versioned adapters
 │   │   │   └── intelligence/       # Planned intelligence providers
-│   │   ├── workers/                # Planned background jobs
+│   │   ├── workers/                # Durable worker
 │   │   ├── reporting/              # Planned forensic exports
 │   │   └── ai/                     # Planned grounded assistance
 │   ├── tests/test_health.py
@@ -263,7 +263,8 @@ GoDeEp-PS-2/
 - [ ] Add deployment hardening, MFA/SSO/recovery and durable security-event monitoring.
 - [x] Add bounded APK intake, hashing, metadata persistence, and local evidence storage.
 - [x] Implement durable jobs, provenance, explicit retries, timeouts and cancellation for archive inventory.
-- [ ] Benchmark and integrate selected static analyzers.
+- [x] Integrate bounded manifest, component, permission and certificate extraction.
+- [ ] Add DEX/API/evasion analysis and benchmark detection quality.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
 - [ ] Implement IoC enrichment, correlation, and explainable scoring.
 - [ ] Add evidence-linked reports and AI investigation assistance.
@@ -292,7 +293,8 @@ verification results and repeatable setup are recorded in
 ## Research foundations
 
 The following projects inform the design and are potential integration candidates.
-They are **not installed or integrated by this scaffold**.
+Androguard 4.1.4 is integrated for manifest decoding and certificate extraction.
+The other projects remain research candidates.
 
 | Project | Design relevance |
 |---|---|
@@ -318,6 +320,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Android static analysis](docs/android-static-analysis.md)
 - [Analysis worker setup and job API](docs/analysis-jobs.md)
 - [Live PostgreSQL verification and test setup](docs/postgresql-verification.md)
 - [Authentication and case permissions](docs/authentication.md)

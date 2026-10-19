@@ -4,15 +4,19 @@
 
 A PostgreSQL-backed queue accepts case-scoped analysis jobs. A separately started
 worker claims jobs and runs the registered adapter in a bounded subprocess.
-No Redis/Celery service or additional Python dependency is required for this stage.
+No Redis/Celery service is required; install the declared Python dependencies.
 SQLite supports local functional tests; use PostgreSQL for concurrent workers.
 
-The only adapter is `archive_inventory` version `1.0.0`. It verifies the original
+The default adapter is `archive_inventory` version `1.0.0`. It verifies the original
 SHA-256, creates a bounded temporary snapshot, performs the existing ZIP-container
 checks, and reports counts and bounded path lists for DEX/native-library entries.
 It does not parse manifest/DEX contents, verify Android signatures, identify malware,
 assign risk scores, or execute an APK. A `completed` job means this adapter finished,
 not that a security assessment is complete or the app is safe.
+
+The second adapter, `android_static`, extracts manifest and certificate evidence.
+See [Android static analysis](android-static-analysis.md). Authenticated
+`GET /api/v1/analyzers` lists implemented capabilities.
 
 ## Start the API and worker
 
@@ -69,7 +73,7 @@ submission-time archive bounds/timeout configuration, requester, attempt number
 and lifecycle timestamps. Internal storage keys and worker claim tokens are hidden.
 See Swagger `/docs` for the exact response fields.
 
-Result data includes `schema_version`, adapter identity, input hash/size,
+For archive inventory, result data includes `schema_version`, adapter identity, input hash/size,
 `observations` (entry/file counts, declared expansion, DEX/native-library counts,
 bounded path lists and top extensions), and explicit limitations. It contains no
 malware verdict. Path strings are untrusted evidence text and must not be rendered
@@ -125,11 +129,11 @@ is provided. Local files remain mutable outside the application.
 
 A subprocess is **not a malware sandbox**. This worker has the host user's privileges
 and does not supply OS-level network/memory/CPU isolation. It runs only the trusted
-built-in archive inventory adapter, uses no shell command assembled from input,
+built-in archive inventory and Android static adapters, uses no shell command assembled from input,
 and does not execute APK code. External tools and dynamic APK execution must not
 be added here without the dedicated isolation layer planned for later milestones.
 
-Output is capped at 1 MiB after subprocess completion. The built-in adapter emits
+Output is capped at 1 MiB after subprocess completion. The built-in adapters emit
 bounded lists and no raw decompressed content; this is not a general disk quota
 for future analyzer processes. Wall-clock timeouts are not memory limits. Database
 connection failures may stop the worker; after database recovery restart it and

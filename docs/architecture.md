@@ -3,7 +3,8 @@
 Status: local intake implemented (cases, samples, bounded ZIP triage, SHA-256,
 local originals and transactional case events). Authentication, revocable sessions
 and case permissions are implemented. Durable jobs and a bounded archive-inventory subprocess worker are implemented.
-Full malware analyzers and OS-level worker isolation remain planned. See
+Manifest/permission/component review and certificate extraction are implemented.
+DEX malware analyzers and OS-level worker isolation remain planned. See
 [worker architecture](analysis-jobs.md). See [milestone guide](intake-development.md).
 
 ## Boundaries
@@ -36,5 +37,4 @@ Treat APK text and decompiled content as untrusted input to AI.
 ## Planned infrastructure
 
 Python/FastAPI API, PostgreSQL metadata, object storage for artifacts, and queued
-analysis workers. Queue technology and analyzer versions will be chosen after
-compatibility testing. Infrastructure is not provisioned by this scaffold.
+analysis workers. The database queue and adapter registry are implemented; Androguard 4.1.4 is pinned. Infrastructure is not provisioned by this scaffold.

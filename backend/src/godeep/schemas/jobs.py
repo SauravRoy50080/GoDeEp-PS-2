@@ -12,7 +12,7 @@ from godeep.schemas.intake import Record
 class JobCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
     sample_id: UUID
-    adapter: Literal["archive_inventory"] = "archive_inventory"
+    adapter: Literal["archive_inventory", "android_static"] = "archive_inventory"
 
 
 class JobRead(Record):

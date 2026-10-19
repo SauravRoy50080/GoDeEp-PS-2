@@ -4,7 +4,8 @@
    authentication, authorization, database migrations and storage.
 2. Jobs and adapters (queue and archive inventory implemented; malware engines pending): bounded workers, retries, cancellation, run provenance,
    raw output retention and normalized observations.
-3. Static analysis: evaluate pinned engines using controlled test APKs.
+3. Static analysis: manifest/permission/component and certificate extraction implemented;
+   next add DEX/API/evasion analysis and evaluate controlled test APKs.
 4. Dynamic analysis: isolated Android environments, repeatable actions,
    filesystem/process/network observations and coverage reporting.
 5. Intelligence and correlation: source-aware IoC enrichment, deduplication,

@@ -1,7 +1,8 @@
 """Separate polling worker with wall-clock bounds and conditional result publication.
 
-A subprocess boundary is not a malware sandbox. The only registered adapter
-reads archive metadata; dynamic analysis and OS-level isolation are future work.
+A subprocess boundary is not a malware sandbox. Registered static adapters
+read bounded manifest/certificate data. Dynamic analysis and OS-level isolation
+are future work.
 """
 
 import argparse
@@ -15,7 +16,7 @@ import time
 from pathlib import Path
 
 from godeep.core.config import Settings
-from godeep.integrations.analyzers.archive_inventory import NAME, VERSION
+from godeep.integrations.analyzers.registry import ADAPTER_VERSIONS
 from godeep.persistence.database import build_engine, session_factory
 from godeep.persistence.models import Sample
 from godeep.services.jobs import claim_job, expire_jobs, finish_job, is_running
@@ -26,7 +27,7 @@ def run_once(factory, settings):
     job = claim_job(factory)
     if job is None:
         return False
-    if job.adapter != NAME or job.adapter_version != VERSION:
+    if ADAPTER_VERSIONS.get(job.adapter) != job.adapter_version:
         finish_job(factory, job.id, job.claim_token, error_code="unsupported_adapter_version")
         return True
     root = settings.evidence_root.resolve()
@@ -42,6 +43,7 @@ def run_once(factory, settings):
         with tempfile.TemporaryDirectory(prefix=job.id + "-", dir=temporary) as scratch:
             output = Path(scratch) / "result.json"
             payload = {
+                "adapter": job.adapter,
                 "original": str(original),
                 "snapshot": str(Path(scratch) / "input.apk"),
                 "expected_hash": job.input_sha256,
@@ -87,6 +89,11 @@ def run_once(factory, settings):
             result = json.loads(raw)
             if process.returncode != 0:
                 allowed = {
+                    "manifest_parse_failed",
+                    "manifest_ambiguous",
+                    "manifest_dtd_rejected",
+                    "manifest_limits_exceeded",
+                    "member_size_exceeded",
                     "input_integrity_mismatch",
                     "input_size_exceeded",
                     "adapter_error",
@@ -129,7 +136,7 @@ def run_once(factory, settings):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="GoDeEp archive-inventory job worker")
+    parser = argparse.ArgumentParser(description="GoDeEp static-analysis job worker")
     parser.add_argument("--once", action="store_true", help="Process at most one queued job")
     args = parser.parse_args()
     settings = Settings()
