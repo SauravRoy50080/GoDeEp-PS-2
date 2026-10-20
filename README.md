@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 17 — validation-only model comparison:** research candidates are
-> compared using training and validation data, with explicit false-positive/recall
-> objectives and a refusal to select failing candidates. Selected validation FPR
-> is 2.00%, recall 86.96%; these selected metrics are not independent accuracy.
-> No new test scoring or production model integration is introduced.
+> **Milestone 18 — tri-state feature compatibility:** saved APK analyses can be
+> audited against dataset columns with evidence, hashes and explicit unknowns.
+> The supplied schema has 109 candidate permission mappings and 106 unsupported
+> features. Extraction equivalence remains unverified; no model input or APK
+> prediction is produced. Dynamic analysis and production inference remain pending.
 
 | Area | Current state |
 |---|---|
@@ -338,6 +338,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Tri-state feature compatibility](docs/feature-compatibility.md)
 - [Validation-only model selection](docs/validation-selection.md)
 - [Research classification baseline](docs/classification-baseline.md)
 - [Offline dataset evaluation](docs/dataset-evaluation.md)

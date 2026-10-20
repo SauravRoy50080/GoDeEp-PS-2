@@ -331,3 +331,23 @@ The real supplied corpus selected Naive Bayes threshold 0.9999 on validation:
 validation figures selected the candidate and are optimistically biased. No test
 scoring was performed in this stage and no production promotion occurred. Raw
 data and candidate artifacts remain outside Git.
+
+## Milestone 18 - tri-state feature compatibility, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **253 passed in 136.79 seconds**. Full SQLite suite:
+**247 passed, six PostgreSQL-only checks skipped in 79.63 seconds**. Real
+Java/apksigner checks enabled. Existing Starlette TestClient deprecation warning
+remains. Temporary PostgreSQL stopped cleanly. Application database unchanged;
+no dependencies or migration added. Ruff lint/format, dependency, UTF-8 and diff
+checks passed.
+
+Fourteen new tests cover declaration/absence/unknown states, SDK qualifiers,
+failed/anomalous phases, namespace and permission element distinctions,
+inconsistent parsed structures, hashes/versions/feature order, strict headerless
+mapping contracts, unconditional withholding of model input and exclusive CLI
+output. An initial fixture expectation was corrected because INTERNET is actually
+declared in the fixture; CAMERA is now the tested absent permission. Final full
+suites passed. A controlled static-review APK fixture aligned 109 candidate
+permissions (2 declared, 107 not declared), leaving 106 features unknown against
+the supplied dataset. These counts are feature-alignment checks, not extraction
+parity, malware accuracy or permission effectiveness. No inference or training ran.

@@ -91,3 +91,8 @@ Validation-only research selection compares Naive Bayes and a decision stump
 under explicit FPR/recall constraints. Test scoring and production promotion
 are excluded; fresh external evaluation and extractor parity remain required.
 See [validation selection](validation-selection.md).
+
+An offline feature compatibility audit now retains dataset order, hash provenance,
+candidate manifest observations and unsupported/null features. It does not produce
+model inputs or predictions; original extraction equivalence remains unverified.
+See [feature compatibility](feature-compatibility.md).
