@@ -67,3 +67,8 @@ or alongside selected analysis jobs. Capture hashes, trace validation, sample
 association and coverage are checked/preserved; collector claims are not promoted
 to verified runtime execution. Analysis-only version 1 remains compatible. See
 [runtime report integration](runtime-report-integration.md).
+
+Selected runtime captures can now be viewed as an evidence-linked, filtered and
+paginated timeline. Clock attribution/causality remain unverified. Backend
+connection review fixes OpenAPI upload documentation and local database readiness;
+see [review](connection-review.md) and [timeline](runtime-timeline.md).

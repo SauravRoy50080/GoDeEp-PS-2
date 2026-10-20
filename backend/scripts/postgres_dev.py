@@ -7,6 +7,8 @@ import subprocess
 import time
 from pathlib import Path
 
+from godeep.persistence.readiness import database_reachable
+
 
 def main():
     parser = argparse.ArgumentParser(description="Manage local PostgreSQL development server")
@@ -30,14 +32,18 @@ def main():
     check = subprocess.run(
         command + ["status"], capture_output=True, timeout=10, creationflags=flags
     )
+    ready = database_reachable(port)
     if action == "status":
         print(
-            "Development PostgreSQL is running."
-            if check.returncode == 0
-            else "Development PostgreSQL is stopped."
+            "Configured development database is reachable on port " + str(port) + "."
+            if ready
+            else "Configured database is not reachable; process status alone is insufficient."
         )
-        return 0 if check.returncode == 0 else 1
+        return 0 if ready else 1
     if action == "stop":
+        if check.returncode != 0:
+            print("Managed process ownership is not confirmed; no stop was attempted.")
+            return 1
         result = subprocess.run(
             command + ["-m", "fast", "-w", "-t", "20", "stop"],
             capture_output=True,
@@ -50,9 +56,12 @@ def main():
             else "Unable to stop the development server."
         )
         return 0 if result.returncode == 0 else 1
-    if check.returncode == 0:
-        print("Development PostgreSQL is already running on port " + str(port) + ".")
+    if ready:
+        print("Configured development database is already reachable on port " + str(port) + ".")
         return 0
+    if check.returncode == 0:
+        print("Managed process exists but database is not ready; inspect configuration/logs.")
+        return 1
     with (data / "postgresql-dev.log").open("ab") as log:
         server = subprocess.Popen(
             [
@@ -71,15 +80,17 @@ def main():
             stderr=subprocess.STDOUT,
             creationflags=flags,
         )
-    for _ in range(100):
+    deadline = time.monotonic() + 15
+    while time.monotonic() < deadline:
         if server.poll() is not None:
             print("Server exited; inspect backend/data/postgresql-dev.log privately.")
             return 1
-        probe = subprocess.run(
-            command + ["status"], capture_output=True, timeout=5, creationflags=flags
-        )
-        if probe.returncode == 0:
-            print("Development PostgreSQL started on port " + str(port) + ".")
+        if database_reachable(port):
+            print(
+                "Development PostgreSQL started and database is reachable on port "
+                + str(port)
+                + "."
+            )
             return 0
         time.sleep(0.1)
     print("Startup not confirmed; inspect backend/data/postgresql-dev.log privately.")

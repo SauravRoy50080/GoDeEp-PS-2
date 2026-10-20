@@ -392,3 +392,33 @@ passed before full-suite runs. Strict trace decoding is shared by import/report
 without changing the structural trace schema. Test traces remain synthetic;
 collector attribution, execution and isolation are not independently verified.
 No new model training or test-corpus selection took place.
+
+## Milestone 21 - connected workflow review and runtime timeline, 21 October 2026
+
+Before implementation, the existing SQLite suite passed **287 tests with six
+PostgreSQL-only skips in 79.43 seconds**. The new all-adapter connected workflow
+and OpenAPI checks passed before timeline implementation. Final PostgreSQL 17.11
+suite: **314 passed in 179.97 seconds**. Final SQLite suite: **308 passed, six
+PostgreSQL-only skips in 102.56 seconds**. Real Java/apksigner tests enabled in
+both full runs; existing Starlette TestClient deprecation warning remains.
+Temporary test PostgreSQL stopped cleanly. No new migration or dependencies.
+Ruff lint/format, dependency, UTF-8 and diff checks passed.
+
+Twenty-one new checks cover every registered adapter through result/report and
+comparison APIs, runtime request OpenAPI references, safe local database readiness,
+refusal to stop unconfirmed process ownership, timeline ordering across offsets,
+filters, inclusive time boundaries, pagination, per-capture duplicate retention,
+evidence references, no audit mutation, permissions/case scope, input/source/output
+bounds and tampered source metadata. Shared runtime-source validation keeps report
+and timeline identity checks aligned. Thirty targeted timeline/workflow/report
+checks and six readiness checks passed separately before final suites.
+
+Local development startup is distinct from these tests. A direct Alembic check
+reached 0005_runtime_captures (head), but helper/foreground startup became ready
+only transiently and later connection attempts timed out across tool invocations.
+The owned foreground attempt exited after an invalid/missing lock-file message.
+No case/sample records or schema migration were changed during operational checks.
+Persistent local startup from a VS Code terminal remains to be verified. Raw logs
+stay in ignored local storage. Tests establish implemented functional connections,
+not continuous local service availability, live Android sandboxing, calibrated ML
+or malware-detection accuracy. See connection-review.md for scope and commands.

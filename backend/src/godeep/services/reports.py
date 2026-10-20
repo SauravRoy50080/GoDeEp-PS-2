@@ -16,9 +16,9 @@ from godeep.persistence.models import (
     new_id,
     utc_now,
 )
-from godeep.schemas.runtime_captures import decode_trace
 from godeep.services.cases import require_case
 from godeep.storage.artifacts import read_verified
+from godeep.storage.runtime import read_trace
 
 
 def require_sample(session, case_id, sample_id, user_id, *, write=False):
@@ -112,26 +112,12 @@ def create_report(factory, settings, case_id, sample_id, user_id, job_ids, captu
                 capture = session.get(RuntimeCapture, capture_id)
                 if capture is None or capture.case_id != case_id or capture.sample_id != sample_id:
                     raise HTTPException(404, "Source runtime capture not found for this sample")
-                raw = read_verified(
-                    root,
-                    capture.artifact_key,
-                    capture.artifact_sha256,
-                    settings.max_runtime_capture_bytes,
+                raw, trace = read_trace(
+                    root, capture, sample.sha256, settings.max_runtime_capture_bytes
                 )
                 source_bytes += len(raw)
                 if source_bytes > settings.max_report_bytes:
                     raise HTTPException(413, "Selected sources exceed report bounds")
-                if len(raw) != capture.size_bytes or capture.input_sha256 != sample.sha256:
-                    raise HTTPException(409, "Runtime capture metadata does not match source")
-                try:
-                    trace = decode_trace(raw)
-                    if (
-                        trace.input_sha256 != sample.sha256
-                        or trace.source_run_id != capture.source_run_id
-                    ):
-                        raise ValueError("Capture identity mismatch")
-                except (ValueError, TypeError, UnicodeError, RecursionError) as exc:
-                    raise HTTPException(409, "Source runtime trace is invalid") from exc
                 runtime_sources.append(
                     {
                         "capture_id": capture.id,

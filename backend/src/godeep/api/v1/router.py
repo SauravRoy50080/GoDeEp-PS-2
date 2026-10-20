@@ -11,6 +11,7 @@ from godeep.api.v1.jobs import router as jobs_router
 from godeep.api.v1.members import router as members_router
 from godeep.api.v1.reports import router as reports_router
 from godeep.api.v1.runtime_captures import router as captures_router
+from godeep.api.v1.timeline import router as timeline_router
 
 router = APIRouter()
 router.include_router(health_router)
@@ -29,3 +30,5 @@ router.include_router(reports_router)
 router.include_router(comparisons_router)
 
 router.include_router(captures_router)
+
+router.include_router(timeline_router)

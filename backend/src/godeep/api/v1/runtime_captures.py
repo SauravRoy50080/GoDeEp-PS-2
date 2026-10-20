@@ -15,7 +15,19 @@ router = APIRouter(
 )
 
 
-@router.post("", response_model=CaptureRead, status_code=201)
+@router.post(
+    "",
+    response_model=CaptureRead,
+    status_code=201,
+    openapi_extra={
+        "requestBody": {
+            "required": True,
+            "content": {
+                "application/json": {"schema": {"$ref": "#/components/schemas/RuntimeTrace"}}
+            },
+        }
+    },
+)
 async def create(case_id: UUID, sample_id: UUID, request: Request, user: CurrentUser):
     factory, settings = request.app.state.sessions, request.app.state.settings
     await run_in_threadpool(service.authorize, factory, str(case_id), str(sample_id), user.user_id)

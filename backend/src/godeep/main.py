@@ -7,6 +7,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
+from godeep.api.openapi import document_runtime_upload
 from godeep.api.v1.router import router
 from godeep.core.config import Settings
 from godeep.persistence.database import build_engine, session_factory
@@ -21,7 +22,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         yield
         application.state.engine.dispose()
 
-    application = FastAPI(title=settings.app_name, version="0.21.0", lifespan=lifespan)
+    application = FastAPI(title=settings.app_name, version="0.22.0", lifespan=lifespan)
     engine = build_engine(settings.database_url.get_secret_value())
     application.state.settings = settings
     application.state.engine = engine
@@ -52,6 +53,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return response
 
     application.include_router(router, prefix="/api/v1")
+    document_runtime_upload(application)
     return application
 
 

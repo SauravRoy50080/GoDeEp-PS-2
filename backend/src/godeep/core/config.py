@@ -74,3 +74,6 @@ class Settings(BaseSettings):
     max_comparison_bytes: int = Field(default=2097152, ge=1024, le=10485760)
 
     max_runtime_capture_bytes: int = Field(default=2097152, ge=1024, le=10485760)
+
+    max_timeline_source_bytes: int = Field(default=10485760, ge=1024, le=20971520)
+    max_timeline_bytes: int = Field(default=1048576, ge=1024, le=5242880)

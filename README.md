@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 20 — runtime evidence in forensic reports:** explicitly selected
-> imported captures can be snapshotted alone or with static analyses. Version-2
-> reports retain collector claims, source hashes and coverage gaps. Analysis-only
-> version-1 reports remain compatible. Live collection and verified isolation
-> remain pending; no new migration is added in this step.
+> **Milestone 21 — connection review and runtime timeline:** an end-to-end
+> adapter/capture/report/comparison check and fixes for runtime OpenAPI and local
+> database readiness accompany a filtered, paginated evidence-linked timeline.
+> Events remain collector claims. Persistent local startup, live sandboxing,
+> verified model integration and production hardening remain distinct concerns.
 
 | Area | Current state |
 |---|---|
@@ -201,6 +201,7 @@ Java and other external tools are not installed by pip.
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}` | Retrieve sample metadata |
 | `GET` | `/api/v1/cases/{case_id}/audit` | List case events |
+| `POST` | `/api/v1/cases/{case_id}/samples/{sample_id}/runtime-timeline` | Read filtered timeline of selected captures |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/runtime-captures` | Import/list collector traces |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/runtime-captures/{capture_id}/download` | Download verified original trace |
 | `POST` | `/api/v1/cases/{case_id}/comparisons` | Compare two explicitly selected completed runs |
@@ -341,6 +342,8 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Backend connection review](docs/connection-review.md)
+- [Runtime investigation timeline](docs/runtime-timeline.md)
 - [Runtime evidence in forensic reports](docs/runtime-report-integration.md)
 - [Runtime capture API and migration](docs/runtime-captures.md)
 - [Tri-state feature compatibility](docs/feature-compatibility.md)
