@@ -67,3 +67,5 @@ class Settings(BaseSettings):
     max_intel_feed_bytes: int = Field(default=2097152, ge=1024, le=8388608)
     max_intel_candidates: int = Field(default=1000, ge=1, le=5000)
     max_intel_matches: int = Field(default=50, ge=1, le=200)
+
+    max_report_bytes: int = Field(default=10485760, ge=1024, le=52428800)

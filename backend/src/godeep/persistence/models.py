@@ -119,3 +119,19 @@ class AnalysisJob(Base):
     error_code: Mapped[str | None] = mapped_column(String(80))
     result_key: Mapped[str | None] = mapped_column(String(160))
     result_sha256: Mapped[str | None] = mapped_column(String(64))
+
+
+class ForensicReport(Base):
+    __tablename__ = "forensic_reports"
+    __table_args__ = (CheckConstraint("size_bytes > 0", name="ck_report_size"),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
+    sample_id: Mapped[str] = mapped_column(ForeignKey("samples.id"), index=True)
+    created_by: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    source_job_ids: Mapped[list] = mapped_column(JSON)
+    input_sha256: Mapped[str] = mapped_column(String(64))
+    artifact_key: Mapped[str] = mapped_column(String(80), unique=True)
+    artifact_sha256: Mapped[str] = mapped_column(String(64))
+    size_bytes: Mapped[int] = mapped_column(BigInteger)
+    schema_version: Mapped[int] = mapped_column(Integer, default=1)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)

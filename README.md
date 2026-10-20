@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 10 — offline intelligence correlation:** a combined analysis now
-> matches static/resource indicators against a validated, pinned local feed, with
-> source attribution, expiry and conflicting claims preserved. No external service
-> receives APK data. Dynamic analysis, provider connectors, vulnerability matching,
-> scoring, reports, AI and deployment hardening remain planned.
+> **Milestone 11 — forensic JSON report snapshots:** investigators can now export
+> selected completed analyses with sample/source hashes, tool provenance, evidence
+> and original coverage gaps. Case permissions protect report creation/downloads.
+> Dynamic analysis, provider connectors, vulnerability matching, scoring, formatted
+> reports, AI and production hardening remain planned.
 
 | Area | Current state |
 |---|---|
@@ -54,7 +54,8 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
-| Malware analyzers, reporting and AI | Planned; no malware classification yet |
+| Forensic JSON report snapshots | Implemented; formatted exports and analyst sign-off pending |
+| Malware classification and AI | Planned; no malware verdict yet |
 | Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
 | Object storage and frontend dashboard | Planned |
 
@@ -194,6 +195,9 @@ Java and other external tools are not installed by pip.
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}` | Retrieve sample metadata |
 | `GET` | `/api/v1/cases/{case_id}/audit` | List case events |
+| `POST` / `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports` | Create/list report snapshots |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}` | Read report metadata |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/download` | Download verified JSON snapshot |
 | `GET` | `/api/v1/analyzers` | List implemented adapter capabilities |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/analyses` | Queue/list sample analysis jobs |
 | `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}` | Read job status/provenance |
@@ -274,7 +278,8 @@ GoDeEp-PS-2/
 - [x] Group static findings and add permission context with evidence references.
 - [x] Add pinned offline indicator-feed matching with expiry and source claims.
 - [ ] Add provider connectors, broader correlation and explainable scoring.
-- [ ] Add evidence-linked reports and AI investigation assistance.
+- [x] Add persisted forensic JSON snapshots with source provenance and integrity checks.
+- [ ] Add formatted reports, analyst review and AI investigation assistance.
 - [ ] Build the investigation dashboard on a separate frontend branch.
 - [ ] Evaluate detection quality and operational limitations on held-out datasets.
 
@@ -327,6 +332,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Forensic JSON reports and migration](docs/forensic-reports.md)
 - [Offline threat-intelligence correlation](docs/offline-threat-intelligence.md)
 - [Resource and library metadata inventory](docs/resource-inventory.md)
 - [Backend review and fixes](docs/backend-review.md)

@@ -56,3 +56,7 @@ It does not resolve Android resources or infer dependency vulnerabilities.
 The threat_review adapter combines static/resource evidence with pinned local
 indicator-feed matching. No external intelligence submissions occur; source claims
 and temporal validity remain explicit. See offline-threat-intelligence.md.
+
+Forensic report snapshots persist selected completed results with original/source
+integrity checks, case authorization, transactional creation audits and verified
+JSON downloads. Migration 0004_forensic_reports is required; see forensic-reports.md.

@@ -204,3 +204,21 @@ CLI and real worker/API case-scoped results. All threat feed records were synthe
 fixtures. No provider feed was configured for normal application operation and
 no intelligence service received APK data. These are functional tests, not a
 validation of source truth or malware-detection accuracy.
+
+## Milestone 11 - forensic JSON report snapshots, 20 October 2026
+
+Live PostgreSQL 17.11: **162 passed in 121.34 seconds**. SQLite: **156 passed,
+six PostgreSQL-only checks skipped in 71.41 seconds**. Real Java/apksigner tests
+remained enabled in both runs. The existing Starlette TestClient warning remains;
+the temporary PostgreSQL server stopped after verification. Ruff lint/format,
+dependency consistency, UTF-8 source/document and diff checks passed.
+
+Fifteen new tests cover persisted report JSON/hash provenance, prior-schema
+upgrade preservation, source selection and same-hash separate registrations,
+missing/tampered original and result artifacts, output bounds, snapshot semantics,
+report tampering/deletion, roles and case scoping, transaction rollback cleanup,
+unavailable analysis phases and exclusive artifact creation under ID collision.
+Alembic schema checks and the full upgrade/downgrade suite passed against both
+backends with migration 0004_forensic_reports. The application runtime database
+was not migrated by these isolated verification runs. No legal certification,
+production custody guarantee or malware-detection accuracy is established here.

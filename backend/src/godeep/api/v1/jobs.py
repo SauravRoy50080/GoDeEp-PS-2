@@ -1,6 +1,5 @@
 """Authenticated, case-scoped analysis submission and verified result access."""
 
-import hashlib
 import json
 from uuid import UUID
 
@@ -10,6 +9,7 @@ from godeep.api.dependencies import CurrentUser
 from godeep.schemas.intake import Page
 from godeep.schemas.jobs import JobCreate, JobRead, JobResult
 from godeep.services import jobs
+from godeep.storage.artifacts import read_verified
 
 router = APIRouter(prefix="/cases/{case_id}/analyses", tags=["analysis jobs"])
 
@@ -53,19 +53,13 @@ def result(case_id: UUID, job_id: UUID, request: Request, user: CurrentUser):
     if job.status != "completed":
         raise HTTPException(409, "Result is available only for a completed job")
     settings = request.app.state.settings
-    root = settings.evidence_root.resolve()
-    path = (root / job.result_key).resolve()
-    if not path.is_relative_to(root):
-        raise HTTPException(409, "Invalid result artifact reference")
+    raw = read_verified(
+        settings.evidence_root, job.result_key, job.result_sha256, settings.max_result_bytes
+    )
     try:
-        with path.open("rb") as source:
-            raw = source.read(settings.max_result_bytes + 1)
-        if (
-            len(raw) > settings.max_result_bytes
-            or hashlib.sha256(raw).hexdigest() != job.result_sha256
-        ):
-            raise HTTPException(409, "Result artifact integrity check failed")
         data = json.loads(raw)
+        if not isinstance(data, dict):
+            raise ValueError("Invalid result structure")
     except (OSError, ValueError) as exc:
         raise HTTPException(409, "Result artifact unavailable or invalid") from exc
     return {

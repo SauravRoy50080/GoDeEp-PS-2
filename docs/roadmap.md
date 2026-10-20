@@ -15,7 +15,8 @@
    pinned local-feed exact matching with expiry and provenance implemented; next add
    provider connectors, broader cross-source correlation,
    explainable scoring and analyst review.
-6. Reporting and AI: evidence-linked explanations, exports and investigation assistance.
+6. Reporting and AI (persisted forensic JSON snapshots implemented): formatted
+   exports, analyst sign-off, evidence-linked explanations and investigation assistance.
 
 At each stage evaluate false positives, category-level precision/recall and
 coverage on controlled benign/malicious corpora. Do not promise accuracy before
