@@ -256,3 +256,21 @@ for the ninth adapter after the initial suite detected its outdated expected set
 Both complete suites passed after that correction. Lint, format, dependency,
 UTF-8 and diff checks passed. Functional checks do not measure evasion detection
 accuracy; anti-emulation and encrypted payload detection remain unevaluated.
+
+## Milestone 14 - explained static priority policy, 21 October 2026
+
+PostgreSQL 17.11 full suite: **197 passed in 143.51 seconds**. SQLite full suite:
+**191 passed, six PostgreSQL-only checks skipped in 89.14 seconds**. Real
+Java/apksigner checks were enabled in both runs. The existing Starlette TestClient
+deprecation warning remains. Temporary PostgreSQL stopped cleanly. Application
+PostgreSQL on port 55433 was unchanged; this step adds no migration or dependencies.
+
+Thirteen new tests cover zero-score interpretation, weak identifier weighting,
+rule deduplication, category caps and exact contribution reconciliation, benign/
+suspicious/malicious source assertions, conflicting claims, repeated matches,
+unavailable/expired feed exclusions, unknown rules, missing evidence, permission
+non-scoring, deterministic gaps, real subprocess pinned-feed delivery, source
+finding/feed references, case scoping and forensic JSON report creation. Catalog
+expectations include the tenth registered adapter. Ruff lint/format, dependency,
+UTF-8 and diff checks passed. These checks validate functional arithmetic and
+integration, not calibration, malware probability or detection accuracy.

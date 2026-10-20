@@ -65,7 +65,7 @@ def run_once(factory, settings):
                     else None,
                     "intel_feed_sha256": settings.intel_feed_sha256,
                 }
-                if job.adapter == "threat_review"
+                if job.adapter in {"threat_review", "risk_review"}
                 else {},
             }
             environment = {

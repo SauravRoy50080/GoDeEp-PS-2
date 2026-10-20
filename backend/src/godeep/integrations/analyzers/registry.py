@@ -12,6 +12,7 @@ ADAPTER_VERSIONS = {
     "resource_inventory": "1.0.0",
     "threat_review": "1.0.0",
     "evasion_review": "1.0.0",
+    "risk_review": "1.0.0",
 }
 
 

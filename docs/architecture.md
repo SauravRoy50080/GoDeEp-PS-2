@@ -70,3 +70,8 @@ The `evasion_review` adapter groups selected loading/debugger/reflection API and
 embedded-file header observations with benign context, source coverage and bounds.
 Anti-emulation, encrypted payloads and control-flow obfuscation remain pending.
 See [evasion review](evasion-review.md); no runtime or malicious-intent claim is made.
+
+The `risk_review` adapter now applies a versioned, uncalibrated analyst-priority
+policy to static and offline-feed evidence, with category caps, source references
+and coverage gaps. Dataset calibration and runtime-informed risk remain pending.
+See [risk prioritization](risk-prioritization.md).

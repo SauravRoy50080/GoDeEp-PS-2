@@ -22,6 +22,7 @@ class JobCreate(BaseModel):
         "resource_inventory",
         "threat_review",
         "evasion_review",
+        "risk_review",
     ] = "archive_inventory"
 
 

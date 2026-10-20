@@ -11,6 +11,11 @@ router = APIRouter(tags=["analysis adapters"])
 @router.get("/analyzers")
 def analyzers(user: CurrentUser):
     capabilities = {
+        "risk_review": [
+            "explained_static_priority",
+            "versioned_uncalibrated_policy",
+            "offline_indicator_matching",
+        ],
         "evasion_review": [
             "static_loading_and_debugger_leads",
             "embedded_file_candidates",
@@ -50,7 +55,8 @@ def analyzers(user: CurrentUser):
             "capabilities": capabilities[name],
             "apk_execution": False,
             "cryptographic_signature_verification": name == "signature_verify",
-            "operator_tool_configuration_required": name in {"signature_verify", "threat_review"},
+            "operator_tool_configuration_required": name
+            in {"signature_verify", "threat_review", "risk_review"},
             "malware_classification": False,
         }
         for name, version in ADAPTER_VERSIONS.items()

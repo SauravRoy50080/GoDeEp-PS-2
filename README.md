@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 13 — static loading and evasion review leads:** a dedicated adapter
-> groups debugger, dynamic-loading, reflection, native-loading and embedded-file
-> evidence with benign explanations and explicit coverage gaps. Case-scoped
-> comparisons and forensic JSON reports are available. Dynamic analysis, broader
-> evasion detection, provider connectors, scoring, AI and hardening remain planned.
+> **Milestone 14 — explainable static prioritization:** `risk_review` adds a
+> versioned 0-100 analyst-priority score with evidence references, bounded category
+> contributions, conflict handling and explicit gaps. Weights are uncalibrated;
+> this is not malware probability. Dynamic analysis, dataset evaluation, broader
+> evasion detection, provider connectors, AI and hardening remain planned.
 
 | Area | Current state |
 |---|---|
@@ -54,6 +54,7 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
+| Explainable static priority | Implemented initial heuristic; calibration pending |
 | Loading/evasion review leads | Implemented for selected static API rules and file headers |
 | Case-scoped analysis comparison | Implemented for static/threat review observations |
 | Forensic JSON report snapshots | Implemented; formatted exports and analyst sign-off pending |
@@ -335,6 +336,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Explainable static review prioritization](docs/risk-prioritization.md)
 - [Static loading and evasion review leads](docs/evasion-review.md)
 - [Case-scoped APK analysis comparison](docs/sample-comparison.md)
 - [Forensic JSON reports and migration](docs/forensic-reports.md)
