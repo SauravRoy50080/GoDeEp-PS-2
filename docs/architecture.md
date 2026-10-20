@@ -52,3 +52,7 @@ its separate unverified status. See [verification integration](signature-verific
 
 Resource and declared-library observations are available through resource_inventory.
 It does not resolve Android resources or infer dependency vulnerabilities.
+
+The threat_review adapter combines static/resource evidence with pinned local
+indicator-feed matching. No external intelligence submissions occur; source claims
+and temporal validity remain explicit. See offline-threat-intelligence.md.

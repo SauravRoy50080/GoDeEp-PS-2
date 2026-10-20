@@ -187,3 +187,20 @@ embedded DEX/ZIP magic, ELF headers and case-scoped worker results. After the fu
 runs, a small ABI-label correction for lib/demo.so paths also passed all ten resource
 tests: paths without an ABI directory report null rather than treating a filename
 as an ABI. These remain functional tests, not malware accuracy benchmarks.
+
+## Milestone 10 - pinned offline threat intelligence, 20 October 2026
+
+Live PostgreSQL 17.11: **147 passed in 85.77 seconds**. SQLite: **141 passed,
+six PostgreSQL-only checks skipped in 42.49 seconds**. Real Java/apksigner checks
+were enabled in both runs. Both retained the existing Starlette TestClient
+warning; the temporary PostgreSQL server stopped after verification. Ruff lint,
+format, dependency consistency, UTF-8 source/document and diff checks passed.
+
+Eighteen new tests cover exact indicator normalization/matching, case and URL
+scope, duplicate evidence, domain/subdomain separation, conflicting active claims,
+expired records, unavailable/stale/future/invalid feeds, duplicate JSON keys and
+record IDs, timezone/schema contracts, hash/size/output bounds, local validation
+CLI and real worker/API case-scoped results. All threat feed records were synthetic
+fixtures. No provider feed was configured for normal application operation and
+no intelligence service received APK data. These are functional tests, not a
+validation of source truth or malware-detection accuracy.

@@ -157,4 +157,5 @@ The dex_static adapter adds bounded identifier-table triage; see
 The static_review adapter adds [unified findings](unified-static-review.md).
 The signature_verify adapter adds [official signature verification](signature-verification.md).
 The resource_inventory adapter adds [resource/library metadata](resource-inventory.md).
-All seven adapters use the same worker; signature verification requires configured external tools.
+The threat_review adapter adds [offline intelligence](offline-threat-intelligence.md).
+All eight adapters use the same worker; optional verifier/feed configuration is operator-local.

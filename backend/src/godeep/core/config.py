@@ -60,3 +60,10 @@ class Settings(BaseSettings):
     max_resource_total_bytes: int = Field(default=16777216, ge=64, le=67108864)
     max_resource_nodes: int = Field(default=2000, ge=1, le=20000)
     max_resource_findings: int = Field(default=500, ge=1, le=2000)
+
+    intel_feed_path: Path | None = None
+    intel_feed_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    intel_max_feed_age_days: int = Field(default=30, ge=1, le=365)
+    max_intel_feed_bytes: int = Field(default=2097152, ge=1024, le=8388608)
+    max_intel_candidates: int = Field(default=1000, ge=1, le=5000)
+    max_intel_matches: int = Field(default=50, ge=1, le=200)

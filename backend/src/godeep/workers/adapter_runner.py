@@ -14,10 +14,15 @@ def main():
     try:
         analyze = adapter_function(payload.get("adapter", "archive_inventory"))
         config = dict(payload["config"])
-        for key in ("signer_java_path", "signer_jar_path", "signer_jar_sha256"):
-            config.pop(key, None)
-            if payload.get("adapter") == "signature_verify":
-                config[key] = payload.get("runtime", {}).get(key)
+        runtime_keys = {
+            "signature_verify": ("signer_java_path", "signer_jar_path", "signer_jar_sha256"),
+            "threat_review": ("intel_feed_path", "intel_feed_sha256"),
+        }
+        for keys in runtime_keys.values():
+            for key in keys:
+                config.pop(key, None)
+        for key in runtime_keys.get(payload.get("adapter"), ()):
+            config[key] = payload.get("runtime", {}).get(key)
         result = analyze(
             Path(payload["original"]),
             Path(payload["snapshot"]),

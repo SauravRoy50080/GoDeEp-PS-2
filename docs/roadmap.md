@@ -12,7 +12,8 @@
 4. Dynamic analysis: isolated Android environments, repeatable actions,
    filesystem/process/network observations and coverage reporting.
 5. Intelligence and correlation (static grouping and permission context implemented):
-   source-aware IoC enrichment, cross-source correlation,
+   pinned local-feed exact matching with expiry and provenance implemented; next add
+   provider connectors, broader cross-source correlation,
    explainable scoring and analyst review.
 6. Reporting and AI: evidence-linked explanations, exports and investigation assistance.
 

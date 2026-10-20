@@ -40,12 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 9 — resource and declared-library inventory:** analysis now adds
-> resource URL candidates, network-policy declarations, embedded-file magic, ELF
-> headers and declared Maven/version metadata. The earlier steps have been reviewed;
-> signature verification and unified static review remain available. Dynamic
-> analysis, threat intelligence, vulnerability matching, scoring, reporting and AI
-> remain planned. No malware-detection accuracy benchmark has been established.
+> **Milestone 10 — offline intelligence correlation:** a combined analysis now
+> matches static/resource indicators against a validated, pinned local feed, with
+> source attribution, expiry and conflicting claims preserved. No external service
+> receives APK data. Dynamic analysis, provider connectors, vulnerability matching,
+> scoring, reports, AI and deployment hardening remain planned.
 
 | Area | Current state |
 |---|---|
@@ -273,7 +272,8 @@ GoDeEp-PS-2/
 - [ ] Add control-flow/call-graph/evasion analysis and benchmark detection quality.
 - [ ] Add isolated Android runtime analysis and coverage reporting.
 - [x] Group static findings and add permission context with evidence references.
-- [ ] Implement IoC enrichment, cross-source correlation and explainable scoring.
+- [x] Add pinned offline indicator-feed matching with expiry and source claims.
+- [ ] Add provider connectors, broader correlation and explainable scoring.
 - [ ] Add evidence-linked reports and AI investigation assistance.
 - [ ] Build the investigation dashboard on a separate frontend branch.
 - [ ] Evaluate detection quality and operational limitations on held-out datasets.
@@ -327,6 +327,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Offline threat-intelligence correlation](docs/offline-threat-intelligence.md)
 - [Resource and library metadata inventory](docs/resource-inventory.md)
 - [Backend review and fixes](docs/backend-review.md)
 - [Official signature verification](docs/signature-verification.md)

@@ -59,6 +59,13 @@ def run_once(factory, settings):
                     "signer_jar_sha256": settings.signer_jar_sha256,
                 }
                 if job.adapter == "signature_verify"
+                else {
+                    "intel_feed_path": str(settings.intel_feed_path)
+                    if settings.intel_feed_path
+                    else None,
+                    "intel_feed_sha256": settings.intel_feed_sha256,
+                }
+                if job.adapter == "threat_review"
                 else {},
             }
             environment = {

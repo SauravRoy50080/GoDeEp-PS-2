@@ -20,6 +20,7 @@ class JobCreate(BaseModel):
         "static_review",
         "signature_verify",
         "resource_inventory",
+        "threat_review",
     ] = "archive_inventory"
 
 
