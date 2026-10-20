@@ -85,3 +85,5 @@ hash/original integrity, failure cleanup and migration/schema consistency.
 The complete suite has also passed against live PostgreSQL 17.11. See
 [verification results](postgresql-verification.md). This does not establish
 production readiness or malware detection accuracy.
+
+See [prepared local PostgreSQL setup](local-postgresql.md) for start/stop commands.

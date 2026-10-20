@@ -13,7 +13,8 @@ if context.is_offline_mode():
     with context.begin_transaction():
         context.run_migrations()
 else:
-    engine = create_engine(url, poolclass=pool.NullPool)
+    options = {"connect_timeout": 5} if url.startswith("postgresql+psycopg") else {}
+    engine = create_engine(url, poolclass=pool.NullPool, connect_args=options)
     with engine.connect() as connection:
         context.configure(
             connection=connection,

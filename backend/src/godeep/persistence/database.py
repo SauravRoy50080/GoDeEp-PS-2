@@ -6,7 +6,13 @@ from sqlalchemy.orm import sessionmaker
 
 
 def build_engine(url: str) -> Engine:
-    options = {"check_same_thread": False} if url.startswith("sqlite") else {}
+    options = (
+        {"check_same_thread": False}
+        if url.startswith("sqlite")
+        else {"connect_timeout": 5}
+        if url.startswith("postgresql+psycopg")
+        else {}
+    )
     engine = create_engine(url, pool_pre_ping=True, connect_args=options)
     if engine.dialect.name == "sqlite":
 
