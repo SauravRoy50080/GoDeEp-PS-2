@@ -60,3 +60,8 @@ and temporal validity remain explicit. See offline-threat-intelligence.md.
 Forensic report snapshots persist selected completed results with original/source
 integrity checks, case authorization, transactional creation audits and verified
 JSON downloads. Migration 0004_forensic_reports is required; see forensic-reports.md.
+
+Case-scoped comparisons of selected static/threat review runs are implemented.
+They compare hash-verified recorded observations with coverage limitations; they
+do not establish removed behaviour or a malware verdict. See
+[sample comparison](sample-comparison.md). No migration is required for this endpoint.

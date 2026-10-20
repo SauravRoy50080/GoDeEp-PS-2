@@ -40,9 +40,9 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 11 — forensic JSON report snapshots:** investigators can now export
-> selected completed analyses with sample/source hashes, tool provenance, evidence
-> and original coverage gaps. Case permissions protect report creation/downloads.
+> **Milestone 12 — case-scoped APK comparisons:** investigators can compare two
+> completed static or threat review runs with evidence references, semantic changes
+> and explicit coverage limitations. Forensic JSON report snapshots are available.
 > Dynamic analysis, provider connectors, vulnerability matching, scoring, formatted
 > reports, AI and production hardening remain planned.
 
@@ -54,6 +54,7 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
+| Case-scoped analysis comparison | Implemented for static/threat review observations |
 | Forensic JSON report snapshots | Implemented; formatted exports and analyst sign-off pending |
 | Malware classification and AI | Planned; no malware verdict yet |
 | Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
@@ -195,6 +196,7 @@ Java and other external tools are not installed by pip.
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}` | Retrieve sample metadata |
 | `GET` | `/api/v1/cases/{case_id}/audit` | List case events |
+| `POST` | `/api/v1/cases/{case_id}/comparisons` | Compare two explicitly selected completed runs |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports` | Create/list report snapshots |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}` | Read report metadata |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/download` | Download verified JSON snapshot |
@@ -332,6 +334,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Case-scoped APK analysis comparison](docs/sample-comparison.md)
 - [Forensic JSON reports and migration](docs/forensic-reports.md)
 - [Offline threat-intelligence correlation](docs/offline-threat-intelligence.md)
 - [Resource and library metadata inventory](docs/resource-inventory.md)

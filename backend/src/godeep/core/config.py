@@ -69,3 +69,6 @@ class Settings(BaseSettings):
     max_intel_matches: int = Field(default=50, ge=1, le=200)
 
     max_report_bytes: int = Field(default=10485760, ge=1024, le=52428800)
+
+    max_comparison_items: int = Field(default=200, ge=1, le=1000)
+    max_comparison_bytes: int = Field(default=2097152, ge=1024, le=10485760)

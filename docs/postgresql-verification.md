@@ -222,3 +222,19 @@ Alembic schema checks and the full upgrade/downgrade suite passed against both
 backends with migration 0004_forensic_reports. The application runtime database
 was not migrated by these isolated verification runs. No legal certification,
 production custody guarantee or malware-detection accuracy is established here.
+
+## Milestone 12 - case-scoped comparison, 20 October 2026
+
+Live PostgreSQL 17.11: **175 passed in 140.20 seconds**. SQLite: **169 passed,
+six PostgreSQL-only checks skipped in 88.27 seconds**. Real Java/apksigner tests
+were enabled in both runs. The existing Starlette TestClient deprecation warning
+remains. The temporary PostgreSQL server on port 55432 stopped cleanly; the
+application database on port 55433 was not changed. No migration is introduced.
+
+Thirteen new tests cover semantic permission/component/API changes, evidence
+references, sample-specific IDs and selectors, canonical network observations,
+certificate identity, coverage/configuration/tool/SDK cautions, truncation and
+output bounds, real worker/API integration, role and case scoping, explicit run
+selection, incompatible versions, incomplete jobs, source tampering and malformed
+source structure. Ruff lint/format, dependency, UTF-8 and diff checks passed.
+These are functional checks, not malware-detection accuracy measurements.
