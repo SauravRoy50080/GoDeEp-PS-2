@@ -65,3 +65,8 @@ Case-scoped comparisons of selected static/threat review runs are implemented.
 They compare hash-verified recorded observations with coverage limitations; they
 do not establish removed behaviour or a malware verdict. See
 [sample comparison](sample-comparison.md). No migration is required for this endpoint.
+
+The `evasion_review` adapter groups selected loading/debugger/reflection API and
+embedded-file header observations with benign context, source coverage and bounds.
+Anti-emulation, encrypted payloads and control-flow obfuscation remain pending.
+See [evasion review](evasion-review.md); no runtime or malicious-intent claim is made.

@@ -238,3 +238,21 @@ output bounds, real worker/API integration, role and case scoping, explicit run
 selection, incompatible versions, incomplete jobs, source tampering and malformed
 source structure. Ruff lint/format, dependency, UTF-8 and diff checks passed.
 These are functional checks, not malware-detection accuracy measurements.
+
+## Milestone 13 - loading and evasion review leads, 21 October 2026
+
+Final full-suite PostgreSQL 17.11 run: **184 passed in 133.69 seconds**.
+SQLite: **178 passed, six PostgreSQL-only checks skipped in 86.50 seconds**.
+Real Java/apksigner tests were enabled in both runs. The existing Starlette
+TestClient deprecation warning remains. Temporary PostgreSQL on port 55432 stopped
+cleanly; application PostgreSQL on port 55433 was not changed. No migration added.
+
+Nine new tests cover the four API-rule categories, identifier/call distinction,
+reference suppression, caller/offset provenance, unrelated rule exclusion,
+duplicate evidence, bounds, partial source coverage, file-header candidates,
+deterministic input-scoped IDs, catalog exposure, real worker analysis, case
+scoping and forensic JSON report creation. The existing catalog test was updated
+for the ninth adapter after the initial suite detected its outdated expected set.
+Both complete suites passed after that correction. Lint, format, dependency,
+UTF-8 and diff checks passed. Functional checks do not measure evasion detection
+accuracy; anti-emulation and encrypted payload detection remain unevaluated.

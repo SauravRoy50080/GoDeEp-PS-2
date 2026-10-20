@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 12 — case-scoped APK comparisons:** investigators can compare two
-> completed static or threat review runs with evidence references, semantic changes
-> and explicit coverage limitations. Forensic JSON report snapshots are available.
-> Dynamic analysis, provider connectors, vulnerability matching, scoring, formatted
-> reports, AI and production hardening remain planned.
+> **Milestone 13 — static loading and evasion review leads:** a dedicated adapter
+> groups debugger, dynamic-loading, reflection, native-loading and embedded-file
+> evidence with benign explanations and explicit coverage gaps. Case-scoped
+> comparisons and forensic JSON reports are available. Dynamic analysis, broader
+> evasion detection, provider connectors, scoring, AI and hardening remain planned.
 
 | Area | Current state |
 |---|---|
@@ -54,6 +54,7 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
+| Loading/evasion review leads | Implemented for selected static API rules and file headers |
 | Case-scoped analysis comparison | Implemented for static/threat review observations |
 | Forensic JSON report snapshots | Implemented; formatted exports and analyst sign-off pending |
 | Malware classification and AI | Planned; no malware verdict yet |
@@ -334,6 +335,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Static loading and evasion review leads](docs/evasion-review.md)
 - [Case-scoped APK analysis comparison](docs/sample-comparison.md)
 - [Forensic JSON reports and migration](docs/forensic-reports.md)
 - [Offline threat-intelligence correlation](docs/offline-threat-intelligence.md)

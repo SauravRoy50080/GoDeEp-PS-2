@@ -11,6 +11,7 @@ ADAPTER_VERSIONS = {
     "signature_verify": "1.0.0",
     "resource_inventory": "1.0.0",
     "threat_review": "1.0.0",
+    "evasion_review": "1.0.0",
 }
 
 
