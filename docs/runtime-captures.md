@@ -124,7 +124,7 @@ artifacts remain under ignored backend/data storage, not Git.
 
 These controls provide integrity relative to metadata, not tamper-proof custody,
 trusted collector signatures or legal certification. OS-level sandbox execution,
-collector adapters, packet capture, event correlation, intelligence enrichment and
-inclusion in forensic report snapshots remain pending. Current report selection
-still accepts analysis jobs only; captures do not modify scores or classifier
-predictions. Raw logs/PCAP/binary uploads are not accepted by this endpoint.
+collector adapters, packet capture, event correlation and intelligence enrichment
+remain pending. Captures can now be selected in [version-2 forensic snapshots](runtime-report-integration.md).
+Captures do not modify scores or classifier predictions. Raw logs/PCAP/binary
+uploads are not accepted by this endpoint.

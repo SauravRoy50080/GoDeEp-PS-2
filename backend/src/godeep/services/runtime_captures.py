@@ -1,7 +1,6 @@
 """Case-authorized immutable storage of bounded collector-asserted runtime traces."""
 
 import hashlib
-import json
 from collections import Counter
 
 from fastapi import HTTPException
@@ -9,7 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 
 from godeep.persistence.models import AuditEvent, RuntimeCapture, new_id, utc_now
-from godeep.schemas.runtime_captures import RuntimeTrace
+from godeep.schemas.runtime_captures import decode_trace
 from godeep.services.reports import require_sample, verify_original
 from godeep.storage.artifacts import read_verified
 
@@ -20,22 +19,8 @@ def authorize(factory, case_id, sample_id, user_id):
 
 
 def parse_trace(raw):
-    def pairs(items):
-        value = {}
-        for key, item in items:
-            if key in value:
-                raise ValueError("Duplicate JSON key")
-            value[key] = item
-        return value
-
-    def invalid(value):
-        raise ValueError("Non-finite JSON")
-
     try:
-        data = json.loads(raw, object_pairs_hook=pairs, parse_constant=invalid)
-        if not isinstance(data, dict) or type(data.get("schema_version")) is not int:
-            raise ValueError("Invalid schema")
-        return RuntimeTrace.model_validate(data)
+        return decode_trace(raw)
     except (ValueError, TypeError, UnicodeError, RecursionError) as exc:
         raise HTTPException(
             422, "Invalid runtime trace schema, coverage or event chronology"

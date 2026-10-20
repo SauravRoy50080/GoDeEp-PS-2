@@ -373,3 +373,22 @@ All traces are synthetic; no APK runtime collection or emulator isolation was
 verified. Capture content, APK attribution, timestamps and collector claims are
 not independently authenticated. Live collector and report integration remain
 pending; intake does not affect priority scores or classifier output.
+
+## Milestone 20 - runtime captures in forensic snapshots, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **293 passed in 159.95 seconds**. Full SQLite suite:
+**287 passed, six PostgreSQL-only checks skipped in 90.94 seconds**. Real
+Java/apksigner checks enabled. Existing Starlette TestClient deprecation warning
+remains. Temporary PostgreSQL stopped cleanly; application database unchanged.
+No new migration or package added; the existing 0005 runtime schema is required.
+Ruff lint/format, dependency, UTF-8 and diff checks passed.
+
+Fifteen new tests cover runtime-only/combined version-2 reports, analysis-only
+version-1 compatibility, explicit selection/counts, empty/duplicate/combined caps,
+capture hash/size/input/structure failures, source loss after snapshot, untrusted
+summary exclusion, wrong sample/case IDs, failed collection preservation,
+report bounds and transactional cleanup. All 55 targeted report/capture checks
+passed before full-suite runs. Strict trace decoding is shared by import/report
+without changing the structural trace schema. Test traces remain synthetic;
+collector attribution, execution and isolation are not independently verified.
+No new model training or test-corpus selection took place.

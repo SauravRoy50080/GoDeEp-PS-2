@@ -60,5 +60,10 @@ See [feature compatibility](feature-compatibility.md).
 
 Runtime capture intake now preserves bounded collector-asserted observations with
 case permissions, hashes, typed events, summaries and explicit coverage. It does
-not run APKs or verify isolation/attribution. Live collectors and report integration
-remain pending. Migration 0005 adds runtime_captures; see [runtime intake](runtime-captures.md).
+not run APKs or verify isolation/attribution. Live collectors remain pending; report integration is implemented. Migration 0005 adds runtime_captures; see [runtime intake](runtime-captures.md).
+
+Selected runtime captures are now included in version-2 forensic snapshots, alone
+or alongside selected analysis jobs. Capture hashes, trace validation, sample
+association and coverage are checked/preserved; collector claims are not promoted
+to verified runtime execution. Analysis-only version 1 remains compatible. See
+[runtime report integration](runtime-report-integration.md).

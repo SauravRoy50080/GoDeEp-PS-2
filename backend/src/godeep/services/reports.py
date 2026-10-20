@@ -11,10 +11,12 @@ from godeep.persistence.models import (
     AnalysisJob,
     AuditEvent,
     ForensicReport,
+    RuntimeCapture,
     Sample,
     new_id,
     utc_now,
 )
+from godeep.schemas.runtime_captures import decode_trace
 from godeep.services.cases import require_case
 from godeep.storage.artifacts import read_verified
 
@@ -53,7 +55,7 @@ def verify_original(root, sample, limit):
         raise HTTPException(409, "Original evidence unavailable or integrity check failed") from exc
 
 
-def create_report(factory, settings, case_id, sample_id, user_id, job_ids):
+def create_report(factory, settings, case_id, sample_id, user_id, job_ids, capture_ids=()):
     destination = None
     owned_artifact = False
     root = settings.evidence_root.resolve()
@@ -105,9 +107,49 @@ def create_report(factory, settings, case_id, sample_id, user_id, job_ids):
                         "data": data,
                     }
                 )
+            runtime_sources = []
+            for capture_id in sorted(str(value) for value in capture_ids):
+                capture = session.get(RuntimeCapture, capture_id)
+                if capture is None or capture.case_id != case_id or capture.sample_id != sample_id:
+                    raise HTTPException(404, "Source runtime capture not found for this sample")
+                raw = read_verified(
+                    root,
+                    capture.artifact_key,
+                    capture.artifact_sha256,
+                    settings.max_runtime_capture_bytes,
+                )
+                source_bytes += len(raw)
+                if source_bytes > settings.max_report_bytes:
+                    raise HTTPException(413, "Selected sources exceed report bounds")
+                if len(raw) != capture.size_bytes or capture.input_sha256 != sample.sha256:
+                    raise HTTPException(409, "Runtime capture metadata does not match source")
+                try:
+                    trace = decode_trace(raw)
+                    if (
+                        trace.input_sha256 != sample.sha256
+                        or trace.source_run_id != capture.source_run_id
+                    ):
+                        raise ValueError("Capture identity mismatch")
+                except (ValueError, TypeError, UnicodeError, RecursionError) as exc:
+                    raise HTTPException(409, "Source runtime trace is invalid") from exc
+                runtime_sources.append(
+                    {
+                        "capture_id": capture.id,
+                        "artifact_sha256": capture.artifact_sha256,
+                        "size_bytes": capture.size_bytes,
+                        "imported_at": aware(capture.created_at).isoformat(),
+                        "imported_by": capture.created_by,
+                        "source_run_id": trace.source_run_id,
+                        "attribution": "collector_asserted_not_verified",
+                        "isolation": "not_verified",
+                        "representation": "validated_normalized_trace_v1",
+                        "data": trace.model_dump(mode="json"),
+                    }
+                )
             report_id, now = new_id(), utc_now()
+            report_schema = 2 if runtime_sources else 1
             document = {
-                "schema_version": 1,
+                "schema_version": report_schema,
                 "report_id": report_id,
                 "report_type": "investigation_analysis_snapshot",
                 "generated_at": now.isoformat(),
@@ -135,6 +177,22 @@ def create_report(factory, settings, case_id, sample_id, user_id, job_ids):
                     "Original and source integrity were checked at report creation",
                 ],
             }
+            if runtime_sources:
+                document["runtime_captures"] = runtime_sources
+                document["selection"].update(
+                    {
+                        "source_capture_ids": [source["capture_id"] for source in runtime_sources],
+                        "runtime_capture_count": len(runtime_sources),
+                        "scope": "Explicitly selected analyses and imported collector traces only",
+                    }
+                )
+                document["limitations"] += [
+                    "Runtime attribution, package, times and isolation remain collector claims",
+                    "Validated traces do not independently verify execution",
+                    "Hashes identify source bytes; embedded traces use normalized JSON",
+                    "Overlapping sources do not establish data flow or independent confirmation",
+                    "Partial or failed collections and missing coverage remain incomplete",
+                ]
             try:
                 output = json.dumps(
                     document, sort_keys=True, indent=2, ensure_ascii=True, allow_nan=False
@@ -163,7 +221,7 @@ def create_report(factory, settings, case_id, sample_id, user_id, job_ids):
                 artifact_key=key,
                 artifact_sha256=hashlib.sha256(output).hexdigest(),
                 size_bytes=len(output),
-                schema_version=1,
+                schema_version=report_schema,
                 created_at=now,
             )
             session.add(report)
@@ -177,6 +235,7 @@ def create_report(factory, settings, case_id, sample_id, user_id, job_ids):
                         "sample_id": sample_id,
                         "artifact_sha256": report.artifact_sha256,
                         "source_job_ids": report.source_job_ids,
+                        "source_capture_ids": [source["capture_id"] for source in runtime_sources],
                     },
                 )
             )

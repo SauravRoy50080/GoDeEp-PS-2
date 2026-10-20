@@ -40,10 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 19 — runtime evidence intake:** case-scoped collector traces can
-> be imported with bounded typed events, chronology/coverage checks, raw-byte
-> integrity and verified downloads. Collector attribution/isolation are unverified.
-> Live sandbox execution remains pending. Apply migration `0005_runtime_captures`.
+> **Milestone 20 — runtime evidence in forensic reports:** explicitly selected
+> imported captures can be snapshotted alone or with static analyses. Version-2
+> reports retain collector claims, source hashes and coverage gaps. Analysis-only
+> version-1 reports remain compatible. Live collection and verified isolation
+> remain pending; no new migration is added in this step.
 
 | Area | Current state |
 |---|---|
@@ -53,7 +54,7 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
-| Imported runtime evidence | Implemented; live collection and report integration pending |
+| Imported runtime evidence | Implemented with report integration; live collection pending |
 | CSV classification research | Baseline trained locally; production inference pending |
 | Offline priority evaluation | Implemented CLI; real datasets and calibration pending |
 | Explainable static priority | Implemented initial heuristic; calibration pending |
@@ -340,6 +341,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Runtime evidence in forensic reports](docs/runtime-report-integration.md)
 - [Runtime capture API and migration](docs/runtime-captures.md)
 - [Tri-state feature compatibility](docs/feature-compatibility.md)
 - [Validation-only model selection](docs/validation-selection.md)

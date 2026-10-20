@@ -23,6 +23,7 @@ def create(
         str(sample_id),
         user.user_id,
         payload.job_ids,
+        payload.capture_ids,
     )
 
 

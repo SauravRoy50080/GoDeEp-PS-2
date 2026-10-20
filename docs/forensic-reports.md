@@ -1,4 +1,4 @@
-# Structured forensic report snapshots - milestone 11
+# Structured forensic report snapshots
 
 ## Database update
 
@@ -37,7 +37,10 @@ Creation body:
 {"job_ids":["COMPLETED_ANALYSIS_JOB_UUID","ANOTHER_COMPLETED_JOB_UUID"]}
 ```
 
-Select 1-20 distinct completed jobs for exactly this registered sample. Jobs from
+Select 1-20 total sources: distinct completed jobs and/or runtime captures for
+exactly this registered sample. Optional `capture_ids` supports runtime-only or
+combined version-2 snapshots; see [runtime report integration](runtime-report-integration.md).
+Analysis-only requests retain version 1. Jobs from
 a separate registration are rejected even when original bytes have the same hash.
 The API does not silently pick a latest run or rerun analysis. Source IDs are sorted
 for a stable selection order. Each successful request creates a new report ID;
@@ -80,7 +83,7 @@ results return 409; incomplete jobs also return 409. Unknown/cross-sample source
 return 404; duplicate/empty/oversized selections return validation errors.
 
 The report uses strict JSON serialization, an exclusive new artifact file and a
-stored SHA-256. At most 20 source results and 10 MiB report output are allowed by
+stored SHA-256. At most 20 combined sources and 10 MiB report output are allowed by
 default. Aggregate source bytes and final rendered bytes are bounded. Exceeded
 report bounds return 413 without a partial report. GODEEP_MAX_REPORT_BYTES is an
 operational setting, not a per-request override. Creation currently runs in the

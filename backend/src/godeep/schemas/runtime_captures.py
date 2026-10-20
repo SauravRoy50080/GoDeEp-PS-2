@@ -1,5 +1,6 @@
 """Bounded collector observations; capture provenance is asserted, not verified."""
 
+import json
 from datetime import datetime, timedelta
 from typing import Annotated, Literal
 from uuid import UUID
@@ -110,3 +111,23 @@ class CaptureRead(Record):
     size_bytes: int
     source_run_id: str
     summary: dict
+
+
+def decode_trace(raw):
+    """Strict JSON plus structural and semantic validation, shared by imports/reports."""
+
+    def pairs(items):
+        value = {}
+        for key, item in items:
+            if key in value:
+                raise ValueError("Duplicate JSON key")
+            value[key] = item
+        return value
+
+    def invalid(value):
+        raise ValueError("Non-finite JSON")
+
+    data = json.loads(raw, object_pairs_hook=pairs, parse_constant=invalid)
+    if not isinstance(data, dict) or type(data.get("schema_version")) is not int:
+        raise ValueError("Invalid schema")
+    return RuntimeTrace.model_validate(data)
