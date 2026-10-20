@@ -80,3 +80,9 @@ Offline priority evaluation now validates recorded results and corpus splits,
 reports selective metrics with abstentions, and preserves hashes/label provenance.
 No real dataset benchmark or model training has run. Category/classification
 evaluation and calibration remain pending; see [dataset evaluation](dataset-evaluation.md).
+
+A separate CSV classification research CLI now validates B/S binary datasets,
+groups identical vectors before splitting and fits a training-only Bernoulli
+Naive Bayes baseline. No production inference integration; extractor parity,
+family/temporal validation and calibration remain pending. See
+[classification baseline](classification-baseline.md).

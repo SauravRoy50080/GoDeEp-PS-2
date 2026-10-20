@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 15 — offline evaluation foundation:** recorded priority results
-> can be evaluated against explicit analyst labels with hash validation, dataset
-> split checks, abstentions and metrics. No real-corpus accuracy or model training
-> is claimed. Dynamic analysis, category evaluation, calibrated models, broader
-> evasion detection, provider connectors, AI and hardening remain planned.
+> **Milestone 16 — research classification baseline:** a strict CSV importer,
+> reproducible unique-vector splits and a Bernoulli Naive Bayes baseline are
+> implemented and evaluated locally. Test precision is 56.79% with 17.50% false
+> positives on the supplied corpus; this is not production APK inference.
+> Dynamic analysis, extractor parity, external validation, AI and hardening remain planned.
 
 | Area | Current state |
 |---|---|
@@ -54,6 +54,7 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
+| CSV classification research | Baseline trained locally; production inference pending |
 | Offline priority evaluation | Implemented CLI; real datasets and calibration pending |
 | Explainable static priority | Implemented initial heuristic; calibration pending |
 | Loading/evasion review leads | Implemented for selected static API rules and file headers |
@@ -337,6 +338,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Research classification baseline](docs/classification-baseline.md)
 - [Offline dataset evaluation](docs/dataset-evaluation.md)
 - [Explainable static review prioritization](docs/risk-prioritization.md)
 - [Static loading and evasion review leads](docs/evasion-review.md)

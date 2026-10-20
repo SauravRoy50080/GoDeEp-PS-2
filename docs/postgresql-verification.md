@@ -292,3 +292,23 @@ explicit splits, profile flags, size bounds and exclusive CLI output creation.
 All test labels/results are synthetic. No real corpus was evaluated, no weights
 were calibrated, and no model was trained. These counts do not measure detection
 accuracy. Real-data schema/label review is the next prerequisite.
+
+## Milestone 16 - research binary classification, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **229 passed in 135.39 seconds**. Full SQLite suite:
+**223 passed, six PostgreSQL-only checks skipped in 76.97 seconds**. Real
+Java/apksigner tests enabled. Existing Starlette TestClient deprecation warning
+remains. Temporary PostgreSQL stopped cleanly. Application database unchanged;
+no migration or dependency added. Ruff lint/format, dependency, UTF-8 and diff
+checks passed.
+
+Thirteen new tests cover duplicate-vector grouping, disjoint stratified splits,
+seed and row-order reproducibility, hand-calculated Naive Bayes outputs, metric
+arithmetic, null denominators, training-only parameters, per-group evaluation,
+invalid/conflicting labels, invalid schemas and values, insufficient unique groups,
+JSON CLI artifacts and refusal to overwrite experiments. A separate local run on
+the user's supplied feature CSV trained the initial baseline, with held-out test
+precision 56.79%, recall 100% on 46 malware-labelled vectors and false-positive
+rate 17.50% on 200 benign vectors. These corpus-specific results do not establish
+modern APK performance or extraction parity. Test data did not tune the model.
+Raw data, split artifacts and model parameters remain outside Git.
