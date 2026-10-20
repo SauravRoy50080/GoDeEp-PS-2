@@ -40,10 +40,10 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 14 — explainable static prioritization:** `risk_review` adds a
-> versioned 0-100 analyst-priority score with evidence references, bounded category
-> contributions, conflict handling and explicit gaps. Weights are uncalibrated;
-> this is not malware probability. Dynamic analysis, dataset evaluation, broader
+> **Milestone 15 — offline evaluation foundation:** recorded priority results
+> can be evaluated against explicit analyst labels with hash validation, dataset
+> split checks, abstentions and metrics. No real-corpus accuracy or model training
+> is claimed. Dynamic analysis, category evaluation, calibrated models, broader
 > evasion detection, provider connectors, AI and hardening remain planned.
 
 | Area | Current state |
@@ -54,6 +54,7 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
+| Offline priority evaluation | Implemented CLI; real datasets and calibration pending |
 | Explainable static priority | Implemented initial heuristic; calibration pending |
 | Loading/evasion review leads | Implemented for selected static API rules and file headers |
 | Case-scoped analysis comparison | Implemented for static/threat review observations |
@@ -336,6 +337,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Offline dataset evaluation](docs/dataset-evaluation.md)
 - [Explainable static review prioritization](docs/risk-prioritization.md)
 - [Static loading and evasion review leads](docs/evasion-review.md)
 - [Case-scoped APK analysis comparison](docs/sample-comparison.md)

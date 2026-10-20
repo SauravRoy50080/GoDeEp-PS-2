@@ -75,3 +75,8 @@ The `risk_review` adapter now applies a versioned, uncalibrated analyst-priority
 policy to static and offline-feed evidence, with category caps, source references
 and coverage gaps. Dataset calibration and runtime-informed risk remain pending.
 See [risk prioritization](risk-prioritization.md).
+
+Offline priority evaluation now validates recorded results and corpus splits,
+reports selective metrics with abstentions, and preserves hashes/label provenance.
+No real dataset benchmark or model training has run. Category/classification
+evaluation and calibration remain pending; see [dataset evaluation](dataset-evaluation.md).

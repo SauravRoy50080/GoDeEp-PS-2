@@ -274,3 +274,21 @@ finding/feed references, case scoping and forensic JSON report creation. Catalog
 expectations include the tenth registered adapter. Ruff lint/format, dependency,
 UTF-8 and diff checks passed. These checks validate functional arithmetic and
 integration, not calibration, malware probability or detection accuracy.
+
+## Milestone 15 - offline priority evaluation, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **216 passed in 137.44 seconds**. Full SQLite suite:
+**210 passed, six PostgreSQL-only checks skipped in 78.37 seconds**. Real
+Java/apksigner tests were enabled. The existing Starlette TestClient deprecation
+warning remains. Temporary PostgreSQL stopped cleanly; application PostgreSQL was
+not changed. No dependency or migration added. Ruff lint/format, dependency,
+UTF-8 and diff checks passed.
+
+Nineteen new tests validate confusion arithmetic, selective coverage and positive
+abstention recall bounds, undefined metrics, missing predictions, duplicate APK
+hashes, cross-split group leakage, label/target contracts, provenance, path/hash
+and input identity, version/policy consistency, duplicate/non-finite JSON,
+explicit splits, profile flags, size bounds and exclusive CLI output creation.
+All test labels/results are synthetic. No real corpus was evaluated, no weights
+were calibrated, and no model was trained. These counts do not measure detection
+accuracy. Real-data schema/label review is the next prerequisite.
