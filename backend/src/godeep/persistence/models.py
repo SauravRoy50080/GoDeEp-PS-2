@@ -13,6 +13,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -134,4 +135,23 @@ class ForensicReport(Base):
     artifact_sha256: Mapped[str] = mapped_column(String(64))
     size_bytes: Mapped[int] = mapped_column(BigInteger)
     schema_version: Mapped[int] = mapped_column(Integer, default=1)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+
+
+class RuntimeCapture(Base):
+    __tablename__ = "runtime_captures"
+    __table_args__ = (
+        CheckConstraint("size_bytes > 0", name="ck_capture_size"),
+        UniqueConstraint("sample_id", "artifact_sha256", name="uq_capture_sample_artifact"),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    case_id: Mapped[str] = mapped_column(ForeignKey("cases.id"), index=True)
+    sample_id: Mapped[str] = mapped_column(ForeignKey("samples.id"), index=True)
+    created_by: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    input_sha256: Mapped[str] = mapped_column(String(64))
+    source_run_id: Mapped[str] = mapped_column(String(200))
+    artifact_key: Mapped[str] = mapped_column(String(100), unique=True)
+    artifact_sha256: Mapped[str] = mapped_column(String(64))
+    size_bytes: Mapped[int] = mapped_column(BigInteger)
+    summary: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)

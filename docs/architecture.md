@@ -96,3 +96,8 @@ An offline feature compatibility audit now retains dataset order, hash provenanc
 candidate manifest observations and unsupported/null features. It does not produce
 model inputs or predictions; original extraction equivalence remains unverified.
 See [feature compatibility](feature-compatibility.md).
+
+Runtime capture intake now preserves bounded collector-asserted observations with
+case permissions, hashes, typed events, summaries and explicit coverage. It does
+not run APKs or verify isolation/attribution. Live collectors and report integration
+remain pending. Migration 0005 adds runtime_captures; see [runtime intake](runtime-captures.md).

@@ -351,3 +351,25 @@ suites passed. A controlled static-review APK fixture aligned 109 candidate
 permissions (2 declared, 107 not declared), leaving 106 features unknown against
 the supplied dataset. These counts are feature-alignment checks, not extraction
 parity, malware accuracy or permission effectiveness. No inference or training ran.
+
+## Milestone 19 - imported runtime observations, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **278 passed in 145.68 seconds**. Full SQLite suite:
+**272 passed, six PostgreSQL-only checks skipped in 84.21 seconds**. Real
+Java/apksigner checks enabled. Existing Starlette TestClient deprecation warning
+remains. Temporary PostgreSQL stopped cleanly; application database was not
+migrated by tests. Apply additive migration 0005_runtime_captures to the application
+before using the new API. No package dependencies added. Ruff lint/format,
+dependency, UTF-8 and diff checks passed.
+
+Twenty-five new tests cover typed runtime events, unique chronology, timezone/
+interval and event bounds, coverage contradictions, malformed JSON and fields,
+raw-byte preservation and digest provenance, metadata/summary/list/download,
+duplicate import rejection, transaction audit, migration preservation and schema
+checks, viewer/analyst/outsider roles, case scope, media/size/hash/original bounds,
+missing/tampered/size-mismatched downloads, transaction cleanup and ID collisions.
+Database/file work runs in the threadpool around bounded async body streaming.
+All traces are synthetic; no APK runtime collection or emulator isolation was
+verified. Capture content, APK attribution, timestamps and collector claims are
+not independently authenticated. Live collector and report integration remain
+pending; intake does not affect priority scores or classifier output.

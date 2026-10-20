@@ -40,11 +40,10 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 18 — tri-state feature compatibility:** saved APK analyses can be
-> audited against dataset columns with evidence, hashes and explicit unknowns.
-> The supplied schema has 109 candidate permission mappings and 106 unsupported
-> features. Extraction equivalence remains unverified; no model input or APK
-> prediction is produced. Dynamic analysis and production inference remain pending.
+> **Milestone 19 — runtime evidence intake:** case-scoped collector traces can
+> be imported with bounded typed events, chronology/coverage checks, raw-byte
+> integrity and verified downloads. Collector attribution/isolation are unverified.
+> Live sandbox execution remains pending. Apply migration `0005_runtime_captures`.
 
 | Area | Current state |
 |---|---|
@@ -54,6 +53,7 @@ could not observe.
 | SQLAlchemy models and Alembic migrations | Implemented; SQLite and live PostgreSQL 17.11 tested |
 | Transactional case events | Authenticated actors implemented; tamper-evident audit pending |
 | Durable job queue and separate worker | Implemented for archive, manifest/certificate and DEX identifier evidence |
+| Imported runtime evidence | Implemented; live collection and report integration pending |
 | CSV classification research | Baseline trained locally; production inference pending |
 | Offline priority evaluation | Implemented CLI; real datasets and calibration pending |
 | Explainable static priority | Implemented initial heuristic; calibration pending |
@@ -200,6 +200,8 @@ Java and other external tools are not installed by pip.
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples` | Register raw APK bytes/list samples |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}` | Retrieve sample metadata |
 | `GET` | `/api/v1/cases/{case_id}/audit` | List case events |
+| `POST` / `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/runtime-captures` | Import/list collector traces |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/runtime-captures/{capture_id}/download` | Download verified original trace |
 | `POST` | `/api/v1/cases/{case_id}/comparisons` | Compare two explicitly selected completed runs |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports` | Create/list report snapshots |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}` | Read report metadata |
@@ -338,6 +340,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Runtime capture API and migration](docs/runtime-captures.md)
 - [Tri-state feature compatibility](docs/feature-compatibility.md)
 - [Validation-only model selection](docs/validation-selection.md)
 - [Research classification baseline](docs/classification-baseline.md)

@@ -72,3 +72,5 @@ class Settings(BaseSettings):
 
     max_comparison_items: int = Field(default=200, ge=1, le=1000)
     max_comparison_bytes: int = Field(default=2097152, ge=1024, le=10485760)
+
+    max_runtime_capture_bytes: int = Field(default=2097152, ge=1024, le=10485760)

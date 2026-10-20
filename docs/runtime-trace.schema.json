@@ -1,0 +1,404 @@
+{
+  "$defs": {
+    "Collector": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ],
+      "title": "Collector",
+      "type": "object"
+    },
+    "Coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "process": {
+          "enum": [
+            "collected",
+            "partial",
+            "not_collected"
+          ],
+          "title": "Process",
+          "type": "string"
+        },
+        "filesystem": {
+          "enum": [
+            "collected",
+            "partial",
+            "not_collected"
+          ],
+          "title": "Filesystem",
+          "type": "string"
+        },
+        "network": {
+          "enum": [
+            "collected",
+            "partial",
+            "not_collected"
+          ],
+          "title": "Network",
+          "type": "string"
+        },
+        "sensitive_access": {
+          "enum": [
+            "collected",
+            "partial",
+            "not_collected"
+          ],
+          "title": "Sensitive Access",
+          "type": "string"
+        }
+      },
+      "required": [
+        "process",
+        "filesystem",
+        "network",
+        "sensitive_access"
+      ],
+      "title": "Coverage",
+      "type": "object"
+    },
+    "FileEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "pid": {
+          "maximum": 2147483647,
+          "minimum": 1,
+          "title": "Pid",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "filesystem",
+          "title": "Kind",
+          "type": "string"
+        },
+        "operation": {
+          "enum": [
+            "create",
+            "read",
+            "write",
+            "delete"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "path": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "content_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Sha256"
+        }
+      },
+      "required": [
+        "event_id",
+        "timestamp",
+        "pid",
+        "kind",
+        "operation",
+        "path"
+      ],
+      "title": "FileEvent",
+      "type": "object"
+    },
+    "NetworkEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "pid": {
+          "maximum": 2147483647,
+          "minimum": 1,
+          "title": "Pid",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "network",
+          "title": "Kind",
+          "type": "string"
+        },
+        "transport": {
+          "enum": [
+            "tcp",
+            "udp"
+          ],
+          "title": "Transport",
+          "type": "string"
+        },
+        "destination_ip": {
+          "format": "ipvanyaddress",
+          "title": "Destination Ip",
+          "type": "string"
+        },
+        "destination_port": {
+          "maximum": 65535,
+          "minimum": 1,
+          "title": "Destination Port",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "event_id",
+        "timestamp",
+        "pid",
+        "kind",
+        "transport",
+        "destination_ip",
+        "destination_port"
+      ],
+      "title": "NetworkEvent",
+      "type": "object"
+    },
+    "ProcessEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "pid": {
+          "maximum": 2147483647,
+          "minimum": 1,
+          "title": "Pid",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "process",
+          "title": "Kind",
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "start",
+            "stop"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "timestamp",
+        "pid",
+        "kind",
+        "action",
+        "name"
+      ],
+      "title": "ProcessEvent",
+      "type": "object"
+    },
+    "SensitiveEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "event_id": {
+          "format": "uuid",
+          "title": "Event Id",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "pid": {
+          "maximum": 2147483647,
+          "minimum": 1,
+          "title": "Pid",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "sensitive_access",
+          "title": "Kind",
+          "type": "string"
+        },
+        "resource": {
+          "enum": [
+            "camera",
+            "microphone",
+            "location",
+            "contacts",
+            "sms"
+          ],
+          "title": "Resource",
+          "type": "string"
+        },
+        "operation": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Operation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "timestamp",
+        "pid",
+        "kind",
+        "resource",
+        "operation"
+      ],
+      "title": "SensitiveEvent",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "input_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "source_run_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Source Run Id",
+      "type": "string"
+    },
+    "collector": {
+      "$ref": "#/$defs/Collector"
+    },
+    "environment": {
+      "enum": [
+        "emulator",
+        "physical_device",
+        "external_sandbox"
+      ],
+      "title": "Environment",
+      "type": "string"
+    },
+    "package_name": {
+      "maxLength": 255,
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)+$",
+      "title": "Package Name",
+      "type": "string"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "ended_at": {
+      "format": "date-time",
+      "title": "Ended At",
+      "type": "string"
+    },
+    "collection_status": {
+      "enum": [
+        "completed",
+        "partial",
+        "failed"
+      ],
+      "title": "Collection Status",
+      "type": "string"
+    },
+    "coverage": {
+      "$ref": "#/$defs/Coverage"
+    },
+    "events": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "filesystem": "#/$defs/FileEvent",
+            "network": "#/$defs/NetworkEvent",
+            "process": "#/$defs/ProcessEvent",
+            "sensitive_access": "#/$defs/SensitiveEvent"
+          },
+          "propertyName": "kind"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ProcessEvent"
+          },
+          {
+            "$ref": "#/$defs/FileEvent"
+          },
+          {
+            "$ref": "#/$defs/NetworkEvent"
+          },
+          {
+            "$ref": "#/$defs/SensitiveEvent"
+          }
+        ]
+      },
+      "maxItems": 2000,
+      "title": "Events",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "input_sha256",
+    "source_run_id",
+    "collector",
+    "environment",
+    "package_name",
+    "started_at",
+    "ended_at",
+    "collection_status",
+    "coverage",
+    "events"
+  ],
+  "title": "RuntimeTrace",
+  "type": "object"
+}
