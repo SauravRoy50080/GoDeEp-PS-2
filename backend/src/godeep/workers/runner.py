@@ -66,6 +66,13 @@ def run_once(factory, settings):
                     "intel_feed_sha256": settings.intel_feed_sha256,
                 }
                 if job.adapter in {"threat_review", "risk_review"}
+                else {
+                    "library_feed_path": str(settings.library_feed_path)
+                    if settings.library_feed_path
+                    else None,
+                    "library_feed_sha256": settings.library_feed_sha256,
+                }
+                if job.adapter == "library_review"
                 else {},
             }
             environment = {

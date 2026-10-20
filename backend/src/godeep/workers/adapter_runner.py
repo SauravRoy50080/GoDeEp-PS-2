@@ -18,6 +18,7 @@ def main():
             "signature_verify": ("signer_java_path", "signer_jar_path", "signer_jar_sha256"),
             "threat_review": ("intel_feed_path", "intel_feed_sha256"),
             "risk_review": ("intel_feed_path", "intel_feed_sha256"),
+            "library_review": ("library_feed_path", "library_feed_sha256"),
         }
         for keys in runtime_keys.values():
             for key in keys:

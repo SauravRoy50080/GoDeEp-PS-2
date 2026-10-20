@@ -13,6 +13,7 @@ ADAPTER_VERSIONS = {
     "threat_review": "1.0.0",
     "evasion_review": "1.0.0",
     "risk_review": "1.0.0",
+    "library_review": "1.0.0",
 }
 
 

@@ -77,3 +77,9 @@ class Settings(BaseSettings):
 
     max_timeline_source_bytes: int = Field(default=10485760, ge=1024, le=20971520)
     max_timeline_bytes: int = Field(default=1048576, ge=1024, le=5242880)
+
+    library_feed_path: Path | None = None
+    library_feed_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    max_library_feed_bytes: int = Field(default=2097152, ge=1024, le=8388608)
+    max_library_matches: int = Field(default=20, ge=1, le=100)
+    library_feed_max_age_days: int = Field(default=30, ge=1, le=365)

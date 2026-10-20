@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 21 — connection review and runtime timeline:** an end-to-end
-> adapter/capture/report/comparison check and fixes for runtime OpenAPI and local
-> database readiness accompany a filtered, paginated evidence-linked timeline.
-> Events remain collector claims. Persistent local startup, live sandboxing,
-> verified model integration and production hardening remain distinct concerns.
+> **Milestone 22 — offline library-advisory review:** declared Maven coordinates
+> and exact versions can be checked against pinned local advisory claims with
+> source hashes, evidence, expiry/withdrawal handling and conflict visibility.
+> Packaged vulnerable code, version ranges and exploitability are not verified.
+> No production feed or live Android sandbox is configured by this implementation.
 
 | Area | Current state |
 |---|---|
@@ -342,6 +342,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Offline library-advisory review](docs/library-advisory-review.md)
 - [Backend connection review](docs/connection-review.md)
 - [Runtime investigation timeline](docs/runtime-timeline.md)
 - [Runtime evidence in forensic reports](docs/runtime-report-integration.md)

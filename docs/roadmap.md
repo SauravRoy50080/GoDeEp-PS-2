@@ -72,3 +72,8 @@ Selected runtime captures can now be viewed as an evidence-linked, filtered and
 paginated timeline. Clock attribution/causality remain unverified. Backend
 connection review fixes OpenAPI upload documentation and local database readiness;
 see [review](connection-review.md) and [timeline](runtime-timeline.md).
+
+The library_review adapter now matches declared Maven coordinates/exact versions
+to pinned offline advisory claims with expiry, withdrawal, conflict and coverage
+handling. Full SCA, version ranges and packaged-code verification remain pending.
+See [library advisory review](library-advisory-review.md).

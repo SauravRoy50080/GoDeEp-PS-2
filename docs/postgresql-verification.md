@@ -422,3 +422,24 @@ Persistent local startup from a VS Code terminal remains to be verified. Raw log
 stay in ignored local storage. Tests establish implemented functional connections,
 not continuous local service availability, live Android sandboxing, calibrated ML
 or malware-detection accuracy. See connection-review.md for scope and commands.
+
+## Milestone 22 - offline declared-library advisory claims, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **337 passed in 180.27 seconds**. Full SQLite suite:
+**331 passed, six PostgreSQL-only skips in 104.66 seconds**. Real Java/apksigner
+checks enabled; existing Starlette TestClient deprecation warning remains.
+Temporary PostgreSQL stopped cleanly. Application database was not changed.
+No migration or dependency added. Ruff lint/format, dependency, UTF-8 and diff
+checks passed.
+
+Twenty-three new tests cover exact coordinates/version boundaries, declaration
+hashes, deduplication/evidence caps, unresolved metadata, conflict detection before
+truncation, withdrawn/expired claims, pinned hash/size/freshness failures, missing
+configuration, strict feed IDs/versions/JSON/schema, feed validation CLI, real
+worker runtime configuration, metadata status linkage, report selection and case
+scoping. Existing all-adapter workflow now exercises eleven registered adapters.
+The final inventory status pointer was additionally verified in a focused worker
+integration run. All advisory records are synthetic; no production feed was
+configured, no external data was submitted, and no real CVE/packaged-code match
+or exploitability claim is established. Priority scoring/model thresholds did not
+change. Version ranges and full software-composition analysis remain pending.
