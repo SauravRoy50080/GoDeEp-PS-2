@@ -47,3 +47,8 @@ groups identical vectors before splitting and fits a training-only Bernoulli
 Naive Bayes baseline. No production inference integration; extractor parity,
 family/temporal validation and calibration remain pending. See
 [classification baseline](classification-baseline.md).
+
+Validation-only research selection compares Naive Bayes and a decision stump
+under explicit FPR/recall constraints. Test scoring and production promotion
+are excluded; fresh external evaluation and extractor parity remain required.
+See [validation selection](validation-selection.md).

@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 16 — research classification baseline:** a strict CSV importer,
-> reproducible unique-vector splits and a Bernoulli Naive Bayes baseline are
-> implemented and evaluated locally. Test precision is 56.79% with 17.50% false
-> positives on the supplied corpus; this is not production APK inference.
-> Dynamic analysis, extractor parity, external validation, AI and hardening remain planned.
+> **Milestone 17 — validation-only model comparison:** research candidates are
+> compared using training and validation data, with explicit false-positive/recall
+> objectives and a refusal to select failing candidates. Selected validation FPR
+> is 2.00%, recall 86.96%; these selected metrics are not independent accuracy.
+> No new test scoring or production model integration is introduced.
 
 | Area | Current state |
 |---|---|
@@ -338,6 +338,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Validation-only model selection](docs/validation-selection.md)
 - [Research classification baseline](docs/classification-baseline.md)
 - [Offline dataset evaluation](docs/dataset-evaluation.md)
 - [Explainable static review prioritization](docs/risk-prioritization.md)

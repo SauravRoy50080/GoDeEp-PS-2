@@ -312,3 +312,22 @@ precision 56.79%, recall 100% on 46 malware-labelled vectors and false-positive
 rate 17.50% on 200 benign vectors. These corpus-specific results do not establish
 modern APK performance or extraction parity. Test data did not tune the model.
 Raw data, split artifacts and model parameters remain outside Git.
+
+## Milestone 17 - validation-only selection, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **239 passed in 133.91 seconds**. Full SQLite suite:
+**233 passed, six PostgreSQL-only checks skipped in 76.97 seconds**. Real
+Java/apksigner checks enabled. Existing Starlette TestClient deprecation warning
+remains. Temporary PostgreSQL stopped cleanly. Application database unchanged;
+no dependencies or migration added. Ruff lint/format, dependency, UTF-8 and diff
+checks passed.
+
+Ten new tests cover stump hand calculations/tie breaks, no-split and class errors,
+objective boundaries and rejection, deterministic selection ranking, reproducible
+comparison, research-only artifacts, guarded exclusion of test feature/label reads,
+validation perturbations without training-data mutation and exclusive CLI outputs.
+The real supplied corpus selected Naive Bayes threshold 0.9999 on validation:
+40 TP, 4 FP, 196 TN, 6 FN; precision 90.91%, recall 86.96%, FPR 2.00%. These
+validation figures selected the candidate and are optimistically biased. No test
+scoring was performed in this stage and no production promotion occurred. Raw
+data and candidate artifacts remain outside Git.
