@@ -605,3 +605,32 @@ capture upload and combined forensic report. No actual emulator or malware was
 executed. Raw process-name observations do not establish APK ownership or complete
 coverage. Live compatibility, isolation and other runtime streams remain pending.
 No model, scoring, frontend or production evidence was changed.
+
+
+## Milestone 30 - seven runtime investigation capabilities, 22 October 2026
+
+Backend 0.31.0 adds process, filesystem, network and sensitive-resource inventories,
+sparse elapsed activity, exact two-capture comparison, and authenticated JSON/HTML
+review pages. No dependency or database migration was added.
+
+Final focused runtime-review/process-collector/network-correlation/runtime-report/
+HTML/timeline suite: **106 passed in 69.39 seconds**. Runtime-review and updated
+process-collector suites on PostgreSQL 17.11: **50 passed in 43.20 seconds**.
+Temporary PostgreSQL stopped cleanly. These are focused runs, not a new full-suite
+claim. Ruff lint/format, dependency, UTF-8 and diff checks passed. The existing
+Starlette TestClient deprecation warning remains.
+
+Tests exercise all four inventories, exact grouping, IP representation/port/transport
+separation, file-path/hash distinctions, process observed semantics, sparse boundary
+buckets, timestamp normalization, capture filtering, comparison membership/counts,
+evidence caps/pointers, pagination, failed/uncollected coverage, event/group/byte
+limits, query/OpenAPI contracts, case permissions and historical read-only snapshots.
+Tampered and rehashed-invalid snapshot identities, duplicate keys/capture IDs and
+invalid traces are rejected. HTML strings are escaped with passive export headers.
+An initial escaping test selected the wrong paginated row; its fixture was corrected
+before the final passing runs. The connected test follows an actual static report,
+fake ADB passive sampling, capture upload, combined report and observed-process view.
+
+No actual emulator compatibility, malware execution, containment or new filesystem/
+network/sensitive collector was established. Those streams are views of supplied
+traces. Source claims remain unverified and no risk/model/frontend code changed.

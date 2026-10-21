@@ -81,6 +81,12 @@ class Settings(BaseSettings):
 
     max_runtime_capture_bytes: int = Field(default=2097152, ge=1024, le=10485760)
 
+    max_runtime_review_events: int = Field(default=40000, ge=1, le=40000)
+    max_runtime_review_groups: int = Field(default=2000, ge=1, le=10000)
+    max_runtime_review_evidence: int = Field(default=5, ge=1, le=25)
+    max_runtime_review_bytes: int = Field(default=2097152, ge=1024, le=8388608)
+    max_runtime_review_html_bytes: int = Field(default=16777216, ge=1024, le=33554432)
+
     max_timeline_source_bytes: int = Field(default=10485760, ge=1024, le=20971520)
     max_timeline_bytes: int = Field(default=1048576, ge=1024, le=5242880)
 

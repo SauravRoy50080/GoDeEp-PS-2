@@ -161,3 +161,11 @@ to existing capture intake and forensic reports. Process coverage stays partial;
 name attribution, containment and live emulator compatibility remain unverified.
 Filesystem/network/sensitive collectors and controlled execution remain pending.
 See [passive process collection](process-collector.md).
+
+
+Runtime report snapshots now expose four exact event inventories, sparse per-capture
+elapsed activity buckets, two-capture comparisons and authenticated JSON/printable
+HTML pages. Source hashes, event pointers, collection status and coverage are retained;
+read-only derived views do not mutate reports or infer absence, process continuity,
+maliciousness or verified runtime attribution. See [runtime review](runtime-review.md).
+Live environment validation, containment and additional collectors remain pending.

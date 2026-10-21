@@ -1,17 +1,107 @@
 """Authenticated report creation, metadata and verified JSON/HTML downloads."""
 
 import hashlib
+import json
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Query, Request, Response
+from fastapi import APIRouter, Depends, Query, Request, Response
 
 from godeep.api.dependencies import CurrentUser
 from godeep.schemas.intake import Page
 from godeep.schemas.reports import ReportCreate, ReportRead
-from godeep.services import report_html, reports
+from godeep.schemas.runtime_review import ComparisonQuery, ReviewQuery
+from godeep.services import report_html, reports, runtime_review
 from godeep.services.network_correlation import network_correlation
 
 router = APIRouter(prefix="/cases/{case_id}/samples/{sample_id}/reports", tags=["forensic reports"])
+
+
+def runtime_view(case_id, sample_id, report_id, request, user, query, *, html=False):
+    settings = request.app.state.settings
+    raw = runtime_review.review(
+        request.app.state.sessions,
+        settings,
+        str(case_id),
+        str(sample_id),
+        str(report_id),
+        user.user_id,
+        **query.values,
+    )
+    data = json.loads(raw)
+    content = runtime_review.render(raw, settings.max_runtime_review_html_bytes) if html else raw
+    headers = {
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+        "X-Source-Report-SHA256": data["source_report_sha256"],
+        "X-Export-SHA256": hashlib.sha256(content).hexdigest(),
+        "X-Export-Version": runtime_review.VERSION,
+        "Content-Disposition": 'attachment; filename="godeep-runtime-review.'
+        + ("html" if html else "json")
+        + '"',
+    }
+    if html:
+        headers.update(
+            {
+                "Content-Security-Policy": report_html.CSP,
+                "X-Frame-Options": "DENY",
+                "Referrer-Policy": "no-referrer",
+            }
+        )
+    return Response(
+        content, media_type="text/html" if html else "application/json", headers=headers
+    )
+
+
+@router.get("/{report_id}/runtime-review", response_class=Response)
+def review_runtime(
+    case_id: UUID,
+    sample_id: UUID,
+    report_id: UUID,
+    request: Request,
+    user: CurrentUser,
+    query: Annotated[ReviewQuery, Depends()],
+):
+    """Paginated inventory or sparse elapsed activity buckets from selected report captures."""
+    return runtime_view(case_id, sample_id, report_id, request, user, query)
+
+
+@router.get("/{report_id}/runtime-review/export/html", response_class=Response)
+def export_runtime_review(
+    case_id: UUID,
+    sample_id: UUID,
+    report_id: UUID,
+    request: Request,
+    user: CurrentUser,
+    query: Annotated[ReviewQuery, Depends()],
+):
+    """Printable selected page; the same filters, bounds and coverage as JSON."""
+    return runtime_view(case_id, sample_id, report_id, request, user, query, html=True)
+
+
+@router.get("/{report_id}/runtime-comparison", response_class=Response)
+def compare_runtime(
+    case_id: UUID,
+    sample_id: UUID,
+    report_id: UUID,
+    request: Request,
+    user: CurrentUser,
+    query: Annotated[ComparisonQuery, Depends()],
+):
+    """Exact inventory identities in two distinct captures selected in this report."""
+    return runtime_view(case_id, sample_id, report_id, request, user, query)
+
+
+@router.get("/{report_id}/runtime-comparison/export/html", response_class=Response)
+def export_runtime_comparison(
+    case_id: UUID,
+    sample_id: UUID,
+    report_id: UUID,
+    request: Request,
+    user: CurrentUser,
+    query: Annotated[ComparisonQuery, Depends()],
+):
+    return runtime_view(case_id, sample_id, report_id, request, user, query, html=True)
 
 
 @router.get("/{report_id}/export/html", response_class=Response)

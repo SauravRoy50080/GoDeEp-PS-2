@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 30 — runtime investigation views:** process/file/network/sensitive
+> inventories, elapsed activity, two-capture comparison and printable exports now
+> derive from verified report snapshots. Collector claims and coverage limits remain
+> explicit; live sandbox containment and other runtime collectors remain pending.
+>
 > **Milestone 29 — passive process collection:** bounded process snapshots,
 > passive sampling and raw-observation replay now connect to runtime reports.
 > Process attribution and containment remain unverified; live emulator validation
@@ -237,6 +242,10 @@ Java and other external tools are not installed by pip.
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/download` | Download verified JSON snapshot |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/export/html` | Download printable HTML presentation |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/network-correlation` | Read exact static/collector IP co-occurrence |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/runtime-review` | Read runtime inventory/activity page |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/runtime-review/export/html` | Print runtime review page |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/runtime-comparison` | Compare two selected runtime captures |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/runtime-comparison/export/html` | Print runtime comparison page |
 | `GET` | `/api/v1/analyzers` | List implemented adapter capabilities |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/analyses` | Queue/list sample analysis jobs |
 | `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}` | Read job status/provenance |
@@ -372,6 +381,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Runtime inventories, activity and comparison](docs/runtime-review.md)
 - [Sandbox plans, preparations and evidence bundles](docs/sandbox-workflow.md)
 - [Emulator preflight and setup](docs/sandbox-preflight.md)
 - [Bounded DEX normal control flow](docs/dex-control-flow.md)

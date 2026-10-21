@@ -219,6 +219,10 @@ def test_collector_trace_to_runtime_api_and_combined_report(intake, tmp_path):
     document = client.get(prefix + f"/reports/{final.json()['id']}/download").json()
     event = document["runtime_captures"][0]["data"]["events"][0]
     assert event["action"] == "observed" and event["pid"] == 123
+    review = client.get(prefix + f"/reports/{final.json()['id']}/runtime-review")
+    assert review.status_code == 200, review.text
+    assert review.json()["items"][0]["identity"]["action"] == "observed"
+    assert review.json()["sources"][0]["artifact_sha256"] == digest(trace_raw)
 
 
 def test_invalid_cli_bundle_and_interval_fail_cleanly(tmp_path, capsys):
