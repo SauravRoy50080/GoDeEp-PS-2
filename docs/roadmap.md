@@ -6,7 +6,7 @@
    raw output retention and normalized observations.
 3. Static analysis: manifest/permission/component and certificate extraction implemented;
    DEX identifier references and network-string candidates also implemented;
-   decoded invoke sites and optional official signature verification are implemented; next add control-flow/call-graph/evasion
+   decoded invoke sites and optional official signature verification are implemented; next extend normal flow to exception handling and deepen call-graph/evasion
    analysis and evaluate controlled test APKs. Resource/policy declarations, embedded-file
    classification and declared-library metadata inventory are also implemented.
 4. Dynamic analysis: isolated Android environments, repeatable actions,
@@ -91,3 +91,9 @@ supported static candidates and imported collector events. Evidence pointers,
 source hashes/coverage, unsupported-adapter status and bounded pagination remain
 explicit. No DNS, causality, runtime attribution verification or scoring is added;
 see [network correlation](network-correlation.md).
+
+The dex_control_flow adapter adds bounded intraprocedural normal-flow blocks and
+checked goto/conditional/switch targets, with per-method offsets, payload references,
+APK-wide budgets and report support. Exception edges/handler validation, full
+verification, feasible-path and entrypoint reachability remain pending. See
+[normal control flow](dex-control-flow.md).

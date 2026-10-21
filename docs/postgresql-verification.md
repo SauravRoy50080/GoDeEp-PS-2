@@ -512,3 +512,27 @@ These tests establish selected-record IP co-occurrence only. They do not establi
 DNS relationships, source independence, successful contact, runtime attribution,
 malicious intent, causality, data exfiltration, model accuracy or calibrated risk.
 No real malware or investigator data was used, and no external service was called.
+
+## Milestone 26 - bounded DEX normal control flow, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **416 passed in 482.56 seconds**. Full SQLite suite:
+**410 passed, six PostgreSQL-only skips in 277.09 seconds**. Official Java/apksigner
+integration checks were enabled in both runs. Temporary PostgreSQL stopped cleanly;
+the application database was not changed. Existing Starlette TestClient deprecation
+warning remains. Ruff lint/format, dependency, UTF-8 and diff checks passed. No
+package or migration was added; backend version is 0.27.0.
+
+Thirty-seven new tests cover linear blocks, all conditional opcodes, goto widths,
+backward/self loops, packed/sparse switches, payload-relative targets, array data,
+invalid registers/zero offsets/operand targets/data targets, key ordering, malformed
+streams, conservative exception coverage, per-method/global limits, bounded switch
+expansion, unchanged default call parsing, real multidex worker configuration,
+report persistence and case scope. Seventy focused flow/call/invoke-graph/connected
+workflow checks passed before the final full suites. The connected workflow now
+exercises thirteen registered adapters through reports and network correlation.
+
+These fixtures establish implemented syntactic normal-target handling only. They
+do not establish Android verifier equivalence, exception-handler validity, feasible
+paths, runtime execution, malware detection accuracy or corpus-wide compatibility.
+No live APK execution, training, priority-score change or external sample submission
+was performed. See dex-control-flow.md for limits, source reference and API usage.

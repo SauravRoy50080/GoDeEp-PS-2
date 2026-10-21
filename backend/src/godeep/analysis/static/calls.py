@@ -12,7 +12,9 @@ class InvalidCode(Exception):
     pass
 
 
-def parse_calls(raw, settings, *, include_all_invokes=False):
+def parse_calls(
+    raw, settings, *, include_all_invokes=False, collect_calls=True, body_consumer=None
+):
     result = parse_dex(raw, settings, include_tables=True)
     strings, types, methods = result.pop("_tables")
     calls, issues = [], []
@@ -164,7 +166,7 @@ def parse_calls(raw, settings, *, include_all_invokes=False):
                     raise InvalidCode("dex_invoke_outs_invalid")
                 cls, _, name = methods[target]
                 category = RULES.get((types[cls], strings[name]))
-                if category or include_all_invokes:
+                if collect_calls and (category or include_all_invokes):
                     stats["matched_calls"] += 1
                     if len(calls) + len(pending) < settings.max_dex_findings:
                         pending.append(
@@ -189,6 +191,8 @@ def parse_calls(raw, settings, *, include_all_invokes=False):
         # Publish only after the entire instruction stream decodes successfully.
         calls.extend(pending)
         stats["bodies_decoded"] += 1
+        if body_consumer is not None:
+            body_consumer(caller, code_offset, start, units, tries, registers)
 
     try:
         check(data_start, data_size)

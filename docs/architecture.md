@@ -131,3 +131,10 @@ IP candidates with collector destinations, and retains pointers into the origina
 report. Source coverage and collector uncertainty are preserved; unsupported
 adapter versions are explicit. There is no database write or risk/model update.
 See [network correlation](network-correlation.md) for bounds and interpretation.
+
+DEX normal-flow extraction is an explicitly selected adapter over the shared
+linear decoder. A callback receives only successfully decoded bodies; the default
+call parser remains unchanged. The flow builder checks normal targets, preserves
+per-method/DEX identity, excludes data payloads, and applies APK-wide graph budgets
+before publication. It is not a full DEX verifier and does not model exceptional
+or interprocedural execution; see [normal control flow](dex-control-flow.md).

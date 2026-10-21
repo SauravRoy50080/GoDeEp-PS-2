@@ -18,6 +18,7 @@ class JobCreate(BaseModel):
         "dex_static",
         "dex_calls",
         "dex_graph",
+        "dex_control_flow",
         "static_review",
         "signature_verify",
         "resource_inventory",

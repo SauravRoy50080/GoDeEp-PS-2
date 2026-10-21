@@ -90,5 +90,10 @@ class Settings(BaseSettings):
     max_library_matches: int = Field(default=20, ge=1, le=100)
     library_feed_max_age_days: int = Field(default=30, ge=1, le=365)
 
+    max_cfg_methods: int = Field(default=100, ge=1, le=1000)
+    max_cfg_blocks: int = Field(default=2000, ge=1, le=10000)
+    max_cfg_edges: int = Field(default=4000, ge=1, le=20000)
+    max_cfg_code_units: int = Field(default=20000, ge=1, le=100000)
+
     max_graph_edges: int = Field(default=1000, ge=1, le=5000)
     max_graph_nodes: int = Field(default=2000, ge=1, le=10000)

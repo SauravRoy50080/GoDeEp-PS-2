@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 26 — bounded normal control flow:** a new DEX adapter extracts
+> basic blocks and checked goto/conditional/switch edges with offsets and
+> APK-wide budgets. Exception handling, path feasibility and full Android
+> verification remain pending.
+>
 > **Milestone 25 — static/runtime IP correlation:** combined report snapshots
 > now expose exact IP co-occurrence with source hashes, event references and
 > coverage limits. Collector attribution remains unverified; no DNS, malicious
@@ -352,6 +357,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Bounded DEX normal control flow](docs/dex-control-flow.md)
 - [Static/runtime IP co-occurrence](docs/network-correlation.md)
 - [Printable forensic HTML exports](docs/html-report-export.md)
 - [DEX invoke-operand graphs](docs/dex-invoke-graphs.md)
