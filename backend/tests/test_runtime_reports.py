@@ -51,6 +51,10 @@ def test_runtime_only_snapshot_schema_provenance_and_audit(intake):
     assert source["attribution"] == "collector_asserted_not_verified"
     assert source["isolation"] == "not_verified"
     assert "malware_verdict" not in document
+    html = client.get(uri + f"/{metadata['id']}/export/html")
+    assert html.status_code == 200
+    assert capture["id"] in html.text and "collector_asserted_not_verified" in html.text
+    assert "No analysis jobs selected." in html.text
     with app.state.sessions() as session:
         audit = session.scalar(select(AuditEvent).where(AuditEvent.subject_id == metadata["id"]))
         assert audit.details["source_capture_ids"] == [capture["id"]]
@@ -64,10 +68,15 @@ def test_combined_report_and_unchanged_static_only_v1(intake):
     meta, static, _ = snapshot(client, uri, {"job_ids": [job["id"]]})
     assert meta["schema_version"] == 1 and "runtime_captures" not in static
     assert "source_capture_ids" not in static["selection"]
-    _, combined, _ = snapshot(client, uri, {"job_ids": [job["id"]], "capture_ids": [capture["id"]]})
+    combined_meta, combined, _ = snapshot(
+        client, uri, {"job_ids": [job["id"]], "capture_ids": [capture["id"]]}
+    )
     assert combined["selection"]["analysis_count"] == 1
     assert combined["analyses"][0]["job_id"] == job["id"]
     assert combined["runtime_captures"][0]["capture_id"] == capture["id"]
+    html = client.get(uri + f"/{combined_meta['id']}/export/html")
+    assert html.status_code == 200
+    assert job["id"] in html.text and capture["id"] in html.text
 
 
 @pytest.mark.parametrize(

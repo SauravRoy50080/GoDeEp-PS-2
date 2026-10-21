@@ -1,5 +1,6 @@
-"""Authenticated sample report creation, metadata and verified JSON downloads."""
+"""Authenticated report creation, metadata and verified JSON/HTML downloads."""
 
+import hashlib
 from uuid import UUID
 
 from fastapi import APIRouter, Query, Request, Response
@@ -7,9 +8,39 @@ from fastapi import APIRouter, Query, Request, Response
 from godeep.api.dependencies import CurrentUser
 from godeep.schemas.intake import Page
 from godeep.schemas.reports import ReportCreate, ReportRead
-from godeep.services import reports
+from godeep.services import report_html, reports
 
 router = APIRouter(prefix="/cases/{case_id}/samples/{sample_id}/reports", tags=["forensic reports"])
+
+
+@router.get("/{report_id}/export/html", response_class=Response)
+def html_export(
+    case_id: UUID, sample_id: UUID, report_id: UUID, request: Request, user: CurrentUser
+):
+    report, raw = reports.download_report(
+        request.app.state.sessions,
+        request.app.state.settings,
+        str(case_id),
+        str(sample_id),
+        str(report_id),
+        user.user_id,
+    )
+    rendered = report_html.render(raw, report, request.app.state.settings.max_report_html_bytes)
+    return Response(
+        rendered,
+        media_type="text/html",
+        headers={
+            "Content-Disposition": f'attachment; filename="godeep-report-{report.id}.html"',
+            "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Security-Policy": report_html.CSP,
+            "X-Frame-Options": "DENY",
+            "Referrer-Policy": "no-referrer",
+            "X-Source-Report-SHA256": report.artifact_sha256,
+            "X-Export-SHA256": hashlib.sha256(rendered).hexdigest(),
+            "X-Export-Version": report_html.EXPORT_VERSION,
+        },
+    )
 
 
 @router.post("", response_model=ReportRead, status_code=201)

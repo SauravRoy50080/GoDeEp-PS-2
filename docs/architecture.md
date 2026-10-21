@@ -122,3 +122,5 @@ the sensitive API allowlist, retaining per-member node identity and offsets.
 APK-wide budgets, partial coverage and report integration are implemented.
 Resolved dispatch, entrypoint reachability and CFG/data-flow analysis remain
 pending; see [invoke-operand graphs](dex-invoke-graphs.md).
+
+HTML report exports derive only from verified persisted JSON snapshots through the existing case-scoped download service. Output is escaped, passive, deterministic and independently byte-bounded, with distinct source/export hash headers. No additional artifact or database write is created; see [HTML exports](html-report-export.md).

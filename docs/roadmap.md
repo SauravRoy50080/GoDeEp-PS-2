@@ -83,3 +83,5 @@ the sensitive API allowlist, retaining per-member node identity and offsets.
 APK-wide budgets, partial coverage and report integration are implemented.
 Resolved dispatch, entrypoint reachability and CFG/data-flow analysis remain
 pending; see [invoke-operand graphs](dex-invoke-graphs.md).
+
+Existing forensic snapshots now support authenticated, bounded, passive HTML downloads for reading and browser printing. Source hashes, coverage and collector limitations remain explicit. PDF generation and analyst sign-off remain pending; see [HTML report export](html-report-export.md).

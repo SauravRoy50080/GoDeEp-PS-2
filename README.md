@@ -40,6 +40,8 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 24 — printable forensic exports:** authenticated HTML downloads preserve snapshot hashes, evidence and coverage limits. Passive escaped output supports browser printing; PDF generation and analyst sign-off remain pending.
+>
 > **Milestone 23 — bounded invoke-operand graphs:** DEX caller/target operands
 > now include unlisted API invokes with scoped method nodes, opcode/offset evidence
 > and APK-wide graph limits. Graphs can be snapshotted in reports. Dispatch,
@@ -60,7 +62,7 @@ could not observe.
 | Explainable static priority | Implemented initial heuristic; calibration pending |
 | Loading/evasion review leads | Implemented for selected static API rules and file headers |
 | Case-scoped analysis comparison | Implemented for static/threat review observations |
-| Forensic JSON report snapshots | Implemented; formatted exports and analyst sign-off pending |
+| Forensic JSON report snapshots | Implemented with printable HTML export; PDF and analyst sign-off pending |
 | Malware classification and AI | Planned; no malware verdict yet |
 | Authentication and owner/analyst/viewer case access | Implemented; deployment hardening pending |
 | Object storage and frontend dashboard | Planned |
@@ -208,6 +210,7 @@ Java and other external tools are not installed by pip.
 | `POST` / `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports` | Create/list report snapshots |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}` | Read report metadata |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/download` | Download verified JSON snapshot |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/export/html` | Download printable HTML presentation |
 | `GET` | `/api/v1/analyzers` | List implemented adapter capabilities |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/analyses` | Queue/list sample analysis jobs |
 | `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}` | Read job status/provenance |
@@ -289,7 +292,8 @@ GoDeEp-PS-2/
 - [x] Add pinned offline indicator-feed matching with expiry and source claims.
 - [ ] Add provider connectors, broader correlation and explainable scoring.
 - [x] Add persisted forensic JSON snapshots with source provenance and integrity checks.
-- [ ] Add formatted reports, analyst review and AI investigation assistance.
+- [x] Add printable HTML exports from verified forensic snapshots.
+- [ ] Add PDF generation, analyst review and AI investigation assistance.
 - [ ] Build the investigation dashboard on a separate frontend branch.
 - [ ] Evaluate detection quality and operational limitations on held-out datasets.
 
@@ -342,6 +346,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Printable forensic HTML exports](docs/html-report-export.md)
 - [DEX invoke-operand graphs](docs/dex-invoke-graphs.md)
 - [Offline library-advisory review](docs/library-advisory-review.md)
 - [Backend connection review](docs/connection-review.md)

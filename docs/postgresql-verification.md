@@ -464,3 +464,25 @@ scope. Existing default sensitive-call parsing remains unchanged. The registered
 adapter workflow now includes twelve adapters. Results are bounded per-DEX static
 operand graphs: no full call graph, dispatch resolution, entrypoint reachability,
 control-flow validation, runtime execution or detection accuracy is established.
+
+## Milestone 24 - printable forensic HTML exports, 21 October 2026
+
+Full SQLite suite: **354 passed, nine skipped in 227.36 seconds**. Six skips
+require PostgreSQL; three require explicitly configured official signer tools.
+Focused PostgreSQL 17.11 report/export/runtime-report suite: **42 passed in
+92.78 seconds**. Temporary PostgreSQL stopped cleanly; the application database
+was not changed. A full PostgreSQL suite was not repeated for this presentation
+change. Existing Starlette TestClient deprecation warning remains.
+
+After those suites were collected, a lone-surrogate text escaping guard and its
+assertions were added; the final **12 HTML export tests passed in 4.14 seconds**.
+Ruff lint/format, dependency, UTF-8 and diff checks passed. No dependency or
+migration was added. Backend version is 0.25.0.
+
+Tests cover hostile HTML in source strings, deterministic rendering, distinct
+source/export hashes, exact UTF-8 byte bounds, malformed source identities,
+unsupported schemas, strict numeric JSON, permission/case scoping, tamper rejection,
+unchanged JSON snapshots, and real v1/v2 runtime-only/combined API downloads.
+Browser print pagination, PDF generation, digital signatures and analyst sign-off
+are not verified or implemented. A clearly marked synthetic example was generated
+outside the repository; no real sample or investigation data was published.
