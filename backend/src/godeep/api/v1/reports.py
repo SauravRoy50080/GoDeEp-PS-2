@@ -9,6 +9,7 @@ from godeep.api.dependencies import CurrentUser
 from godeep.schemas.intake import Page
 from godeep.schemas.reports import ReportCreate, ReportRead
 from godeep.services import report_html, reports
+from godeep.services.network_correlation import network_correlation
 
 router = APIRouter(prefix="/cases/{case_id}/samples/{sample_id}/reports", tags=["forensic reports"])
 
@@ -97,5 +98,35 @@ def download(case_id: UUID, sample_id: UUID, report_id: UUID, request: Request, 
             "Cache-Control": "no-store",
             "X-Content-Type-Options": "nosniff",
             "X-Report-SHA256": report.artifact_sha256,
+        },
+    )
+
+
+@router.get("/{report_id}/network-correlation", response_class=Response)
+def correlate_network(
+    case_id: UUID,
+    sample_id: UUID,
+    report_id: UUID,
+    request: Request,
+    user: CurrentUser,
+    limit: int = Query(100, ge=1, le=200),
+    offset: int = Query(0, ge=0, le=20000),
+):
+    raw = network_correlation(
+        request.app.state.sessions,
+        request.app.state.settings,
+        str(case_id),
+        str(sample_id),
+        str(report_id),
+        user.user_id,
+        limit,
+        offset,
+    )
+    return Response(
+        raw,
+        media_type="application/json",
+        headers={
+            "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff",
         },
     )

@@ -85,3 +85,9 @@ Resolved dispatch, entrypoint reachability and CFG/data-flow analysis remain
 pending; see [invoke-operand graphs](dex-invoke-graphs.md).
 
 Existing forensic snapshots now support authenticated, bounded, passive HTML downloads for reading and browser printing. Source hashes, coverage and collector limitations remain explicit. PDF generation and analyst sign-off remain pending; see [HTML report export](html-report-export.md).
+
+Combined forensic snapshots now support exact canonical IP co-occurrence between
+supported static candidates and imported collector events. Evidence pointers,
+source hashes/coverage, unsupported-adapter status and bounded pagination remain
+explicit. No DNS, causality, runtime attribution verification or scoring is added;
+see [network correlation](network-correlation.md).

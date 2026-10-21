@@ -486,3 +486,29 @@ unchanged JSON snapshots, and real v1/v2 runtime-only/combined API downloads.
 Browser print pagination, PDF generation, digital signatures and analyst sign-off
 are not verified or implemented. A clearly marked synthetic example was generated
 outside the repository; no real sample or investigation data was published.
+
+## Milestone 25 - static/runtime IP co-occurrence, 21 October 2026
+
+Full SQLite suite: **373 passed, six PostgreSQL-only skips in 261.81 seconds**.
+Official Java/apksigner integration tests were enabled. Focused PostgreSQL 17.11
+correlation, connected-workflow, report, runtime-report and HTML export suite:
+**60 passed in 157.63 seconds**. Temporary PostgreSQL stopped cleanly; application
+database was not changed. A full PostgreSQL suite was not repeated for this view.
+Existing Starlette TestClient deprecation warning remains. Ruff lint/format,
+dependency, UTF-8 and diff checks passed. No dependency or migration was added;
+backend version is 0.26.0.
+
+Sixteen new tests cover canonical IPv6, distinct IPv4-mapped addresses, scoped IP
+exclusion, skipped non-IP candidates, source pointers/hashes, occurrence counts,
+evidence caps, group/candidate/output bounds, pagination, empty selections,
+unsupported versions, required sources, real worker/capture/report correlation,
+historical snapshot independence, no audit/report mutation, report tampering,
+source identity and typed-trace validation, authorization and case/sample scope.
+The all-adapter connected workflow now checks both supported and unsupported
+source handling through the new endpoint. An initial test-only missing import
+was corrected before the passing suites above.
+
+These tests establish selected-record IP co-occurrence only. They do not establish
+DNS relationships, source independence, successful contact, runtime attribution,
+malicious intent, causality, data exfiltration, model accuracy or calibrated risk.
+No real malware or investigator data was used, and no external service was called.

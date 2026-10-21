@@ -69,6 +69,11 @@ class Settings(BaseSettings):
     max_intel_matches: int = Field(default=50, ge=1, le=200)
 
     max_report_bytes: int = Field(default=10485760, ge=1024, le=52428800)
+    max_network_correlation_groups: int = Field(default=5000, ge=1, le=20000)
+    max_network_correlation_candidates: int = Field(default=20000, ge=1, le=100000)
+    max_network_correlation_evidence: int = Field(default=25, ge=1, le=100)
+    max_network_correlation_bytes: int = Field(default=1048576, ge=1024, le=5242880)
+
     max_report_html_bytes: int = Field(default=67108864, ge=1024, le=134217728)
 
     max_comparison_items: int = Field(default=200, ge=1, le=1000)

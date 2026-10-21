@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 25 — static/runtime IP correlation:** combined report snapshots
+> now expose exact IP co-occurrence with source hashes, event references and
+> coverage limits. Collector attribution remains unverified; no DNS, malicious
+> intent, causality or scoring is inferred.
+>
 > **Milestone 24 — printable forensic exports:** authenticated HTML downloads preserve snapshot hashes, evidence and coverage limits. Passive escaped output supports browser printing; PDF generation and analyst sign-off remain pending.
 >
 > **Milestone 23 — bounded invoke-operand graphs:** DEX caller/target operands
@@ -211,6 +216,7 @@ Java and other external tools are not installed by pip.
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}` | Read report metadata |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/download` | Download verified JSON snapshot |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/export/html` | Download printable HTML presentation |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/network-correlation` | Read exact static/collector IP co-occurrence |
 | `GET` | `/api/v1/analyzers` | List implemented adapter capabilities |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/analyses` | Queue/list sample analysis jobs |
 | `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}` | Read job status/provenance |
@@ -346,6 +352,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Static/runtime IP co-occurrence](docs/network-correlation.md)
 - [Printable forensic HTML exports](docs/html-report-export.md)
 - [DEX invoke-operand graphs](docs/dex-invoke-graphs.md)
 - [Offline library-advisory review](docs/library-advisory-review.md)

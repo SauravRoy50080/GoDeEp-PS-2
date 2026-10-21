@@ -63,6 +63,14 @@ def test_all_registered_adapters_to_combined_snapshot_and_comparison(intake):
     assert document["schema_version"] == 2 and len(document["analyses"]) == len(jobs)
     assert document["runtime_captures"][0]["data"]["input_sha256"] == sample["sha256"]
     assert document["runtime_captures"][0]["attribution"] == "collector_asserted_not_verified"
+    correlation = client.get(sample_base + f"/reports/{report.json()['id']}/network-correlation")
+    assert correlation.status_code == 200, correlation.text
+    network = correlation.json()
+    assert network["summary"]["collector_only_in_selection"] == 1
+    assert (
+        sum(source.get("status") == "unsupported_adapter_version" for source in network["sources"])
+        == len(jobs) - 2
+    )
     second = upload(
         client, case, MANIFEST.replace('android:debuggable="true"', 'android:debuggable="false"')
     )

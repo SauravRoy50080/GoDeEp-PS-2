@@ -124,3 +124,10 @@ Resolved dispatch, entrypoint reachability and CFG/data-flow analysis remain
 pending; see [invoke-operand graphs](dex-invoke-graphs.md).
 
 HTML report exports derive only from verified persisted JSON snapshots through the existing case-scoped download service. Output is escaped, passive, deterministic and independently byte-bounded, with distinct source/export hash headers. No additional artifact or database write is created; see [HTML exports](html-report-export.md).
+
+Report network correlation is a read-only derived view over a verified persisted
+v2 snapshot. It revalidates source identities and typed traces, compares emitted
+IP candidates with collector destinations, and retains pointers into the original
+report. Source coverage and collector uncertainty are preserved; unsupported
+adapter versions are explicit. There is no database write or risk/model update.
+See [network correlation](network-correlation.md) for bounds and interpretation.
