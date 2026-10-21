@@ -695,3 +695,24 @@ Reviews are account-authored judgments alongside evidence, not report approval,
 cryptographic signatures, independent runtime verification or a malware verdict.
 Privileged database rewriting is not cryptographically prevented. Live emulator
 containment, additional collectors, formal sign-off and validated ML remain pending.
+
+## Milestone 33 - offline MISP export handoff, 22 October 2026
+
+Backend 0.34.0 adds bounded parsing, identity checks, domain/URL/IP/composite/hash/
+certificate mapping, filters, provenance/expiry, replay packages and worker/report
+handoff. No dependency, migration, frontend or active feed configuration changed.
+
+Final focused importer/intelligence/risk/analyst-review suite: **114 passed in
+44.88 seconds**. PostgreSQL 17.11 importer/intelligence/risk suite: **78 passed in
+7.27 seconds**. Temporary PostgreSQL stopped cleanly. These are focused checks,
+not a new full-suite claim. Ruff lint/format, dependency, UTF-8 and diff checks
+passed; existing Starlette TestClient warning remains.
+
+Tests cover every mapping, unknown defaults, event/object/attribute filters,
+malformed/duplicate structures, stale/future attributes, hard bounds, deterministic
+replay/tampering, CLI errors, existing hash/expiry guards and a converted APK-hash
+claim through a real worker, forensic report and evidence-linked analyst note.
+MISP fixtures are synthetic; no real instance was contacted. No model was trained,
+APK executed or sandbox containment established. Explicit operator configuration
+is required to use a converted feed. Detection flags and modification timestamps
+remain selection metadata, not malware verdicts or observed behavior.

@@ -184,3 +184,9 @@ and normalized evidence pointers. Preserved correction threads, current/history
 views, atomic audits/quotas and JSON/HTML exports are implemented with migration
 0006_report_reviews. These account-authored judgments do not provide formal sign-off
 or automatic malware verdicts; see [analyst review workflow](report-reviews.md).
+
+An operator-only MISP export subset converter creates reproducible pinned feeds
+and provenance receipts with offline replay verification. Existing threat/risk
+review and forensic report handoff are tested. Labels default unknown; detection
+flags do not become verdicts. Live synchronization, sharing-policy translation
+and multi-feed aggregation remain pending. See [MISP handoff](misp-export-import.md).

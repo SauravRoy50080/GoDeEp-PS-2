@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 33 — offline MISP handoff:** bounded export conversion produces
+> pinned feeds with filtering, expiry, provenance and replay verification. Existing
+> threat-review/report APIs consume the feed; labels default unknown. Live MISP
+> synchronization and broader sandbox/ML validation remain pending.
+>
 > **Milestone 32 — analyst review workflow:** append-only evidence-linked judgments,
 > preserved corrections, current/history views and JSON/HTML exports now accompany
 > verified report snapshots. Apply migration 0006_report_reviews before use. These
@@ -395,6 +400,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Offline MISP export conversion and handoff](docs/misp-export-import.md)
 - [Evidence-linked analyst review workflow](docs/report-reviews.md)
 - [Exception-aware DEX control flow](docs/dex-exception-flow.md)
 - [Runtime inventories, activity and comparison](docs/runtime-review.md)
