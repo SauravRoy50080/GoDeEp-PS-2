@@ -83,3 +83,6 @@ class Settings(BaseSettings):
     max_library_feed_bytes: int = Field(default=2097152, ge=1024, le=8388608)
     max_library_matches: int = Field(default=20, ge=1, le=100)
     library_feed_max_age_days: int = Field(default=30, ge=1, le=365)
+
+    max_graph_edges: int = Field(default=1000, ge=1, le=5000)
+    max_graph_nodes: int = Field(default=2000, ge=1, le=10000)

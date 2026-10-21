@@ -259,6 +259,7 @@ def test_analyzer_catalog_declares_real_capabilities(intake):
         "android_static",
         "dex_static",
         "dex_calls",
+        "dex_graph",
         "static_review",
         "signature_verify",
         "resource_inventory",

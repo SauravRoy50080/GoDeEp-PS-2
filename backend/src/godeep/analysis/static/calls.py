@@ -12,7 +12,7 @@ class InvalidCode(Exception):
     pass
 
 
-def parse_calls(raw, settings):
+def parse_calls(raw, settings, *, include_all_invokes=False):
     result = parse_dex(raw, settings, include_tables=True)
     strings, types, methods = result.pop("_tables")
     calls, issues = [], []
@@ -70,6 +70,9 @@ def parse_calls(raw, settings):
         if shorty >= len(strings) or return_type >= len(types):
             raise InvalidCode("dex_proto_invalid")
         arguments = []
+        prototype_size = 2 + len(types[return_type])
+        if include_all_invokes and prototype_size > settings.max_dex_string_bytes:
+            raise InvalidCode("dex_graph_prototype_limit")
         if parameters:
             if parameters % 4:
                 raise InvalidCode("dex_proto_invalid")
@@ -82,6 +85,9 @@ def parse_calls(raw, settings):
                 type_id = struct.unpack_from("<H", raw, parameters + 4 + i * 2)[0]
                 if type_id >= len(types):
                     raise InvalidCode("dex_proto_invalid")
+                prototype_size += len(types[type_id])
+                if include_all_invokes and prototype_size > settings.max_dex_string_bytes:
+                    raise InvalidCode("dex_graph_prototype_limit")
                 arguments.append(types[type_id])
         return {
             "method_index": index,
@@ -158,7 +164,7 @@ def parse_calls(raw, settings):
                     raise InvalidCode("dex_invoke_outs_invalid")
                 cls, _, name = methods[target]
                 category = RULES.get((types[cls], strings[name]))
-                if category:
+                if category or include_all_invokes:
                     stats["matched_calls"] += 1
                     if len(calls) + len(pending) < settings.max_dex_findings:
                         pending.append(
@@ -170,7 +176,9 @@ def parse_calls(raw, settings):
                                 "instruction_offset_code_units": pos // 2,
                                 "byte_offset": start + pos,
                                 "code_item_offset": code_offset,
-                                "rule_id": "DEX." + category.upper(),
+                                "rule_id": "DEX." + category.upper()
+                                if category
+                                else "DEX.INVOKE_OPERAND",
                                 "evidence_state": "decoded_invoke_instruction",
                                 "requires_review": True,
                             }

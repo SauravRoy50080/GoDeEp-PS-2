@@ -40,11 +40,11 @@ could not observe.
 
 ## Implementation status
 
-> **Milestone 22 — offline library-advisory review:** declared Maven coordinates
-> and exact versions can be checked against pinned local advisory claims with
-> source hashes, evidence, expiry/withdrawal handling and conflict visibility.
-> Packaged vulnerable code, version ranges and exploitability are not verified.
-> No production feed or live Android sandbox is configured by this implementation.
+> **Milestone 23 — bounded invoke-operand graphs:** DEX caller/target operands
+> now include unlisted API invokes with scoped method nodes, opcode/offset evidence
+> and APK-wide graph limits. Graphs can be snapshotted in reports. Dispatch,
+> reachability, control flow and runtime execution are not established; live
+> sandboxing and production model integration remain pending.
 
 | Area | Current state |
 |---|---|
@@ -342,6 +342,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [DEX invoke-operand graphs](docs/dex-invoke-graphs.md)
 - [Offline library-advisory review](docs/library-advisory-review.md)
 - [Backend connection review](docs/connection-review.md)
 - [Runtime investigation timeline](docs/runtime-timeline.md)

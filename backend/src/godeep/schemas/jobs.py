@@ -17,6 +17,7 @@ class JobCreate(BaseModel):
         "android_static",
         "dex_static",
         "dex_calls",
+        "dex_graph",
         "static_review",
         "signature_verify",
         "resource_inventory",

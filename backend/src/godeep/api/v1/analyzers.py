@@ -11,6 +11,11 @@ router = APIRouter(tags=["analysis adapters"])
 @router.get("/analyzers")
 def analyzers(user: CurrentUser):
     capabilities = {
+        "dex_graph": [
+            "bounded_invoke_operand_graph",
+            "per_dex_method_nodes",
+            "caller_target_offset_evidence",
+        ],
         "library_review": [
             "declared_maven_advisory_matching",
             "pinned_feed_provenance",

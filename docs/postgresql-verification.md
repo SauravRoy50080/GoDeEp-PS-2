@@ -443,3 +443,24 @@ integration run. All advisory records are synthetic; no production feed was
 configured, no external data was submitted, and no real CVE/packaged-code match
 or exploitability claim is established. Priority scoring/model thresholds did not
 change. Version ranges and full software-composition analysis remain pending.
+
+## Milestone 23 - bounded DEX invoke operand graphs, 21 October 2026
+
+Full PostgreSQL 17.11 suite: **350 passed in 424.42 seconds**. Full SQLite suite:
+**344 passed, six PostgreSQL-only skips in 230.49 seconds**. Real Java/apksigner
+checks enabled; existing Starlette TestClient deprecation warning remains.
+Temporary PostgreSQL stopped cleanly; application database was not changed.
+
+After full-suite collection, an additional graph-only prototype-length guard and
+regression test were added: **31 focused graph/call tests passed**, including that
+new test. The full-suite counts above exclude this final additional test. Ruff
+lint/format, dependency, UTF-8 and diff checks passed. No dependency or migration
+was added.
+
+Coverage includes ordinary/range invoke operands, non-sensitive targets, recursive
+node reuse, repeated edges, malformed instruction streams, payload exclusion,
+shared multidex budgets, prototype bounds, worker/report integration and case
+scope. Existing default sensitive-call parsing remains unchanged. The registered
+adapter workflow now includes twelve adapters. Results are bounded per-DEX static
+operand graphs: no full call graph, dispatch resolution, entrypoint reachability,
+control-flow validation, runtime execution or detection accuracy is established.

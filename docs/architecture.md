@@ -116,3 +116,9 @@ The library_review adapter now matches declared Maven coordinates/exact versions
 to pinned offline advisory claims with expiry, withdrawal, conflict and coverage
 handling. Full SCA, version ranges and packaged-code verification remain pending.
 See [library advisory review](library-advisory-review.md).
+
+The dex_graph adapter now extracts bounded method-ID invoke operands beyond
+the sensitive API allowlist, retaining per-member node identity and offsets.
+APK-wide budgets, partial coverage and report integration are implemented.
+Resolved dispatch, entrypoint reachability and CFG/data-flow analysis remain
+pending; see [invoke-operand graphs](dex-invoke-graphs.md).

@@ -54,6 +54,8 @@ def create_job(factory, settings, case_id, user_id, payload: JobCreate):
                 "max_dex_identifiers",
                 "max_dex_string_bytes",
                 "max_dex_findings",
+                "max_graph_edges",
+                "max_graph_nodes",
                 "max_review_findings",
                 "max_review_evidence",
                 "signer_timeout_seconds",
