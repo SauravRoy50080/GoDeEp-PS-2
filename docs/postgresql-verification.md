@@ -556,3 +556,33 @@ found on PATH or at standard local SDK paths. Live emulator compatibility,
 containment, image provenance, restoration and APK execution remain unverified
 and unimplemented. No emulator/server was started or stopped; no device or APK
 was inspected, installed or launched. No dataset/model or risk score was changed.
+
+## Milestone 28 - three-step sandbox collection handoff, 21 October 2026
+
+Implemented together: report-bound run plans, exact-input/profile preflight
+preparations, and canonical collector evidence bundles with offline verification
+and trace handoff. Backend version is 0.29.0. No package or migration was added.
+
+Final focused sandbox workflow/preflight/runtime-intake/runtime-report suite:
+**108 passed in 24.74 seconds**. Workflow suite on PostgreSQL 17.11:
+**26 passed in 8.18 seconds**. Temporary PostgreSQL stopped cleanly; application
+database was not changed. Full database suites were not repeated for this isolated
+operator CLI addition. Ruff lint/format, dependency, UTF-8 and diff checks passed.
+Existing Starlette TestClient deprecation warning remains.
+
+The new tests cover source hashes/IDs, manifest-package agreement, plan expiry,
+pre-ADB profile/APK mismatch rejection, blocked preparations, cross-source identity,
+preflight timing/observations, stream/duration/event consistency, exact source-byte
+retention, deterministic ZIP packaging, integrity/metadata/member/canonical-format
+bounds, CLI commands and output refusal. An integration fixture initially used a
+different package from its real static report; the identity guard rejected it.
+The corrected passing test uses the report's package and unmodified trace bytes
+through a real API-created sample/static report, fake-loopback ADB preparation,
+bundle verification, authenticated capture upload and combined forensic report.
+
+All dynamic observations in these tests are explicit synthetic collector claims.
+No actual emulator compatibility, live collection, isolated APK execution,
+network containment, snapshot restoration, image provenance or maliciousness was
+established. These controls remain pending. Local records are not execution
+authorization or tamper-proof custody, and API intake does not enforce a bundle's
+whole plan policy. No models, scores, production evidence or frontend were changed.

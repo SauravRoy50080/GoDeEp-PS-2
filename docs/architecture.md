@@ -145,3 +145,11 @@ with framing/output/packet/deadline bounds. There is no HTTP or analysis-adapter
 exposure and no server lifecycle management or APK execution. Peer-reported
 properties are not isolation or identity verification. See
 [preflight setup and limitations](sandbox-preflight.md).
+
+Sandbox workflow artifacts link exact source hashes across a report-bound plan,
+read-only preflight preparation and externally collected runtime trace. Canonical
+bounded bundles are verified without archive extraction; optional trace handoff
+uses the existing authenticated API unchanged. All emulator/collector claims and
+containment gaps remain explicit. There is no automatic installation/execution,
+collector, database mutation or authorization through these local artifacts.
+See [sandbox workflow](sandbox-workflow.md).

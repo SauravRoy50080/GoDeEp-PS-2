@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 28 — three-step sandbox handoff:** report-bound plans,
+> preflight-linked preparations and exact-byte collector bundles now connect
+> to existing runtime intake/reporting. Live collection, containment and APK
+> execution remain pending; preflight does not authorize execution.
+>
 > **Milestone 27 — emulator preflight foundation:** an operator CLI checks a
 > selected emulator profile through bounded loopback ADB probes. No APK is
 > executed; actual emulator compatibility, collection and containment remain
@@ -362,6 +367,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Sandbox plans, preparations and evidence bundles](docs/sandbox-workflow.md)
 - [Emulator preflight and setup](docs/sandbox-preflight.md)
 - [Bounded DEX normal control flow](docs/dex-control-flow.md)
 - [Static/runtime IP co-occurrence](docs/network-correlation.md)

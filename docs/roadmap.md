@@ -103,3 +103,9 @@ loopback ADB protocol probes, with explicit failure/coverage reporting and no
 APK execution. It does not provision or verify containment. Actual emulator
 compatibility and live collection remain pending; see
 [sandbox preflight](sandbox-preflight.md).
+
+The operator sandbox workflow now adds (1) report-bound run plans, (2) input/profile
+rehashing and preflight-linked preparations, and (3) exact-byte collector bundles
+with offline verification and existing runtime-capture/report handoff. External
+collection and controlled execution are still pending; passing preflight does not
+authorize a run. See [three-step workflow](sandbox-workflow.md).
