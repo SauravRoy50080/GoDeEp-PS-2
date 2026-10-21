@@ -536,3 +536,23 @@ do not establish Android verifier equivalence, exception-handler validity, feasi
 paths, runtime execution, malware detection accuracy or corpus-wide compatibility.
 No live APK execution, training, priority-score change or external sample submission
 was performed. See dex-control-flow.md for limits, source reference and API usage.
+
+## Milestone 27 - bounded operator emulator preflight, 21 October 2026
+
+**42 sandbox preflight tests passed in 2.35 seconds**. Final sandbox/health smoke
+suite: **43 passed in 2.33 seconds**. These checks use real loopback fake ADB peers
+and cover successful fixed-target probes, fragmentation, framing/packet/output
+bounds, timeout/EOF/error handling, profile/schema restrictions, non-default port
+selection, typed mismatches, exact profile/report hashes and output refusal.
+Ruff lint/format, dependency, UTF-8 and diff checks passed. Backend is 0.28.0.
+No package or database migration was added; database/worker/report code was not
+changed. Full SQLite/PostgreSQL suites were not repeated for this isolated CLI;
+the previous milestone records the latest full database-backed regression runs.
+Existing Starlette TestClient deprecation warning remains.
+
+The actual module entrypoint generated a configuration_required report with its
+expected non-ready exit, without contacting an ADB server. SDK tools were not
+found on PATH or at standard local SDK paths. Live emulator compatibility,
+containment, image provenance, restoration and APK execution remain unverified
+and unimplemented. No emulator/server was started or stopped; no device or APK
+was inspected, installed or launched. No dataset/model or risk score was changed.

@@ -138,3 +138,10 @@ call parser remains unchanged. The flow builder checks normal targets, preserves
 per-method/DEX identity, excludes data payloads, and applies APK-wide graph budgets
 before publication. It is not a full DEX verifier and does not model exceptional
 or interprocedural execution; see [normal control flow](dex-control-flow.md).
+
+The sandbox preflight CLI uses a dedicated loopback ADB smart socket and an
+explicit emulator profile. Host/target requests and property commands are fixed,
+with framing/output/packet/deadline bounds. There is no HTTP or analysis-adapter
+exposure and no server lifecycle management or APK execution. Peer-reported
+properties are not isolation or identity verification. See
+[preflight setup and limitations](sandbox-preflight.md).

@@ -97,3 +97,9 @@ checked goto/conditional/switch targets, with per-method offsets, payload refere
 APK-wide budgets and report support. Exception edges/handler validation, full
 verification, feasible-path and entrypoint reachability remain pending. See
 [normal control flow](dex-control-flow.md).
+
+Operator-only emulator preflight now checks a selected profile through bounded
+loopback ADB protocol probes, with explicit failure/coverage reporting and no
+APK execution. It does not provision or verify containment. Actual emulator
+compatibility and live collection remain pending; see
+[sandbox preflight](sandbox-preflight.md).

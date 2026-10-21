@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 27 — emulator preflight foundation:** an operator CLI checks a
+> selected emulator profile through bounded loopback ADB probes. No APK is
+> executed; actual emulator compatibility, collection and containment remain
+> pending SDK/environment setup.
+>
 > **Milestone 26 — bounded normal control flow:** a new DEX adapter extracts
 > basic blocks and checked goto/conditional/switch edges with offsets and
 > APK-wide budgets. Exception handling, path feasibility and full Android
@@ -357,6 +362,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Emulator preflight and setup](docs/sandbox-preflight.md)
 - [Bounded DEX normal control flow](docs/dex-control-flow.md)
 - [Static/runtime IP co-occurrence](docs/network-correlation.md)
 - [Printable forensic HTML exports](docs/html-report-export.md)

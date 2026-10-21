@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "adb_server_port": 5038,
+  "emulator_serial": "emulator-5554",
+  "avd_name": "godeep_api35",
+  "api_level": 35,
+  "abi": "x86_64",
+  "command_timeout_seconds": 2,
+  "total_timeout_seconds": 15,
+  "max_output_bytes": 16384
+}
