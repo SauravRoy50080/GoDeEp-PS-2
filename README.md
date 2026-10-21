@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 29 — passive process collection:** bounded process snapshots,
+> passive sampling and raw-observation replay now connect to runtime reports.
+> Process attribution and containment remain unverified; live emulator validation
+> and other runtime collectors remain pending.
+>
 > **Milestone 28 — three-step sandbox handoff:** report-bound plans,
 > preflight-linked preparations and exact-byte collector bundles now connect
 > to existing runtime intake/reporting. Live collection, containment and APK
@@ -371,6 +376,7 @@ not protections supplied by this scaffold.
 - [Emulator preflight and setup](docs/sandbox-preflight.md)
 - [Bounded DEX normal control flow](docs/dex-control-flow.md)
 - [Static/runtime IP co-occurrence](docs/network-correlation.md)
+- [Passive process collector and evidence verification](docs/process-collector.md)
 - [Printable forensic HTML exports](docs/html-report-export.md)
 - [DEX invoke-operand graphs](docs/dex-invoke-graphs.md)
 - [Offline library-advisory review](docs/library-advisory-review.md)

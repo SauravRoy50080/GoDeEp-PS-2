@@ -29,7 +29,7 @@ class Event(StrictRecord):
 
 class ProcessEvent(Event):
     kind: Literal["process"]
-    action: Literal["start", "stop"]
+    action: Literal["start", "stop", "observed"]
     name: str = Field(min_length=1, max_length=200)
 
 

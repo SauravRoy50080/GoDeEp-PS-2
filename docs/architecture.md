@@ -153,3 +153,11 @@ uses the existing authenticated API unchanged. All emulator/collector claims and
 containment gaps remain explicit. There is no automatic installation/execution,
 collector, database mutation or authorization through these local artifacts.
 See [sandbox workflow](sandbox-workflow.md).
+
+
+The operator-only passive process collector now adds bounded ADB snapshots,
+observed process events and receipt/journal replay verification. It connects
+to existing capture intake and forensic reports. Process coverage stays partial;
+name attribution, containment and live emulator compatibility remain unverified.
+Filesystem/network/sensitive collectors and controlled execution remain pending.
+See [passive process collection](process-collector.md).

@@ -109,3 +109,11 @@ rehashing and preflight-linked preparations, and (3) exact-byte collector bundle
 with offline verification and existing runtime-capture/report handoff. External
 collection and controlled execution are still pending; passing preflight does not
 authorize a run. See [three-step workflow](sandbox-workflow.md).
+
+
+The operator-only passive process collector now adds bounded ADB snapshots,
+observed process events and receipt/journal replay verification. It connects
+to existing capture intake and forensic reports. Process coverage stays partial;
+name attribution, containment and live emulator compatibility remain unverified.
+Filesystem/network/sensitive collectors and controlled execution remain pending.
+See [passive process collection](process-collector.md).

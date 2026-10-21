@@ -586,3 +586,22 @@ network containment, snapshot restoration, image provenance or maliciousness was
 established. These controls remain pending. Local records are not execution
 authorization or tamper-proof custody, and API intake does not enforce a bundle's
 whole plan policy. No models, scores, production evidence or frontend were changed.
+
+
+## Milestone 29 - passive process collection, 21 October 2026
+
+Backend 0.30.0 adds bounded process snapshots, passive sampling and offline
+receipt/raw-journal verification. No dependency or migration was added.
+Final focused collector/preflight/workflow/runtime intake/runtime reports/timeline/
+HTML suite: **154 passed in 42.79 seconds**. Collector suite on PostgreSQL 17.11:
+**21 passed in 8.61 seconds**. Temporary PostgreSQL stopped cleanly. These are
+focused runs; full database suites were not repeated. Existing Starlette TestClient
+deprecation warning remains.
+
+Coverage includes strict parsing, exact ADB command, event/output/snapshot bounds,
+partial/failed/blocked states, source integrity, raw observation replay, CLI errors,
+and a real API-created APK/static report through fake ADB sampling, authenticated
+capture upload and combined forensic report. No actual emulator or malware was
+executed. Raw process-name observations do not establish APK ownership or complete
+coverage. Live compatibility, isolation and other runtime streams remain pending.
+No model, scoring, frontend or production evidence was changed.

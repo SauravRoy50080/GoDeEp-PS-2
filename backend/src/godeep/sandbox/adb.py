@@ -95,9 +95,18 @@ class AdbProbe:
     def property(self, key):
         if key not in PROPERTIES:
             raise ProbeError("unsupported_probe")
+        try:
+            return self._shell("getprop " + PROPERTIES[key]).decode("ascii").strip()
+        except UnicodeError as exc:
+            raise ProbeError("invalid_encoding") from exc
+
+    def process_snapshot(self):
+        return self._shell("ps -A -o PID,NAME")
+
+    def _shell(self, command):
         with self._connection() as (stream, deadline):
             self._service(stream, deadline, f"host:transport:{self.profile.emulator_serial}")
-            self._service(stream, deadline, "shell,v2,raw:getprop " + PROPERTIES[key])
+            self._service(stream, deadline, "shell,v2,raw:" + command)
             output, total = bytearray(), 0
             for _ in range(256):
                 channel, size = struct.unpack("<BI", self._read(stream, deadline, 5))
@@ -110,10 +119,7 @@ class AdbProbe:
                 if channel == 3:
                     if raw != b"\0":
                         raise ProbeError("remote_command_failed")
-                    try:
-                        return output.decode("ascii").strip()
-                    except UnicodeError as exc:
-                        raise ProbeError("invalid_encoding") from exc
+                    return bytes(output)
                 if channel == 2:
                     # Unexpected diagnostics cannot be mistaken for a valid property value.
                     if raw:
