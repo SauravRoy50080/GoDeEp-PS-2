@@ -75,6 +75,10 @@ class Settings(BaseSettings):
     max_network_correlation_bytes: int = Field(default=1048576, ge=1024, le=5242880)
 
     max_report_html_bytes: int = Field(default=67108864, ge=1024, le=134217728)
+    max_report_review_entries: int = Field(default=500, ge=1, le=2000)
+    max_report_review_reference_bytes: int = Field(default=16777216, ge=1024, le=67108864)
+    max_report_review_bytes: int = Field(default=4194304, ge=1024, le=16777216)
+    max_report_review_html_bytes: int = Field(default=16777216, ge=1024, le=33554432)
 
     max_comparison_items: int = Field(default=200, ge=1, le=1000)
     max_comparison_bytes: int = Field(default=2097152, ge=1024, le=10485760)

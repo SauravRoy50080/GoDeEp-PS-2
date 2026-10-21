@@ -665,3 +665,33 @@ All exception paths are syntactic overapproximations. The fixtures do not establ
 Android verifier acceptance, Throwable ancestry, type dispatch, feasible paths,
 live execution, malware accuracy or full DEX validation. No production evidence,
 frontend, scoring policy, ML model or emulator was changed.
+
+
+## Milestone 32 - evidence-linked analyst reviews, 22 October 2026
+
+Backend 0.33.0 implements ten connected review features: append-only entries,
+source pointers/hash bindings, analyst decisions, preserved corrections, history,
+current heads, atomic audits/conflict handling, and JSON/HTML exports. Migration
+0006_report_reviews adds the review table and internal report allocation counter.
+No dependency, frontend, model or scoring policy was changed.
+
+Final focused review/report/runtime-report/HTML/auth/runtime-intake and Alembic
+schema-check suite: **120 passed in 72.13 seconds**. PostgreSQL 17.11 review/report/
+schema-check and existing PostgreSQL concurrency/transaction/migration suite:
+**58 passed in 89.43 seconds**. Temporary PostgreSQL stopped cleanly. Tests use
+isolated databases; the application database was not migrated or modified. These
+are focused checks, not a new full-suite claim. Existing Starlette TestClient
+warning remains. Ruff lint/format, dependency, UTF-8 and diff checks passed.
+
+Tests cover exact analysis/runtime pointers, report/source/value hashes, pointer
+escaping and invalid references, original author/owner correction permissions,
+case scope, stale/concurrent correction rejection, independent conflicting threads,
+entry quotas, JSON/HTML/reference byte bounds, audit-failure rollback, unchanged
+report bytes, current/history pagination, passive escaped exports, unsafe Unicode,
+rehashed/tampered records, cross-report parents, malformed lineage, upgrade/downgrade
+with a populated correction chain, and schema/model parity on both databases.
+
+Reviews are account-authored judgments alongside evidence, not report approval,
+cryptographic signatures, independent runtime verification or a malware verdict.
+Privileged database rewriting is not cryptographically prevented. Live emulator
+containment, additional collectors, formal sign-off and validated ML remain pending.

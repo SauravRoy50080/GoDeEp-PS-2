@@ -177,3 +177,10 @@ offsets. It is registered in the worker/catalog and retained in forensic reports
 Normal-only adapter semantics remain unchanged. Full DEX verification, exception
 type dispatch and path feasibility remain pending; see
 [exception-aware flow](dex-exception-flow.md).
+
+
+Append-only analyst reviews now bind judgments to exact report/source/value hashes
+and normalized evidence pointers. Preserved correction threads, current/history
+views, atomic audits/quotas and JSON/HTML exports are implemented with migration
+0006_report_reviews. These account-authored judgments do not provide formal sign-off
+or automatic malware verdicts; see [analyst review workflow](report-reviews.md).

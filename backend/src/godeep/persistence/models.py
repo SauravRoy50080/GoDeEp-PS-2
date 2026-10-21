@@ -135,6 +135,7 @@ class ForensicReport(Base):
     artifact_sha256: Mapped[str] = mapped_column(String(64))
     size_bytes: Mapped[int] = mapped_column(BigInteger)
     schema_version: Mapped[int] = mapped_column(Integer, default=1)
+    review_entry_count: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
 
 
@@ -154,4 +155,29 @@ class RuntimeCapture(Base):
     artifact_sha256: Mapped[str] = mapped_column(String(64))
     size_bytes: Mapped[int] = mapped_column(BigInteger)
     summary: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+
+
+class ReportReviewEntry(Base):
+    __tablename__ = "report_review_entries"
+    __table_args__ = (
+        CheckConstraint(
+            "decision IN ('comment','supported','disputed','follow_up')", name="ck_review_decision"
+        ),
+        CheckConstraint(
+            "(supersedes_id IS NULL AND thread_id = id) OR "
+            "(supersedes_id IS NOT NULL AND thread_id <> id)",
+            name="ck_review_thread",
+        ),
+        UniqueConstraint("supersedes_id", name="uq_review_supersedes"),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
+    report_id: Mapped[str] = mapped_column(ForeignKey("forensic_reports.id"), index=True)
+    thread_id: Mapped[str] = mapped_column(ForeignKey("report_review_entries.id"), index=True)
+    supersedes_id: Mapped[str | None] = mapped_column(ForeignKey("report_review_entries.id"))
+    created_by: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    report_sha256: Mapped[str] = mapped_column(String(64))
+    decision: Mapped[str] = mapped_column(String(20))
+    text: Mapped[str] = mapped_column(Text)
+    evidence_references: Mapped[list] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)

@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 32 — analyst review workflow:** append-only evidence-linked judgments,
+> preserved corrections, current/history views and JSON/HTML exports now accompany
+> verified report snapshots. Apply migration 0006_report_reviews before use. These
+> judgments do not approve reports or establish malware verdicts.
+>
 > **Milestone 31 — exception-aware DEX graphs:** an explicit adapter now checks
 > try/handler metadata, splits exception boundaries and emits conservative exception
 > edges with offsets. Dispatch and path feasibility remain unresolved; this does
@@ -251,6 +256,10 @@ Java and other external tools are not installed by pip.
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/runtime-review/export/html` | Print runtime review page |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/runtime-comparison` | Compare two selected runtime captures |
 | `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/runtime-comparison/export/html` | Print runtime comparison page |
+| `POST` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/reviews` | Append evidence-bound analyst judgment/correction |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/reviews` | Read review history or current thread heads |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/reviews/export/json` | Download complete bounded review history |
+| `GET` | `/api/v1/cases/{case_id}/samples/{sample_id}/reports/{report_id}/reviews/export/html` | Print analyst review history |
 | `GET` | `/api/v1/analyzers` | List implemented adapter capabilities |
 | `POST` / `GET` | `/api/v1/cases/{case_id}/analyses` | Queue/list sample analysis jobs |
 | `GET` | `/api/v1/cases/{case_id}/analyses/{job_id}` | Read job status/provenance |
@@ -386,6 +395,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Evidence-linked analyst review workflow](docs/report-reviews.md)
 - [Exception-aware DEX control flow](docs/dex-exception-flow.md)
 - [Runtime inventories, activity and comparison](docs/runtime-review.md)
 - [Sandbox plans, preparations and evidence bundles](docs/sandbox-workflow.md)
