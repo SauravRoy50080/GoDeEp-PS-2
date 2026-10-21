@@ -5,6 +5,7 @@ import struct
 from androguard.core.dex import DALVIK_OPCODES_FORMAT
 
 from godeep.analysis.static.calls import parse_calls
+from godeep.analysis.static.exceptions import InvalidException, boundaries, read_tables
 
 
 class InvalidFlow(Exception):
@@ -12,7 +13,16 @@ class InvalidFlow(Exception):
 
 
 def build_method(
-    raw, caller, code_offset, start, units, tries, registers, block_budget, edge_budget
+    raw,
+    caller,
+    code_offset,
+    start,
+    units,
+    tries,
+    registers,
+    block_budget,
+    edge_budget,
+    exception_table=None,
 ):
     if block_budget < 1:
         raise InvalidFlow("cfg_output_budget")
@@ -49,6 +59,8 @@ def build_method(
     if 0 not in instructions:
         raise InvalidFlow("cfg_entry_not_instruction")
     leaders, successors = {0}, {}
+    if exception_table is not None:
+        leaders.update(boundaries(exception_table, instructions, units))
     previous_end = None
     branch_edges = 0
     for pos, instruction in instructions.items():
@@ -149,7 +161,44 @@ def build_method(
             if key is not None:
                 edge["case_value"] = key
             edges.append(edge)
-    return {
+    if exception_table is not None:
+        handlers = {handler["id"]: handler for handler in exception_table["handlers"]}
+        regions = exception_table["regions"]
+        region_index = 0
+        for block in blocks:
+            while (
+                region_index < len(regions)
+                and block["start_code_unit"] >= regions[region_index]["end_code_unit_exclusive"]
+            ):
+                region_index += 1
+            if region_index == len(regions):
+                break
+            region = regions[region_index]
+            if block["start_code_unit"] < region["start_code_unit"]:
+                continue
+            catches = handlers[region["handler_id"]]["catches"]
+            if len(edges) + len(catches) > edge_budget:
+                raise InvalidFlow("cfg_output_budget")
+            for catch in catches:
+                edges.append(
+                    {
+                        "source": block["id"],
+                        "target": owners[catch["target_code_unit"]],
+                        "kind": "exception_possible",
+                        "try_region_id": region["id"],
+                        "handler_id": region["handler_id"],
+                        "catch_order": catch["order"],
+                        "catch_kind": catch["kind"],
+                        "type_index": catch["type_index"],
+                        "type_descriptor": catch["type_descriptor"],
+                        "handler_entry_byte_offset": catch["byte_offset"],
+                        "protected_start_code_unit": block["start_code_unit"],
+                        "protected_end_code_unit_exclusive": block["end_code_unit_exclusive"],
+                        "byte_offset": block["byte_offset"],
+                        "dispatch": "exception_type_matching_not_resolved",
+                    }
+                )
+    result = {
         "method": caller,
         "code_item_offset": code_offset,
         "instruction_start_byte": start,
@@ -159,24 +208,40 @@ def build_method(
         "edges": edges,
         "payload_count": len(payloads),
         "try_region_count": tries,
-        "coverage": "partial_exception_flow_unmodeled" if tries else "normal_targets_checked",
-        "exception_flow": "not_modeled",
+        "coverage": "normal_and_exception_targets_checked"
+        if exception_table is not None
+        else "partial_exception_flow_unmodeled"
+        if tries
+        else "normal_targets_checked",
+        "exception_flow": "conservative_block_edges"
+        if exception_table is not None
+        else "not_modeled",
         "register_and_type_verification": "not_performed",
         "entry_reachability": "not_analyzed",
         "runtime_execution": "not_observed",
     }
+    if exception_table is not None:
+        result["exception_tables"] = exception_table
+    return result
 
 
 class FlowParser:
     """One instance per APK, with budgets shared across ordinary DEX members."""
 
-    def __init__(self, settings):
+    def __init__(self, settings, *, exception_aware=False):
         self.attempted = self.retained = self.blocks = self.edges = 0
+        self.tries = self.handlers = self.catches = 0
+        self.exception_aware = exception_aware
         self.settings = settings
 
     def __call__(self, raw, settings):
         methods, issues = [], []
         limited = False
+        types = []
+
+        def retain_types(values):
+            nonlocal types
+            types = values
 
         def consume(caller, code_offset, start, units, tries, registers):
             nonlocal limited
@@ -187,6 +252,19 @@ class FlowParser:
             try:
                 if units > settings.max_cfg_code_units:
                     raise InvalidFlow("cfg_method_code_limit")
+                table = None
+                if self.exception_aware:
+                    table = read_tables(
+                        raw,
+                        start,
+                        units,
+                        tries,
+                        types,
+                        try_budget=settings.max_exception_tries - self.tries,
+                        handler_budget=settings.max_exception_handlers - self.handlers,
+                        catch_budget=settings.max_exception_catches - self.catches,
+                        byte_budget=settings.max_exception_table_bytes,
+                    )
                 flow = build_method(
                     raw,
                     caller,
@@ -197,14 +275,17 @@ class FlowParser:
                     registers,
                     settings.max_cfg_blocks - self.blocks,
                     settings.max_cfg_edges - self.edges,
+                    exception_table=table,
                 )
                 if (
                     self.blocks + len(flow["blocks"]) > settings.max_cfg_blocks
                     or self.edges + len(flow["edges"]) > settings.max_cfg_edges
                 ):
                     raise InvalidFlow("cfg_output_budget")
-            except InvalidFlow as exc:
-                if str(exc) in {"cfg_method_code_limit", "cfg_output_budget"}:
+            except (InvalidFlow, InvalidException) as exc:
+                if str(exc) in {"cfg_method_code_limit", "cfg_output_budget"} or str(exc).endswith(
+                    "_limit"
+                ):
                     limited = True
                 if len(issues) < 100:
                     issues.append({"method_index": caller["method_index"], "code": str(exc)})
@@ -215,28 +296,43 @@ class FlowParser:
             self.retained += 1
             self.blocks += len(flow["blocks"])
             self.edges += len(flow["edges"])
+            if table is not None:
+                self.tries += len(table["regions"])
+                self.handlers += len(table["handlers"])
+                self.catches += table["typed_catch_count"]
 
         parsed = parse_calls(
-            raw, settings, include_all_invokes=True, collect_calls=False, body_consumer=consume
+            raw,
+            settings,
+            include_all_invokes=True,
+            collect_calls=False,
+            body_consumer=consume,
+            type_consumer=retain_types if self.exception_aware else None,
         )
         partial = (
             limited
             or bool(issues)
             or parsed["coverage"] != "call_sites_decoded"
-            or any(method["try_region_count"] for method in methods)
+            or (not self.exception_aware and any(method["try_region_count"] for method in methods))
         )
         return {
             "sha256": parsed["sha256"],
             "version": parsed["version"],
             "counts": parsed["counts"],
-            "coverage": "partial" if partial else "normal_targets_checked",
+            "coverage": "partial"
+            if partial
+            else "normal_and_exception_targets_checked"
+            if self.exception_aware
+            else "normal_targets_checked",
             "decoder": parsed["instruction_analysis"],
-            "normal_flow": {
+            "exception_flow" if self.exception_aware else "normal_flow": {
                 "methods": methods,
                 "issues": issues,
                 "output_limited": limited,
                 "block_scope": "this_method_in_this_dex_member_only",
-                "exception_flow": "not_modeled",
+                "exception_flow": "conservative_block_edges"
+                if self.exception_aware
+                else "not_modeled",
                 "runtime_execution": "not_observed",
             },
         }

@@ -634,3 +634,34 @@ fake ADB passive sampling, capture upload, combined report and observed-process 
 No actual emulator compatibility, malware execution, containment or new filesystem/
 network/sensitive collector was established. Those streams are views of supplied
 traces. Source claims remain unverified and no risk/model/frontend code changed.
+
+
+## Milestone 31 - exception-aware DEX analysis, 22 October 2026
+
+Backend 0.32.0 adds the explicit dex_exception_flow 1.0.0 adapter: bounded try
+metadata, signed/unsigned handler decoding, typed/catch-all records, boundary
+checks, block splitting, conservative exception edges and worker/catalog/report
+integration. No dependency or migration was added. Existing normal-only adapter
+and shared decoder default output semantics remain unchanged.
+
+Focused exception-flow/control-flow/calls/invoke-graph/connected-workflow/forensic-
+report/HTML suite: **129 passed in 31.84 seconds**. Two additional extreme-count/
+seeded malformed-table tests and the updated analyzer catalog test: **3 passed
+in 1.12 seconds**. These are 132 distinct focused checks across two runs, not a
+full-suite run. PostgreSQL 17.11 exception-flow/control-flow/catalog/connected-
+workflow suite: **74 passed in 17.62 seconds**. Temporary PostgreSQL stopped
+cleanly. Ruff lint/format, dependency, UTF-8 and diff checks passed. Existing
+Starlette TestClient deprecation warning remains.
+
+Fixtures exercise typed/catch-all order, shared/unreferenced handlers, odd padding,
+range/target/operand/payload rejection, invalid and extreme LEB values, per-method
+byte limits, retained APK-wide metadata caps, no partial graph publication and
+200 deterministic malformed handler variants. Worker tests verify snapshotted
+configuration, multi-DEX budgets, input hashes, catalog capabilities, forensic
+JSON/HTML retention and case scope. The connected regression executes every
+registered adapter on a controlled fixture and creates a combined runtime report.
+
+All exception paths are syntactic overapproximations. The fixtures do not establish
+Android verifier acceptance, Throwable ancestry, type dispatch, feasible paths,
+live execution, malware accuracy or full DEX validation. No production evidence,
+frontend, scoring policy, ML model or emulator was changed.

@@ -100,6 +100,10 @@ class Settings(BaseSettings):
     max_cfg_blocks: int = Field(default=2000, ge=1, le=10000)
     max_cfg_edges: int = Field(default=4000, ge=1, le=20000)
     max_cfg_code_units: int = Field(default=20000, ge=1, le=100000)
+    max_exception_tries: int = Field(default=256, ge=1, le=4096)
+    max_exception_handlers: int = Field(default=512, ge=1, le=4096)
+    max_exception_catches: int = Field(default=1024, ge=1, le=8192)
+    max_exception_table_bytes: int = Field(default=32768, ge=16, le=131072)
 
     max_graph_edges: int = Field(default=1000, ge=1, le=5000)
     max_graph_nodes: int = Field(default=2000, ge=1, le=10000)

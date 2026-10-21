@@ -169,3 +169,11 @@ HTML pages. Source hashes, event pointers, collection status and coverage are re
 read-only derived views do not mutate reports or infer absence, process continuity,
 maliciousness or verified runtime attribution. See [runtime review](runtime-review.md).
 Live environment validation, containment and additional collectors remain pending.
+
+
+The explicit dex_exception_flow adapter now validates bounded try/handler structures,
+splits exception boundaries and emits conservative block-to-catch edges with source
+offsets. It is registered in the worker/catalog and retained in forensic reports.
+Normal-only adapter semantics remain unchanged. Full DEX verification, exception
+type dispatch and path feasibility remain pending; see
+[exception-aware flow](dex-exception-flow.md).

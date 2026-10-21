@@ -13,10 +13,18 @@ class InvalidCode(Exception):
 
 
 def parse_calls(
-    raw, settings, *, include_all_invokes=False, collect_calls=True, body_consumer=None
+    raw,
+    settings,
+    *,
+    include_all_invokes=False,
+    collect_calls=True,
+    body_consumer=None,
+    type_consumer=None,
 ):
     result = parse_dex(raw, settings, include_tables=True)
     strings, types, methods = result.pop("_tables")
+    if type_consumer is not None:
+        type_consumer(types)
     calls, issues = [], []
     stats = {
         "encoded_methods": 0,

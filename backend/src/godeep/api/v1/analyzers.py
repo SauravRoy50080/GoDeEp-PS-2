@@ -11,6 +11,12 @@ router = APIRouter(tags=["analysis adapters"])
 @router.get("/analyzers")
 def analyzers(user: CurrentUser):
     capabilities = {
+        "dex_exception_flow": [
+            "bounded_try_and_handler_tables",
+            "checked_exception_boundaries",
+            "conservative_exception_edges",
+            "normal_flow_with_evidence_offsets",
+        ],
         "dex_control_flow": [
             "bounded_normal_flow_blocks",
             "checked_branch_targets",

@@ -40,6 +40,11 @@ could not observe.
 
 ## Implementation status
 
+> **Milestone 31 — exception-aware DEX graphs:** an explicit adapter now checks
+> try/handler metadata, splits exception boundaries and emits conservative exception
+> edges with offsets. Dispatch and path feasibility remain unresolved; this does
+> not establish runtime execution or a malware verdict.
+>
 > **Milestone 30 — runtime investigation views:** process/file/network/sensitive
 > inventories, elapsed activity, two-capture comparison and printable exports now
 > derive from verified report snapshots. Collector claims and coverage limits remain
@@ -381,6 +386,7 @@ not protections supplied by this scaffold.
 
 ## Documentation and contribution
 
+- [Exception-aware DEX control flow](docs/dex-exception-flow.md)
 - [Runtime inventories, activity and comparison](docs/runtime-review.md)
 - [Sandbox plans, preparations and evidence bundles](docs/sandbox-workflow.md)
 - [Emulator preflight and setup](docs/sandbox-preflight.md)

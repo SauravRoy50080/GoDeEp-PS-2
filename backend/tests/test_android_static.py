@@ -261,6 +261,7 @@ def test_analyzer_catalog_declares_real_capabilities(intake):
         "dex_calls",
         "dex_graph",
         "dex_control_flow",
+        "dex_exception_flow",
         "static_review",
         "signature_verify",
         "resource_inventory",
