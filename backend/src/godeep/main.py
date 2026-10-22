@@ -6,10 +6,13 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
+from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from godeep.api.openapi import document_runtime_upload
 from godeep.api.v1.router import router
 from godeep.core.config import Settings
+from godeep.core.http_guard import HttpGuard
 from godeep.persistence.database import build_engine, session_factory
 from godeep.storage.local import LocalEvidenceStore
 
@@ -22,7 +25,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         yield
         application.state.engine.dispose()
 
-    application = FastAPI(title=settings.app_name, version="0.34.0", lifespan=lifespan)
+    docs = (
+        settings.docs_enabled
+        if settings.docs_enabled is not None
+        else settings.environment != "production"
+    )
+    application = FastAPI(
+        title=settings.app_name,
+        version="0.35.0",
+        lifespan=lifespan,
+        docs_url="/docs" if docs else None,
+        redoc_url="/redoc" if docs else None,
+        openapi_url="/openapi.json" if docs else None,
+    )
     engine = build_engine(settings.database_url.get_secret_value())
     application.state.settings = settings
     application.state.engine = engine
@@ -54,6 +69,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     application.include_router(router, prefix="/api/v1")
     document_runtime_upload(application)
+    application.add_middleware(HttpGuard, settings=settings)
+    hosts = list(settings.allowed_hosts)
+    if settings.environment != "production" and "testserver" not in hosts:
+        hosts.append("testserver")
+    application.add_middleware(TrustedHostMiddleware, allowed_hosts=hosts, www_redirect=False)
+    if settings.cors_origins:
+        application.add_middleware(
+            CORSMiddleware,
+            allow_origins=settings.cors_origins,
+            allow_methods=["GET", "POST", "PUT", "DELETE"],
+            allow_headers=["Authorization", "Content-Type", "X-Filename"],
+            allow_credentials=False,
+            expose_headers=["X-Request-ID", "X-Export-SHA256", "X-Source-Report-SHA256"],
+        )
     return application
 
 

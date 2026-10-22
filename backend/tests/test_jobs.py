@@ -134,6 +134,26 @@ def test_original_tampering_fails_analysis(intake):
     assert failed["result_sha256"] is None
 
 
+def test_worker_settles_lease_expired_after_claim(intake, monkeypatch):
+    client, app, _ = intake
+    case_id, sample = fixture_sample(client)
+    job = queue(client, case_id, sample)
+
+    def claim_then_expire(factory):
+        claimed = claim_job(factory)
+        with factory.begin() as session:
+            session.get(AnalysisJob, claimed.id).lease_expires_at = utc_now() - timedelta(seconds=1)
+        return claimed
+
+    monkeypatch.setattr("godeep.workers.runner.claim_job", claim_then_expire)
+    assert run_once(app.state.sessions, app.state.settings)
+    failed = client.get(path(case_id, job["id"])).json()
+    assert failed["status"] == "failed"
+    assert failed["error_code"] == "worker_lease_expired"
+    assert failed["result_sha256"] is None
+    assert expire_jobs(app.state.sessions) == 0
+
+
 def test_result_tampering_is_not_returned(intake):
     client, app, _ = intake
     case_id, sample = fixture_sample(client)

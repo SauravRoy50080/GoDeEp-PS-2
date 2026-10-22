@@ -19,6 +19,10 @@ data/
 *.dex
 *.pcap
 *.pcapng
+*.pem
+*.key
+*.p12
+*.pfx
 # Local duplicate checkouts; not project source
 /GoDeEp-PS-2/
 /GoDeEp-PS-2-1/

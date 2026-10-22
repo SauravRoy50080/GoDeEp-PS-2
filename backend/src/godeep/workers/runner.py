@@ -159,6 +159,10 @@ def run_once(factory, settings):
             result_path.unlink(missing_ok=True)
         finish_job(factory, job.id, job.claim_token, error_code="worker_error")
         return True
+    finally:
+        # A suspended host can outlive the lease even before the process timeout.
+        # Reject late results above, then settle expired claims before returning.
+        expire_jobs(factory)
 
 
 def main():

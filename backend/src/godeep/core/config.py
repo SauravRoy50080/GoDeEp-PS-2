@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_ROOT = Path(__file__).resolve().parents[3]
@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     )
     app_name: str = "GoDeEp API"
     environment: Literal["development", "test", "production"] = "development"
+    allowed_hosts: list[str] = Field(default_factory=lambda: ["localhost", "127.0.0.1"])
+    cors_origins: list[str] = Field(default_factory=list)
+    docs_enabled: bool | None = None
+    max_json_request_bytes: int = Field(default=262144, ge=1024, le=2097152)
     database_url: SecretStr = SecretStr("postgresql+psycopg://godeep@127.0.0.1:5432/godeep")
     evidence_root: Path = BACKEND_ROOT / "data" / "evidence"
     max_upload_bytes: int = Field(default=200 * 1024 * 1024, ge=1)
@@ -111,3 +115,41 @@ class Settings(BaseSettings):
 
     max_graph_edges: int = Field(default=1000, ge=1, le=5000)
     max_graph_nodes: int = Field(default=2000, ge=1, le=10000)
+
+    @model_validator(mode="after")
+    def deployment_settings(self):
+        import re
+        from urllib.parse import urlsplit
+
+        from sqlalchemy.engine import make_url
+
+        if not self.allowed_hosts or any(
+            host != "*" and re.fullmatch(r"(?:\*\.)?[A-Za-z0-9.-]+|\[[0-9A-Fa-f:]+\]", host) is None
+            for host in self.allowed_hosts
+        ):
+            raise ValueError("Configure valid allowed host names without ports or paths")
+        for origin in self.cors_origins:
+            parsed = urlsplit(origin)
+            if (
+                parsed.scheme not in {"http", "https"}
+                or not parsed.hostname
+                or parsed.path
+                or parsed.query
+                or parsed.fragment
+                or parsed.username is not None
+                or "*" in origin
+            ):
+                raise ValueError("Configure exact HTTP(S) CORS origins")
+            _ = parsed.port
+        if self.environment == "production":
+            url = make_url(self.database_url.get_secret_value())
+            if (
+                url.drivername != "postgresql+psycopg"
+                or not url.password
+                or not self.evidence_root.is_absolute()
+                or "*" in self.allowed_hosts
+            ):
+                raise ValueError(
+                    "Production needs PostgreSQL credentials, absolute storage and restricted hosts"
+                )
+        return self

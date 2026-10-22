@@ -1,0 +1,69 @@
+name: godeep-backend
+x-backend: &backend
+  build:
+    context: ..
+    dockerfile: infra/Dockerfile.backend
+  user: "10001:10001"
+  read_only: true
+  init: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  pids_limit: 256
+  tmpfs: ["/tmp:size=128m,noexec,nosuid"]
+  volumes: ["evidence:/var/lib/godeep/evidence"]
+  networks: [internal]
+  environment: &environment
+    GODEEP_ENVIRONMENT: production
+    GODEEP_DATABASE_URL: "postgresql+psycopg://godeep_app:${GODEEP_POSTGRES_PASSWORD:?Set a strong URL-safe private password}@db:5432/godeep"
+    GODEEP_EVIDENCE_ROOT: /var/lib/godeep/evidence
+    GODEEP_ALLOWED_HOSTS: '${GODEEP_ALLOWED_HOSTS:-["localhost","127.0.0.1"]}'
+    GODEEP_CORS_ORIGINS: '${GODEEP_CORS_ORIGINS:-[]}'
+services:
+  db:
+    image: postgres:17-bookworm
+    environment:
+      POSTGRES_DB: godeep
+      POSTGRES_USER: godeep_admin
+      POSTGRES_PASSWORD: ${GODEEP_POSTGRES_ADMIN_PASSWORD:?Set a distinct private admin password}
+      GODEEP_APP_DB_PASSWORD: ${GODEEP_POSTGRES_PASSWORD:?Set a strong URL-safe app password}
+    volumes:
+      - metadata:/var/lib/postgresql/data
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/010-app-role.sql:ro
+    networks: [internal]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U godeep_admin -d godeep"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  migrate:
+    <<: *backend
+    command: [python, -m, alembic, -c, backend/alembic.ini, upgrade, head]
+    depends_on:
+      db: {condition: service_healthy}
+  api:
+    <<: *backend
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: 1.0
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health/ready', timeout=5)"]
+      interval: 15s
+      timeout: 6s
+      retries: 3
+  worker:
+    <<: *backend
+    restart: unless-stopped
+    mem_limit: 2g
+    cpus: 1.0
+    command: [python, -m, godeep.workers.runner]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+volumes:
+  evidence:
+  metadata:
+networks:
+  internal:
+    internal: true

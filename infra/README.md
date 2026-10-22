@@ -1,9 +1,10 @@
 # Infrastructure
 
-Deployment definitions will be added after the first persistence and worker
-implementation. Planned services: API, PostgreSQL, object storage and task queue.
-Dynamic Android execution belongs on dedicated isolated hosts, separate from the
-API and evidence store. No production deployment or sandbox configuration is implemented yet.
+`compose.backend.yml` and `Dockerfile.backend` define the API, PostgreSQL,
+migrations and static worker. See [deployment](../docs/deployment.md) for setup
+and limitations. These definitions have not been executed in Docker here.
+Dynamic Android execution requires dedicated isolated hosts; this Compose stack
+does not provide an Android sandbox.
 
 An optional disposable PostgreSQL test server is defined in
 `compose.postgres-test.yml`. See ../docs/postgresql-verification.md for setup and

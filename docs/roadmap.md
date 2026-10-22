@@ -1,12 +1,17 @@
 # Backend implementation roadmap
 
+Current implementation and external completion gates are tracked in
+[backend release status](backend-release-status.md). Deployment definitions are
+prepared; Docker and hosted CI execution remain unverified. Exception-flow
+analysis, heuristic scoring, analyst reviews and HTML exports are implemented.
+
 1. Evidence foundation (local intake implemented; accounts/sessions and case permissions implemented; deployment hardening pending): cases, samples, upload validation, hashes, audit records,
    authentication, authorization, database migrations and storage.
 2. Jobs and adapters (queue and archive inventory implemented; malware engines pending): bounded workers, retries, cancellation, run provenance,
    raw output retention and normalized observations.
 3. Static analysis: manifest/permission/component and certificate extraction implemented;
    DEX identifier references and network-string candidates also implemented;
-   decoded invoke sites and optional official signature verification are implemented; next extend normal flow to exception handling and deepen call-graph/evasion
+   decoded invoke sites, exception flow and optional official signature verification are implemented; next deepen call-graph/evasion
    analysis and evaluate controlled test APKs. Resource/policy declarations, embedded-file
    classification and declared-library metadata inventory are also implemented.
 4. Dynamic analysis: isolated Android environments, repeatable actions,

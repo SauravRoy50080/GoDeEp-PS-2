@@ -716,3 +716,37 @@ MISP fixtures are synthetic; no real instance was contacted. No model was traine
 APK executed or sandbox containment established. Explicit operator configuration
 is required to use a converted feed. Detection flags and modification timestamps
 remain selection metadata, not malware verdicts or observed behavior.
+
+## Milestone 34 - release controls and evidence handoff, 22 October 2026
+
+Backend 0.35.0 adds trusted hosts, exact CORS, bounded JSON requests, production
+documentation defaults, schema readiness and authenticated capabilities. It adds
+canonical report/review packages, offline encrypted Ed25519 keys and pinned-key
+signature verification, read-only CSV auditing, deployment definitions and CI.
+No migration, frontend or active feed configuration changed.
+
+Final full PostgreSQL 17.11 run: **666 passed in 1526.55 seconds**, with the
+official Java/apksigner integration configured. Each persistence test used a new
+disposable database; the temporary server stopped cleanly. The application
+database and its development server were not migrated or modified by this run.
+
+Full SQLite run: **658 passed, six PostgreSQL-only skips, two failed in 1242.40
+seconds**. Both failures occurred in package-test setup because source jobs had
+expired leases. Stored timestamps show 325- and 399-second gaps after claims
+whose leases lasted 90 seconds. No late output was accepted. A separate rerun of
+all eleven release-control tests passed in 23.67 seconds. This is not represented
+as an uninterrupted successful SQLite full-suite run.
+
+Earlier regression checks identified an oversized Content-Length response-code
+issue, now fixed and covered, and expired claims left running on worker return.
+The worker now settles expired claims in its cleanup; a deterministic regression
+test checks failed status, no result publication and idempotent expiry.
+Focused worker/release/corpus checks: **26 passed in 45.88 seconds**. The final
+corpus-only check passed three tests after strengthening shared-label conflict
+counting. Ruff lint/format, pip check and diff checks passed; the existing
+Starlette TestClient deprecation warning remains. Compose and workflow YAML
+parsed locally; Docker builds and hosted GitHub Actions were not run.
+
+No APK was executed, model trained or production accuracy established. Live
+Android containment, collectors, representative APK validation and institutional
+signing procedures remain external completion gates.

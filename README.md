@@ -25,6 +25,14 @@ behaviour, forensic artifacts, and threat intelligence in one investigation work
 
 ## Overview
 
+Backend release 0.35.0 adds bounded HTTP requests, deployment definitions,
+schema readiness, capability reporting, read-only corpus audits, and portable
+evidence packages with optional offline signatures. See the
+[release status](docs/backend-release-status.md),
+[deployment guide](docs/deployment.md), and
+[evidence package guide](docs/evidence-package.md).
+Live Android execution and production ML accuracy remain unvalidated.
+
 Malicious Android applications can conceal functionality through obfuscation,
 encrypted payloads, dynamic code loading, and anti-analysis checks. Investigators
 must connect findings spread across code inspection, sandbox observations,

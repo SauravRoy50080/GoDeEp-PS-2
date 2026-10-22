@@ -8,13 +8,56 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Query, Request, Response
 
 from godeep.api.dependencies import CurrentUser
+from godeep.reporting import evidence_package
 from godeep.schemas.intake import Page
 from godeep.schemas.reports import ReportCreate, ReportRead
 from godeep.schemas.runtime_review import ComparisonQuery, ReviewQuery
-from godeep.services import report_html, reports, runtime_review
+from godeep.services import report_html, report_reviews, reports, runtime_review
 from godeep.services.network_correlation import network_correlation
 
 router = APIRouter(prefix="/cases/{case_id}/samples/{sample_id}/reports", tags=["forensic reports"])
+
+
+@router.get("/{report_id}/export/package", response_class=Response)
+def package_export(
+    case_id: UUID, sample_id: UUID, report_id: UUID, request: Request, user: CurrentUser
+):
+    report, raw = reports.download_report(
+        request.app.state.sessions,
+        request.app.state.settings,
+        str(case_id),
+        str(sample_id),
+        str(report_id),
+        user.user_id,
+    )
+    reviews = report_reviews.export(
+        request.app.state.sessions,
+        request.app.state.settings,
+        str(case_id),
+        str(sample_id),
+        str(report_id),
+        user.user_id,
+    )
+    try:
+        content = evidence_package.build(raw, reviews)
+    except (ValueError, KeyError, TypeError, AttributeError, RecursionError) as exc:
+        from fastapi import HTTPException
+
+        raise HTTPException(
+            409, "Report and review snapshot cannot form an evidence package"
+        ) from exc
+    return Response(
+        content,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": 'attachment; filename="godeep-evidence-package.zip"',
+            "Cache-Control": "no-store",
+            "X-Content-Type-Options": "nosniff",
+            "X-Source-Report-SHA256": report.artifact_sha256,
+            "X-Export-SHA256": evidence_package.digest(content),
+            "X-Export-Version": evidence_package.VERSION,
+        },
+    )
 
 
 def runtime_view(case_id, sample_id, report_id, request, user, query, *, html=False):
